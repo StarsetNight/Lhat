@@ -6,6 +6,6 @@ Lhat 聊天软件，有最基本的聊天功能，没有臃肿的其他无用功
 | 要使用这款软件，下载它！  
 
 ## 下载 DOWNLOADS
-欲下载本软件，请访问 [发布页面|https://github.com/ThirdBlood/Lhat/releases/tag/Alpha]
+欲下载本软件，请访问 [发布页面](https://github.com/ThirdBlood/Lhat/releases/tag/Alpha)
 
 Powered by ThirdBlood Studio
