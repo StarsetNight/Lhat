@@ -1,7 +1,7 @@
 # Lhat
-`import socket`  
+> 本项目基于python和pyside6
+
 ## 开发说明 DEVELOPING DIRECTIONS  
-*main*分支目前我们正在尝试使用**PyQt**进行开发。  
 > 该分支仅用于开发。  
 ## 介绍 INTRODUCE  
 Lhat 聊天软件，有最基本的聊天功能，没有臃肿的其他无用功能，净化你的聊天环境，保护你的聊天安全！ 
