@@ -5,6 +5,7 @@ import json
 import sys
 import re
 import os
+import webbrowser
 
 import user_window
 
@@ -45,10 +46,12 @@ class LoginApplication(user_window.LoginWindow):
         chat_window = ChatApplication()#销毁登录窗口，启动聊天窗口
         chat_window.Show()
 
-    def OnRegister(self, event):
-        dlg = wx.TextEntryDialog(self, u'有些服务器有可能设置了安全验证（比如Sakura Frp），\n'
-                                       u'导致无法连接，所以，如果您的服务器无法连接。\n'
-                                       u'请在下面文本框中输入服务器的IP地址及端口:', u'服务器安全验证')
+    def OnRegister(self, event):  # 安全认证按钮事件
+        dlg = wx.TextEntryDialog(self, u'''\
+目前仅支持Sakura Frp的安全认证！
+有些服务器有可能设置了安全验证（比如Sakura Frp），
+导致无法连接，所以，如果您的服务器无法连接.
+请在下面文本框中输入服务器的IP地址及端口:''', u'服务器安全验证')
         if dlg.ShowModal() == wx.ID_OK:
             IpPort = dlg.GetValue()
         else:
@@ -56,22 +59,7 @@ class LoginApplication(user_window.LoginWindow):
             del dlg
             return
         dlg.Destroy()
-        dlg = wx.TextEntryDialog(self, u'''
-如果服务器设置了安全认证，那么肯定有验证密码。
-如果你被提前告知有密码，那么你应该拥有它。
-请在下面文本框中输入验证密码:
-''', u'服务器安全验证')
-        if dlg.ShowModal() == wx.ID_OK:
-            password = dlg.GetValue()
-        else:
-            dlg.Destroy()
-            del dlg
-            return
-        dlg.Destroy()
-        command = 'start /wait auth-guest -u https://' + IpPort + ' -p ' + password
-        os.system(command)
-        os.system('start /wait authpass_generated.exe')
-        os.system('del /f /s /q authpass_generated.exe')
+        webbrowser.open('https://' + IpPort)  # 打开安全认证网页
 
 
 class ChatApplication(user_window.ChatWindow):
