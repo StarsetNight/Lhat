@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ChatWindow</class>
+ <widget class="QMainWindow" name="ChatWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>766</width>
+    <height>656</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="hbox2">
+      <item>
+       <widget class="QTextBrowser" name="output_box_message">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>5</horstretch>
+          <verstretch>5</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextBrowser" name="output_box_online_user">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>2</horstretch>
+          <verstretch>5</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>幼圆</family>
+         </font>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="hbox1">
+      <item>
+       <widget class="QTextEdit" name="input_box_message">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>4</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_send_message">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>发送</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>766</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>操作</string>
+    </property>
+    <addaction name="menubar_send"/>
+    <addaction name="menubar_logoff"/>
+    <addaction name="menubar_exit"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="menubar_send">
+   <property name="text">
+    <string>发送</string>
+   </property>
+  </action>
+  <action name="menubar_logoff">
+   <property name="text">
+    <string>断开连接</string>
+   </property>
+  </action>
+  <action name="menubar_exit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>button_send_message</sender>
+   <signal>clicked()</signal>
+   <receiver>ChatWindow</receiver>
+   <slot>sendMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>667</x>
+     <y>568</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>619</x>
+     <y>633</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>menubar</sender>
+   <signal>triggered(QAction*)</signal>
+   <receiver>ChatWindow</receiver>
+   <slot>triggeredMenubar()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>81</x>
+     <y>26</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>sendMessage()</slot>
+  <slot>triggeredMenubar()</slot>
+ </slots>
+</ui>
