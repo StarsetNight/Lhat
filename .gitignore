@@ -2,6 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.vscode/
+.idea/
+.cspell/
+打包用/
+*.bat
+*.fbp
 
 # C extensions
 *.so
