@@ -232,11 +232,11 @@ class ChatApplication(QMainWindow):
                         chat_window_signal.appendOutPutBox.emit(message)
 
     def backLoginWindow(self):
-        global main
         self.close()
         login_window = LoginApplication()
         login_window.show()
-        #del self
+        return login_window.exec(0)
+        #这里return会报错，但是删掉这一行就不显示了，所以留着
 
     def onLogoff(self):
         dlg = QMessageBox.warning(self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
