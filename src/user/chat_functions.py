@@ -45,34 +45,17 @@ def decrypt(string, privkey):
     return rsa.decrypt(string, privkey).decode()
 
 
-def encrypt_File(filename, pubkey):
-    """
-    加密文件
-    """
-    with open(filename, 'rb') as f:
-        return rsa.encrypt(f.read(), pubkey)
-
-
-def decrypt_File_Save(string, privkey, filepath='Files/'):
-    """
-    解密文件，并保存到软件文件目录
-    """
-    with open(filepath, 'wb') as f:
-        f.write(rsa.decrypt(string, privkey))
-        return True
-
-
 def send_file(server, port, by, to, filename, widget):
     """
     发送文件
     """
     # 创建套接字
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # 连接服务器
-    sock.connect((server, port))
-    # 首先，告诉服务器文件大小
-    sock.send(str(os.path.getsize(filename)).encode())
-    widget.append('\n锵锵！文件正在火速奔往服务器！')
-    with open(filename, 'rb') as f:
-        sock.send(pack(f.read(), by, to, 'FILE_TYPE'))
-    widget.append('\n哒哒！文件已经运输完毕！')
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        # 连接服务器
+        sock.connect((server, port))
+        # 首先，告诉服务器文件大小
+        sock.send(str(os.path.getsize(filename)).encode())
+        widget.append('\n锵锵！文件正在火速奔往服务器！')
+        with open(filename, 'rb') as f:
+            sock.send(pack(f.read(), by, to, 'FILE_TYPE'))
+        widget.append('\n哒哒！文件已经运输完毕！')
