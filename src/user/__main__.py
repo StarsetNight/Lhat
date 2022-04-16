@@ -7,7 +7,7 @@ import webbrowser
 
 import Doc
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QStyleFactory,QMessageBox,QDialog
+from PySide6.QtWidgets import QApplication, QMainWindow, QStyleFactory, QMessageBox, QDialog
 
 from ui.ChatWindow import Ui_ChatWindow
 from ui.LoginWindow import Ui_LoginWindow
@@ -25,7 +25,8 @@ show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
 chat = 'Lhat! Chatting Room'  # 聊天对象
 
-#---调试信息专用
+
+# ---调试信息专用
 
 class LoginApplication(QMainWindow):
     def __init__(self):
@@ -46,35 +47,37 @@ class LoginApplication(QMainWindow):
         try:
             ip, port = self.ui.input_box_server_ip_port.toPlainText().split(':')
         except ValueError:
-            QMessageBox.warning(self,"警告",'请输入正确的IP地址格式：\n<IP地址> : <外部端口>',QMessageBox.Yes,QMessageBox.Yes)
+            QMessageBox.warning(self, "警告", '请输入正确的IP地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
         user = self.ui.input_box_nickname.text()
         if not user:
-            dlg = QMessageBox.question(self,"警告","用户名为空，如果确定，将使用IP地址\n确认继续吗？",QMessageBox.Yes | QMessageBox.No,QMessageBox.Yes)
-            if str(dlg)=="PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
+            dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用IP地址\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
+                                       QMessageBox.Yes)
+            if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
                 self.close()
-                #del dlg, self
+                # del dlg, self
             else:
-                print("no")#---调试信息专用
+                print("no")  # ---调试信息专用
                 self.ui.input_box_nickname.setFocus()
                 return
 
         else:
             self.close()
-            #del self
+            # del self
 
-        chat_window = ChatApplication()#销毁登录窗口，启动聊天窗口
+        chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
         chat_window.show()
 
     def onRegister(self):  # 安全认证按钮事件
-        dlg=RegisterApplication()
-        #self.close()
+        dlg = RegisterApplication()
+        # self.close()
         return dlg.exec()
+
 
 class RegisterApplication(QDialog):
     def __init__(self):
         super().__init__()
         self.ui = Ui_RegisterWindow()  # UI类的实例化()
-        #self.ui.setupUi(self)
+        # self.ui.setupUi(self)
         self.ui.setupUi(self)
         self.band()  # 信号和槽的绑定
 
@@ -88,13 +91,14 @@ class RegisterApplication(QDialog):
         pass
 
     def accept(self):
-        print("accept")#--
-        webbrowser.open(f'https://{self.ui.input_box_register_server_ip_port.toPlainText()}')# 打开安全认证网页
+        print("accept")  # --
+        webbrowser.open(f'https://{self.ui.input_box_register_server_ip_port.toPlainText()}')  # 打开安全认证网页
         return self.done(0)
 
     def reject(self):
         print("reject")  # --
         return self.done(0)
+
 
 class ChatApplication(QMainWindow):
     def __init__(self):
@@ -113,11 +117,11 @@ class ChatApplication(QMainWindow):
         try:
             self.connection.connect((ip, int(port)))
         except ValueError:
-            QMessageBox.critical(self,"错误",'非法的IP地址及端口，\n将退回登录界面。')
+            QMessageBox.critical(self, "错误", '非法的IP地址及端口，\n将退回登录界面。')
             self.backLoginWindow()
             return
         except ConnectionRefusedError as e:
-            QMessageBox.critical(self,"错误",'似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(e))
+            QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(e))
             self.backLoginWindow()
             return
         if user:
@@ -187,31 +191,30 @@ class ChatApplication(QMainWindow):
         receive_thread = threading.Thread(target=self.receive)
         receive_thread.start()  # 开始线程接收信息
 
-    def triggeredMenubar(self,triggeres):
+    def triggeredMenubar(self, triggeres):
         jump_map = {"发送": self.sendMessage,
                     "断开连接": self.onLogoff,
                     "退出": self.onExit
                     }
         jump_map[triggeres.text()]()
 
-
     def receive(self):
-        global uses
+        global users, user
         while True:
             try:
                 data = self.connection.recv(1024)
             except ConnectionAbortedError:
                 return
             data = data.decode('utf-8')
-            print(data)#---
+            print(data)  # ---
             try:
-                uses = json.loads(data)
+                users = json.loads(data)
                 chat_window_signal.clearOnlineUserList.emit()
                 chat_window_signal.appendOnlineUserList.emit('Lhat! Chatting Room\n')
                 chat_window_signal.appendOnlineUserList.emit('===在线用户===\n')
-                for user_index,user in enumerate(uses):
+                for user_index, user in enumerate(users):
                     chat_window_signal.appendOnlineUserList.emit(str(user))
-                    #uses[user_index] + '\n')
+                    # users[user_index] + '\n')
                 users.append('Lhat! Chatting Room')
             except Exception:
                 data = data.split(r'\+-*/')
@@ -220,26 +223,28 @@ class ChatApplication(QMainWindow):
                 chat_with = data[2]
                 message = '\n' + message
                 if chat_with == 'Lhat! Chatting Room':  # 群聊
-                    if user_name == user:
-                        chat_window_signal.appendOutPutBox.emit(message)
-                    else:
-                        chat_window_signal.appendOutPutBox.emit(message)
+                    # if user_name == user:
+                    #     chat_window_signal.appendOutPutBox.emit(message)
+                    # else:
+                    #     chat_window_signal.appendOutPutBox.emit(message)
+                    chat_window_signal.appendOutPutBox.emit(message)
                 elif user_name == user or chat_with == user:  # 私聊
-                    if user_name == user:
-                        chat_window_signal.appendOutPutBox.emit(message)
-                    else:
-                        chat_window_signal.appendOutPutBox.emit(message)
+                    # if user_name == user:
+                    #     chat_window_signal.appendOutPutBox.emit(message)
+                    # else:
+                    #     chat_window_signal.appendOutPutBox.emit(message)
+                    chat_window_signal.appendOutPutBox.emit(message)
 
     def backLoginWindow(self):
         self.close()
         login_window = LoginApplication()
         login_window.show()
         return login_window.exec(0)
-        #这里return会报错，但是删掉这一行就不显示了，所以留着
+        # 这里return会报错，但是删掉这一行就不显示了，所以留着
 
     def onLogoff(self):
         dlg = QMessageBox.warning(self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-        if str(dlg)=="PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
+        if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
             self.backLoginWindow()
         else:
@@ -248,7 +253,7 @@ class ChatApplication(QMainWindow):
 
     def onExit(self):
         dlg = QMessageBox.warning(self, "警告", '你真的要退出Lhat！吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-        if str(dlg)=="PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
+        if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
             dlg.close()
             self.close()
@@ -256,6 +261,7 @@ class ChatApplication(QMainWindow):
         else:
             self.ui.input_box_message.setFocus()
             return
+
 
 """
 勾勾选项是check_为前缀，
