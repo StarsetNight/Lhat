@@ -2,22 +2,22 @@
 import rsa
 import os
 import socket
+import json
 
 
 def pack(msg, by, to, kind):
     """
     封装消息
-    使用 \+-*/ 字符串分割
     msg, by, to, kind
     """
-    return r'\+-*/'.join([msg, by, to, kind])
+    return json.dumps({'msg': msg, 'by': by, 'to': to, 'kind': kind})
 
 
 def unpack(string):
     """
     解包函数
     """
-    return string.split(r'\+-*/')
+    return json.loads(string)
 
 
 def loadall(pubfile, privfile):
@@ -33,19 +33,36 @@ def loadall(pubfile, privfile):
 
 def encrypt(string, pubkey):
     """
-    加密函数
+    加密函数（文本）
     """
     return rsa.encrypt(string.encode(), pubkey)
 
 
 def decrypt(string, privkey):
     """
-    解密函数
+    解密函数（文本）
     """
     return rsa.decrypt(string, privkey).decode()
 
 
-def send_file(server, port, filename, widget):
+def encrypt_File(filename, pubkey):
+    """
+    加密文件
+    """
+    with open(filename, 'rb') as f:
+        return rsa.encrypt(f.read(), pubkey)
+
+
+def decrypt_File_Save(string, privkey, filepath='Files/'):
+    """
+    解密文件，并保存到软件文件目录
+    """
+    with open(filepath, 'wb') as f:
+        f.write(rsa.decrypt(string, privkey))
+        return True
+
+
+def send_file(server, port, by, to, filename, widget):
     """
     发送文件
     """
@@ -55,6 +72,7 @@ def send_file(server, port, filename, widget):
     sock.connect((server, port))
     # 首先，告诉服务器文件大小
     sock.send(str(os.path.getsize(filename)).encode())
-    with open(filename, 'rb') as f:
-        sock.send(f.read())
     widget.append('\n锵锵！文件正在火速奔往服务器！')
+    with open(filename, 'rb') as f:
+        sock.send(pack(f.read(), by, to, 'FILE_TYPE'))
+    widget.append('\n哒哒！文件已经运输完毕！')
