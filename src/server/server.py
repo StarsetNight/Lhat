@@ -7,6 +7,17 @@ import os
 import os.path
 import sys
 
+'''
+变量备忘录
+users: 
+    第一层索引：用户名
+    第二层索引：用户名的tcp连接实例
+message: 
+    0: IP地址和端口
+    1: 打包消息内容
+online_users: 在线用户列表
+'''
+
 ip = settings.ip_address
 port = settings.network_port
 
@@ -46,12 +57,12 @@ class Server(threading.Thread):
                 tag = tag + 1
                 user = temp + str(tag)
         users.append((user, conn))
-        USERS = OnOnline()
-        self.Load(USERS, address)
+        online_users = OnOnline()
+        self.Load(online_users, address)
         # 在获取用户名后便会不断地接受用户端发来的消息（即聊天内容），结束后关闭连接。
         try:
             while True:
-                message = conn.recv(1024)  # 发送消息
+                message = conn.recv(1024)  # 接收用户发来的消息
                 message = message.decode('utf-8')
                 self.Load(message, address)
         # 如果用户断开连接，将该用户从用户列表中删除，然后更新用户列表。
@@ -64,8 +75,8 @@ class Server(threading.Thread):
                     break
                 j = j + 1
 
-            USERS = OnOnline()
-            self.Load(USERS, address)
+            online_users = OnOnline()
+            self.Load(online_users, address)
             conn.close()
 
     # 将地址与数据（需发送给客户端）存入messages队列。
@@ -101,7 +112,7 @@ class Server(threading.Thread):
 
     def run(self):
         self.s.bind((ip, port))
-        self.s.listen(5)
+        self.s.listen(10)
         q = threading.Thread(target=self.sendData)
         q.start()
         while True:
