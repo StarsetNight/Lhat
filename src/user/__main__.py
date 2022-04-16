@@ -255,7 +255,6 @@ class ChatApplication(QMainWindow):
         dlg = QMessageBox.warning(self, "警告", '你真的要退出Lhat！吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
-            dlg.close()
             self.close()
             sys.exit(0)
         else:
