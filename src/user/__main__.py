@@ -31,6 +31,9 @@ chat = chatops.chat
 
 class LoginApplication(QMainWindow):
     def __init__(self):
+        """
+        UI窗口初始化
+        """
         super().__init__()
         self.ui = Ui_LoginWindow()  # UI类的实例化()
         self.ui.setupUi(self)
@@ -46,11 +49,11 @@ class LoginApplication(QMainWindow):
     def onLogin(self):
         global ip, port, user
         try:
-            ip, port = self.ui.input_box_server_ip_port.toPlainText().split(':')
+            ip, port = self.ui.input_box_server_ip_port.toPlainText().split(':')  #
         except ValueError:
             QMessageBox.warning(self, "警告", '请输入正确的IP地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
-        user = self.ui.input_box_nickname.text()
-        if not user:
+        user = self.ui.input_box_nickname.text()  # 获取用户名
+        if not user:  # 如果用户名为空
             dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用IP地址\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
                                        QMessageBox.Yes)
             if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
@@ -131,7 +134,7 @@ class ChatApplication(QMainWindow):
             self.connection.send('用户名不存在'.encode('utf-8'))
             user = ip + ':' + port
 
-        self.startReceive()
+        self.startReceive()  # 创建线程用于接收消息
 
     def band(self):
         chat_window_signal.appendOutPutBox.connect(self.appendOutPut)
