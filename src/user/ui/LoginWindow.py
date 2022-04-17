@@ -133,7 +133,7 @@ class Ui_LoginWindow(object):
         QWidget.setTabOrder(self.button_login, self.button_register)
 
         self.retranslateUi(LoginWindow)
-        self.button_login.clicked.connect(LoginWindow.onLogin)
+        self.button_login.clicked.connect(LoginWindow.onCheckLogin)
         self.button_register.clicked.connect(LoginWindow.onRegister)
 
         QMetaObject.connectSlotsByName(LoginWindow)

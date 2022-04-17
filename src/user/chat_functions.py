@@ -2,22 +2,6 @@
 import rsa
 import os
 import socket
-import json
-
-
-def pack(msg, by, to, kind):
-    """
-    封装消息
-    msg, by, to, kind
-    """
-    return json.dumps({'msg': msg, 'by': by, 'to': to, 'kind': kind})
-
-
-def unpack(string):
-    """
-    解包函数
-    """
-    return json.loads(string)
 
 
 def loadall(pubfile, privfile):

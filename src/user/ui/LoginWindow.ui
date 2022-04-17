@@ -233,7 +233,7 @@
    <sender>button_login</sender>
    <signal>clicked()</signal>
    <receiver>LoginWindow</receiver>
-   <slot>onLogin()</slot>
+   <slot>onCheckLogin()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>382</x>
@@ -263,7 +263,7 @@
   </connection>
  </connections>
  <slots>
-  <slot>onLogin()</slot>
+  <slot>onCheckLogin()</slot>
   <slot>onRegister()</slot>
  </slots>
 </ui>

@@ -26,9 +26,9 @@ chat_with = chatops.chat  # 定义聊天对象，默认为群聊
 
 
 # ---调试信息专用
+
 '''
 备忘录：
-211行有缺陷，后续得质问用户，是否需要重新连接。
 250行？我删掉了exec方法还能显示欸？
 '''
 
@@ -50,12 +50,17 @@ class LoginApplication(QMainWindow):
     def band(self):
         pass
 
-    def onLogin(self):
+    def onCheckLogin(self):
+        """
+        其实这个方法并不能真正实现登录，登陆方法都在ChatApplication中实现，这只是在处理登录前的事情罢了。
+        """
         global server_ip, server_port, username
         try:
-            server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  #
+            server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')
         except ValueError:
             QMessageBox.warning(self, "警告", '请输入正确的IP地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
+            self.ui.input_box_server_ip_port.setFocus()
+            return
         username = self.ui.input_box_nickname.text()  # 获取用户名
         if not username:  # 如果用户名为空
             dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用IP地址\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
@@ -64,7 +69,7 @@ class LoginApplication(QMainWindow):
                 self.close()
                 # del dlg, self
             else:
-                print("no")  # ---调试信息专用
+                print('[Selection] No')  # ---调试信息专用
                 self.ui.input_box_nickname.setFocus()
                 return
 
@@ -128,8 +133,12 @@ class ChatApplication(QMainWindow):
             QMessageBox.critical(self, "错误", '非法的IP地址及端口，\n将退回登录界面。')
             self.backLoginWindow()
             return
-        except ConnectionRefusedError as e:
-            QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(e))
+        except ConnectionAbortedError or ConnectionResetError or ConnectionRefusedError as conn_err:
+            QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
+            self.backLoginWindow()
+            return
+        except socket.gaierror:
+            QMessageBox.critical(self, "错误", '获取地址信息失败，\n将退回登录界面。')
             self.backLoginWindow()
             return
         if username:
