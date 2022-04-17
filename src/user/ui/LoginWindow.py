@@ -30,6 +30,10 @@ class Ui_LoginWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.static_text_3 = QLabel(self.centralwidget)
         self.static_text_3.setObjectName(u"static_text_3")
+        font = QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        self.static_text_3.setFont(font)
         self.static_text_3.setAlignment(Qt.AlignCenter)
 
         self.gridLayout.addWidget(self.static_text_3, 4, 1, 1, 1)
@@ -42,6 +46,10 @@ class Ui_LoginWindow(object):
         sizePolicy.setHeightForWidth(self.button_register.sizePolicy().hasHeightForWidth())
         self.button_register.setSizePolicy(sizePolicy)
         self.button_register.setMaximumSize(QSize(16777215, 80))
+        font1 = QFont()
+        font1.setPointSize(20)
+        font1.setBold(True)
+        self.button_register.setFont(font1)
 
         self.gridLayout.addWidget(self.button_register, 5, 1, 1, 1)
 
@@ -53,15 +61,15 @@ class Ui_LoginWindow(object):
         sizePolicy1.setHeightForWidth(self.input_box_server_ip_port.sizePolicy().hasHeightForWidth())
         self.input_box_server_ip_port.setSizePolicy(sizePolicy1)
         self.input_box_server_ip_port.setMaximumSize(QSize(16777215, 90))
-        font = QFont()
-        font.setPointSize(14)
-        self.input_box_server_ip_port.setFont(font)
+        font2 = QFont()
+        font2.setPointSize(14)
+        self.input_box_server_ip_port.setFont(font2)
 
         self.gridLayout.addWidget(self.input_box_server_ip_port, 2, 2, 1, 1)
 
         self.input_box_nickname = QLineEdit(self.centralwidget)
         self.input_box_nickname.setObjectName(u"input_box_nickname")
-        self.input_box_nickname.setFont(font)
+        self.input_box_nickname.setFont(font2)
 
         self.gridLayout.addWidget(self.input_box_nickname, 4, 2, 1, 1)
 
@@ -79,6 +87,7 @@ class Ui_LoginWindow(object):
 
         self.static_text_2 = QLabel(self.centralwidget)
         self.static_text_2.setObjectName(u"static_text_2")
+        self.static_text_2.setFont(font)
         self.static_text_2.setContextMenuPolicy(Qt.DefaultContextMenu)
         self.static_text_2.setLayoutDirection(Qt.LeftToRight)
         self.static_text_2.setAlignment(Qt.AlignCenter)
@@ -90,6 +99,7 @@ class Ui_LoginWindow(object):
         sizePolicy.setHeightForWidth(self.button_login.sizePolicy().hasHeightForWidth())
         self.button_login.setSizePolicy(sizePolicy)
         self.button_login.setMaximumSize(QSize(16777215, 80))
+        self.button_login.setFont(font1)
 
         self.gridLayout.addWidget(self.button_login, 5, 2, 1, 1)
 
@@ -97,12 +107,13 @@ class Ui_LoginWindow(object):
         self.static_text_1.setObjectName(u"static_text_1")
         sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setVerticalStretch(1)
         sizePolicy2.setHeightForWidth(self.static_text_1.sizePolicy().hasHeightForWidth())
         self.static_text_1.setSizePolicy(sizePolicy2)
-        font1 = QFont()
-        font1.setPointSize(12)
-        self.static_text_1.setFont(font1)
+        font3 = QFont()
+        font3.setPointSize(12)
+        font3.setBold(True)
+        self.static_text_1.setFont(font3)
 
         self.gridLayout.addWidget(self.static_text_1, 1, 1, 1, 2)
 
@@ -122,7 +133,7 @@ class Ui_LoginWindow(object):
         QWidget.setTabOrder(self.button_login, self.button_register)
 
         self.retranslateUi(LoginWindow)
-        self.button_login.clicked.connect(LoginWindow.onLogin)
+        self.button_login.clicked.connect(LoginWindow.onCheckLogin)
         self.button_register.clicked.connect(LoginWindow.onRegister)
 
         QMetaObject.connectSlotsByName(LoginWindow)

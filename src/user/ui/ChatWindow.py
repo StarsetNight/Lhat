@@ -84,6 +84,7 @@ class Ui_ChatWindow(object):
         self.button_send_message.setSizePolicy(sizePolicy3)
         font1 = QFont()
         font1.setPointSize(20)
+        font1.setBold(True)
         self.button_send_message.setFont(font1)
 
         self.hbox1.addWidget(self.button_send_message)

@@ -17,6 +17,12 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="4" column="1">
      <widget class="QLabel" name="static_text_3">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="text">
        <string>显示昵称</string>
       </property>
@@ -38,6 +44,12 @@
         <width>16777215</width>
         <height>80</height>
        </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>安全认证</string>
@@ -118,6 +130,12 @@
     </item>
     <item row="2" column="1">
      <widget class="QLabel" name="static_text_2">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="contextMenuPolicy">
        <enum>Qt::DefaultContextMenu</enum>
       </property>
@@ -146,6 +164,12 @@
         <height>80</height>
        </size>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="text">
        <string>登录服务器</string>
       </property>
@@ -156,12 +180,13 @@
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
+        <verstretch>1</verstretch>
        </sizepolicy>
       </property>
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <bold>true</bold>
        </font>
       </property>
       <property name="text">
@@ -208,7 +233,7 @@
    <sender>button_login</sender>
    <signal>clicked()</signal>
    <receiver>LoginWindow</receiver>
-   <slot>onLogin()</slot>
+   <slot>onCheckLogin()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>382</x>
@@ -238,7 +263,7 @@
   </connection>
  </connections>
  <slots>
-  <slot>onLogin()</slot>
+  <slot>onCheckLogin()</slot>
   <slot>onRegister()</slot>
  </slots>
 </ui>
