@@ -31,7 +31,7 @@ chat_with = chatops.chat  # 定义聊天对象，默认为群聊
 '''
 备忘录：
 211行有缺陷，后续得质问用户，是否需要重新连接。
-250行，显而易见，exec方法不存在，所以得要更好的替代方法，毋庸置疑。
+250行？我删掉了exec方法还能显示欸？
 '''
 
 
@@ -183,19 +183,9 @@ class ChatApplication(QMainWindow):
         self.ui.output_box_online_user.setText(msg)
 
     def sendMessage(self):
-        global chat_with
         raw_message = self.ui.input_box_message.toPlainText()
-        if raw_message == '':
-            self.chat_window_signal.appendOutPutBox.emit('\n[提示] 发送的消息不能为空！')
-            return
-        elif raw_message.startswith('//tell'):
-            talk_with = raw_message.split(' ')
-            chat_with = talk_with[1]
-            raw_message = re.sub('//tell', '[私聊消息] 到', raw_message)
-        message = raw_message + r'\+-*/' + username + r'\+-*/' + chat_with
-        chat_with = 'Lhat! Chatting Room'
-        self.connection.send(message.encode('utf-8'))
-        chat_window_signal.clearInPutBox.emit()
+        chatops.send(self.connection, raw_message, username, chat_window_signal.appendOutPutBox)
+        chat_window_signal.clearInPutBox.emit()  # 清空输入框
 
     def startReceive(self):
         receive_thread = threading.Thread(target=self.receive)
@@ -250,8 +240,7 @@ class ChatApplication(QMainWindow):
         self.close()
         login_window = LoginApplication()  # 这里就成功覆盖旧实例了
         login_window.show()
-        return login_window.exec(0)
-        # 这里return会报错，但是删掉这一行就不显示了，所以留着
+        # ？删掉了还能显示欸？不知道你那边啥情况。
 
     def onLogoff(self):
         dlg = QMessageBox.warning(self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
