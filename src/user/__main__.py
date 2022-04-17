@@ -19,15 +19,21 @@ from ui.Signal import login_window_signal
 from ui.Signal import register_window_signal
 
 
-ip = chatops.ip
-port = chatops.port
-user = chatops.user
-textbox = chatops.textbox
-users = chatops.users
-chat = chatops.chat
+server_ip = chatops.ip  # 定义服务器IP
+server_port = chatops.port  # 定义服务器端口
+username = chatops.user  # 定义用户名
+# textbox = chatops.textbox
+online_users = chatops.users  # 定义在线用户列表
+chat_with = chatops.chat  # 定义聊天对象，默认为群聊
 
 
 # ---调试信息专用
+'''
+备忘录：
+211行有缺陷，后续得质问用户，是否需要重新连接。
+250行，显而易见，exec方法不存在，所以得要更好的替代方法，毋庸置疑。
+'''
+
 
 class LoginApplication(QMainWindow):
     def __init__(self):
@@ -47,13 +53,13 @@ class LoginApplication(QMainWindow):
         pass
 
     def onLogin(self):
-        global ip, port, user
+        global server_ip, server_port, username
         try:
-            ip, port = self.ui.input_box_server_ip_port.toPlainText().split(':')  #
+            server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  #
         except ValueError:
             QMessageBox.warning(self, "警告", '请输入正确的IP地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
-        user = self.ui.input_box_nickname.text()  # 获取用户名
-        if not user:  # 如果用户名为空
+        username = self.ui.input_box_nickname.text()  # 获取用户名
+        if not username:  # 如果用户名为空
             dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用IP地址\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
                                        QMessageBox.Yes)
             if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
@@ -106,7 +112,7 @@ class RegisterApplication(QDialog):
 
 class ChatApplication(QMainWindow):
     def __init__(self):
-        global user
+        global username  # 用户名是需要在窗口关闭时重新赋值的，所以需要全局变量
 
         super().__init__()
         self.ui = Ui_ChatWindow()  # UI类的实例化()
@@ -115,11 +121,11 @@ class ChatApplication(QMainWindow):
 
         self.chat_window_signal = chat_window_signal
 
-        self.setWindowTitle(f'欢迎来到Lhat！聊天室 Lhat！版本{Doc.version} 登录为：{user}')
+        self.setWindowTitle(f'欢迎来到Lhat！聊天室 Lhat！版本{Doc.version} - 登录为：{username}')
 
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            self.connection.connect((ip, int(port)))
+            self.connection.connect((server_ip, int(server_port)))
         except ValueError:
             QMessageBox.critical(self, "错误", '非法的IP地址及端口，\n将退回登录界面。')
             self.backLoginWindow()
@@ -128,11 +134,11 @@ class ChatApplication(QMainWindow):
             QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(e))
             self.backLoginWindow()
             return
-        if user:
-            self.connection.send(user.encode('utf-8'))  # 发送用户名
+        if username:
+            self.connection.send(username.encode('utf-8'))  # 发送用户名
         else:
             self.connection.send('用户名不存在'.encode('utf-8'))
-            user = ip + ':' + port
+            username = server_ip + ':' + server_port
 
         self.startReceive()  # 创建线程用于接收消息
 
@@ -177,17 +183,17 @@ class ChatApplication(QMainWindow):
         self.ui.output_box_online_user.setText(msg)
 
     def sendMessage(self):
-        global chat
+        global chat_with
         raw_message = self.ui.input_box_message.toPlainText()
         if raw_message == '':
             self.chat_window_signal.appendOutPutBox.emit('\n[提示] 发送的消息不能为空！')
             return
         elif raw_message.startswith('//tell'):
             talk_with = raw_message.split(' ')
-            chat = talk_with[1]
+            chat_with = talk_with[1]
             raw_message = re.sub('//tell', '[私聊消息] 到', raw_message)
-        message = raw_message + r'\+-*/' + user + r'\+-*/' + chat
-        chat = 'Lhat! Chatting Room'
+        message = raw_message + r'\+-*/' + username + r'\+-*/' + chat_with
+        chat_with = 'Lhat! Chatting Room'
         self.connection.send(message.encode('utf-8'))
         chat_window_signal.clearInPutBox.emit()
 
@@ -203,45 +209,46 @@ class ChatApplication(QMainWindow):
         jump_map[triggeres.text()]()
 
     def receive(self):
-        global users, user
+        global online_users, username
         while True:
             try:
-                data = self.connection.recv(1024)
+                received_data = self.connection.recv(1024)
             except ConnectionAbortedError:
-                return
-            data = data.decode('utf-8')
-            print(data)  # ---
+                return  # 这个后续要改，连接断开了，要提示用户，而不是直接关闭接收方法，这样可以保证接收线程不会一直挂起。
+            received_data = received_data.decode('utf-8')
+            print(received_data)  # ---
             try:
-                users = json.loads(data)
+                online_users = json.loads(received_data)
                 chat_window_signal.clearOnlineUserList.emit()
                 chat_window_signal.appendOnlineUserList.emit('Lhat! Chatting Room\n')
                 chat_window_signal.appendOnlineUserList.emit('===在线用户===\n')
-                for user_index, user in enumerate(users):
-                    chat_window_signal.appendOnlineUserList.emit(str(user))
-                    # users[user_index] + '\n')
-                users.append('Lhat! Chatting Room')
+                for user_index, username in enumerate(online_users):
+                    chat_window_signal.appendOnlineUserList.emit(str(username))
+                    # online_users[user_index] + '\n')
+                online_users.append('Lhat! Chatting Room')
             except Exception:
-                data = data.split(r'\+-*/')
-                message = data[0]
-                user_name = data[1]
-                chat_with = data[2]
-                message = '\n' + message
-                if chat_with == 'Lhat! Chatting Room':  # 群聊
-                    # if user_name == user:
-                    #     chat_window_signal.appendOutPutBox.emit(message)
+                received_data = received_data.split(r'\+-*/')
+                article = received_data[0]  # 正文
+                send_from = received_data[1]  # 发送者
+                send_to = received_data[2]  # 接收者
+                article = '\n' + article  # 添加换行符
+                if send_to == 'Lhat! Chatting Room':  # 群聊
+                    # if send_from == username:
+                    #     chat_window_signal.appendOutPutBox.emit(article)
                     # else:
-                    #     chat_window_signal.appendOutPutBox.emit(message)
-                    chat_window_signal.appendOutPutBox.emit(message)
-                elif user_name == user or chat_with == user:  # 私聊
-                    # if user_name == user:
-                    #     chat_window_signal.appendOutPutBox.emit(message)
+                    #     chat_window_signal.appendOutPutBox.emit(article)
+                    chat_window_signal.appendOutPutBox.emit(article)
+                elif send_from == username or send_to == username:  # 私聊
+                    # if send_from == username:
+                    #     chat_window_signal.appendOutPutBox.emit(article)
                     # else:
-                    #     chat_window_signal.appendOutPutBox.emit(message)
-                    chat_window_signal.appendOutPutBox.emit(message)
+                    #     chat_window_signal.appendOutPutBox.emit(article)
+                    chat_window_signal.appendOutPutBox.emit(article)
 
     def backLoginWindow(self):
+        global login_window  # 登录窗口实例总是要被覆盖的，所以要全局变量，以便后续开发
         self.close()
-        login_window = LoginApplication()
+        login_window = LoginApplication()  # 这里就成功覆盖旧实例了
         login_window.show()
         return login_window.exec(0)
         # 这里return会报错，但是删掉这一行就不显示了，所以留着
