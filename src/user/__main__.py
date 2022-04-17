@@ -6,6 +6,7 @@ import re
 import webbrowser
 
 import Doc
+import chat_operations as chatops
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStyleFactory, QMessageBox, QDialog
 
@@ -17,13 +18,13 @@ from ui.Signal import chat_window_signal
 from ui.Signal import login_window_signal
 from ui.Signal import register_window_signal
 
-ip = ''
-port = ''
-user = ''
-textbox = ''  # 用于显示在线用户的列表框
-show = 1  # 用于判断是开还是关闭列表框
-users = []  # 在线用户列表
-chat = 'Lhat! Chatting Room'  # 聊天对象
+
+ip = chatops.ip
+port = chatops.port
+user = chatops.user
+textbox = chatops.textbox
+users = chatops.users
+chat = chatops.chat
 
 
 # ---调试信息专用
