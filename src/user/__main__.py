@@ -1,8 +1,6 @@
 import socket
 import threading
-import json
 import sys
-import re
 import webbrowser
 
 import Doc
@@ -188,7 +186,9 @@ class ChatApplication(QMainWindow):
         chat_window_signal.clearInPutBox.emit()  # 清空输入框
 
     def startReceive(self):
-        receive_thread = threading.Thread(target=self.receive)
+        # 你懂的，这是一个线程，用于接收消息，函数呢？在模块里面的函数，可以直接调用，但是要加模块名
+        receive_thread = threading.Thread(target=chatops.receive,
+                                          args=(username, self, chat_window_signal, QMessageBox))
         receive_thread.start()  # 开始线程接收信息
 
     def triggeredMenubar(self, triggeres):
@@ -197,43 +197,6 @@ class ChatApplication(QMainWindow):
                     "退出": self.onExit
                     }
         jump_map[triggeres.text()]()
-
-    def receive(self):
-        global online_users, username
-        while True:
-            try:
-                received_data = self.connection.recv(1024)
-            except ConnectionAbortedError:
-                return  # 这个后续要改，连接断开了，要提示用户，而不是直接关闭接收方法，这样可以保证接收线程不会一直挂起。
-            received_data = received_data.decode('utf-8')
-            print(received_data)  # ---
-            try:
-                online_users = json.loads(received_data)
-                chat_window_signal.clearOnlineUserList.emit()
-                chat_window_signal.appendOnlineUserList.emit('Lhat! Chatting Room\n')
-                chat_window_signal.appendOnlineUserList.emit('===在线用户===\n')
-                for user_index, username in enumerate(online_users):
-                    chat_window_signal.appendOnlineUserList.emit(str(username))
-                    # online_users[user_index] + '\n')
-                online_users.append('Lhat! Chatting Room')
-            except Exception:
-                received_data = received_data.split(r'\+-*/')
-                article = received_data[0]  # 正文
-                send_from = received_data[1]  # 发送者
-                send_to = received_data[2]  # 接收者
-                article = '\n' + article  # 添加换行符
-                if send_to == 'Lhat! Chatting Room':  # 群聊
-                    # if send_from == username:
-                    #     chat_window_signal.appendOutPutBox.emit(article)
-                    # else:
-                    #     chat_window_signal.appendOutPutBox.emit(article)
-                    chat_window_signal.appendOutPutBox.emit(article)
-                elif send_from == username or send_to == username:  # 私聊
-                    # if send_from == username:
-                    #     chat_window_signal.appendOutPutBox.emit(article)
-                    # else:
-                    #     chat_window_signal.appendOutPutBox.emit(article)
-                    chat_window_signal.appendOutPutBox.emit(article)
 
     def backLoginWindow(self):
         global login_window  # 登录窗口实例总是要被覆盖的，所以要全局变量，以便后续开发
