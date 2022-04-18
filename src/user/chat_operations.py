@@ -172,7 +172,7 @@ def receive(username, window_object, signals, tips_box):
 
         elif message_type == 'USER_MANIFEST':
             message_body = message[1]
-            online_users = json.loads(message_body)
+            online_users = message_body
             signals.clearOnlineUserList.emit()
             signals.appendOnlineUserList.emit('Lhat! Chatting Room\n')
             signals.appendOnlineUserList.emit('====在线用户====\n')
@@ -180,4 +180,3 @@ def receive(username, window_object, signals, tips_box):
                 # online_username是用于显示在线用户的，不要与username混淆
                 signals.appendOnlineUserList.emit(str(online_username))
                 # online_users[user_index] + '\n')
-            online_users.append('Lhat! Chatting Room')
