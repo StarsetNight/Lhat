@@ -1,6 +1,7 @@
 # Lhat  
 ## 开发说明 DEVELOPING INSTRUCTIONS
-这是个开发性质的分支，可以用来存放一些开发中的东西。  
+如果有开发人员想要研究一下Lhat的研究核心的话，里面请：  
+[Lhat通信核心文档](https://github.com/3rdBit/Lhat-Communications-Standard)  
 > 直接塞到main里是会心肌梗塞的。  
 > 项目基于Python和PySide6开发。  
 ## 介绍 INTRODUCE  
