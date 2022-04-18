@@ -170,7 +170,7 @@ def receive(username, window_object, signals, tips_box):
             elif message_send_to == username or message_send_by == username:  # 私聊
                 signals.appendOutPutBox.emit(message_body)
 
-        elif message_type == 'TEXT_MESSAGE_USER_LIST':
+        elif message_type == 'USER_MANIFEST':
             message_body = message[1]
             online_users = json.loads(message_body)
             signals.clearOnlineUserList.emit()
