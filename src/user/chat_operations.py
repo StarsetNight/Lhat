@@ -3,7 +3,7 @@ import json
 import time
 # import os.path
 
-import chat_functions
+# import chat_functions
 
 ip = ''
 port = ''
@@ -67,11 +67,12 @@ def unpack(json_message: str):
         return 'NOT_JSON_MESSAGE'
 
     if message['type'] == 'TEXT_MESSAGE_ARTICLE':  # 如果是纯文本消息
-        return message['type'], message['to'], (message['by'] + f' [{message["time"]}] : \n  ' + message['message'])
+        return message['type'], message['to'], \
+               (message['by'] + f' [{message["time"]}] : \n  ' + message['message']), message['by']
     elif message['type'] == 'USER_MANIFEST':  # 如果是用户列表
         try:
             manifest = json.loads(message['message'])
-            return manifest
+            return message['type'], manifest
         except json.decoder.JSONDecodeError:
             return 'MANIFEST_NOT_JSON'
 
@@ -160,14 +161,17 @@ def receive(username, window_object, signals, tips_box):
         '''
         message = unpack(received_data)  # 解包消息
         message_type = message[0]
-        message_send_to = message[1]
-        message_body = message[2]
         if message_type == 'TEXT_MESSAGE_ARTICLE':
+            message_send_to = message[1]
+            message_body = message[2]
+            message_send_by = message[3]
             if message_send_to == 'Lhat! Chatting Room':  # 群聊
                 signals.appendOutPutBox.emit(message_body)
-            elif message_send_to == username or message_send_to == 'Lhat! Chatting Room':  # 私聊
+            elif message_send_to == username or message_send_by == username:  # 私聊
                 signals.appendOutPutBox.emit(message_body)
+
         elif message_type == 'TEXT_MESSAGE_USER_LIST':
+            message_body = message[1]
             online_users = json.loads(message_body)
             signals.clearOnlineUserList.emit()
             signals.appendOnlineUserList.emit('Lhat! Chatting Room\n')
