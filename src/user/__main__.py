@@ -133,7 +133,7 @@ class ChatApplication(QMainWindow):
             QMessageBox.critical(self, "错误", '非法的IP地址及端口，\n将退回登录界面。')
             self.backLoginWindow()
             return
-        except ConnectionAbortedError or ConnectionResetError or ConnectionRefusedError as conn_err:
+        except ConnectionAbortedError or ConnectionRefusedError as conn_err:
             QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
             self.backLoginWindow()
             return
@@ -142,9 +142,9 @@ class ChatApplication(QMainWindow):
             self.backLoginWindow()
             return
         if username:
-            self.connection.send(username.encode('utf-8'))  # 发送用户名
+            self.connection.send(chatops.pack(username, None, None, 'USER_NAME'))  # 发送用户名
         else:
-            self.connection.send('用户名不存在'.encode('utf-8'))
+            self.connection.send(chatops.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
             username = server_ip + ':' + server_port
 
         self.startReceive()  # 创建线程用于接收消息
