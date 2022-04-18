@@ -1,7 +1,7 @@
 import re
 import json
 import time
-import os.path
+# import os.path
 
 import chat_functions
 
@@ -42,13 +42,12 @@ def pack(raw_message: str, send_from, chat_with, message_type, file_name=None):
     return json.dumps(message).encode('utf-8')  # 再用json打包
 
 
-def unpack(json_message: str, output_box):
+def unpack(json_message: str):
     """
     解包消息，用于接收JSON格式的消息
     看不懂message字典对应的东西吗？message_types里面有。
 
     :param json_message: JSON消息
-    :param output_box: 显示消息的控件
     :return: 返回的东西有很多，也有可能是报错
     ==================================================
     return返回值大全：
@@ -68,7 +67,7 @@ def unpack(json_message: str, output_box):
         return 'NOT_JSON_MESSAGE'
 
     if message['type'] == 'TEXT_MESSAGE_ARTICLE':  # 如果是纯文本消息
-        return message['by'] + f' [{message["time"]}] : \n  ' + message['message']
+        return message['type'], message['to'], (message['by'] + f' [{message["time"]}] : \n  ' + message['message'])
     elif message['type'] == 'USER_MANIFEST':  # 如果是用户列表
         try:
             manifest = json.loads(message['message'])
@@ -77,12 +76,15 @@ def unpack(json_message: str, output_box):
             return 'MANIFEST_NOT_JSON'
 
     elif message['type'] == 'FILE_RECV_DATA':
+        '''
         output_box.emit('锵锵！正在接收文件...')
         file_path = os.path.join('/files/', message['message'])
         with open(file_path, 'wb') as opened_file:
             opened_file.write(message['message'])
         output_box.emit(f'接收完毕！保存路径为：{file_path}')
         return 'FILE_SAVED'
+        '''
+        # 待办 接收文件
     else:
         return 'UNKNOWN_MESSAGE_TYPE'
 
@@ -91,6 +93,8 @@ def send(connection, raw_message: str, send_from, output_box):
     """
     发送消息，但是得要TCP连接。
     """
+    # 待办 更人性化且更先进的发送函数，所以函数体要更改
+    # 消息类型，消息类型要改，以后使用pack()来打包消息
     chat_with = 'Lhat! Chatting Room'
     if not raw_message:
         output_box.emit('\n[提示] 发送的消息不能为空！')
@@ -99,8 +103,9 @@ def send(connection, raw_message: str, send_from, output_box):
         command_message = raw_message.split(' ')  # 分割完之后，分辨一下是否为命令
         chat_with = command_message[1]
         raw_message = re.sub('//tell', '[私聊消息] 到', raw_message)
-    message = raw_message + r'\+-*/' + send_from + r'\+-*/' + chat_with  # 打包消息
-    connection.send(message.encode('utf-8'))  # 发送消息
+    # message = raw_message + r'\+-*/' + send_from + r'\+-*/' + chat_with  # 打包消息，旧版的
+    message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE_ARTICLE')  # 被替换
+    connection.send(message)  # 发送消息
 
 
 def receive(username, window_object, signals, tips_box):
@@ -111,6 +116,8 @@ def receive(username, window_object, signals, tips_box):
     :param signals: 绑定的信号，用于触发方法
     :param tips_box: 对话框
     """
+    # 待办 更人性化且更先进的接收函数，所以函数体要更改
+    # 用unpack()来解包消息
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
@@ -121,6 +128,7 @@ def receive(username, window_object, signals, tips_box):
             return
         received_data = received_data.decode('utf-8')
         print(received_data)  # ---
+        '''
         try:  # 如果JSON解码成功，则是用户列表
             online_users = json.loads(received_data)
             signals.clearOnlineUserList.emit()
@@ -149,3 +157,23 @@ def receive(username, window_object, signals, tips_box):
                 # else:
                 #     chat_window_signal.appendOutPutBox.emit(article)
                 signals.appendOutPutBox.emit(article)
+        '''
+        message = unpack(received_data)  # 解包消息
+        message_type = message[0]
+        message_send_to = message[1]
+        message_body = message[2]
+        if message_type == 'TEXT_MESSAGE_ARTICLE':
+            if message_send_to == 'Lhat! Chatting Room':  # 群聊
+                signals.appendOutPutBox.emit(message_body)
+            elif message_send_to == username or message_send_to == 'Lhat! Chatting Room':  # 私聊
+                signals.appendOutPutBox.emit(message_body)
+        elif message_type == 'TEXT_MESSAGE_USER_LIST':
+            online_users = json.loads(message_body)
+            signals.clearOnlineUserList.emit()
+            signals.appendOnlineUserList.emit('Lhat! Chatting Room\n')
+            signals.appendOnlineUserList.emit('====在线用户====\n')
+            for user_index, online_username in enumerate(online_users):
+                # online_username是用于显示在线用户的，不要与username混淆
+                signals.appendOnlineUserList.emit(str(online_username))
+                # online_users[user_index] + '\n')
+            online_users.append('Lhat! Chatting Room')
