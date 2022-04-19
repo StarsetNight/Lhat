@@ -41,8 +41,8 @@ class Ui_RegisterWindow(object):
         self.button_argee_disargee.setSizePolicy(sizePolicy1)
         self.button_argee_disargee.setSizeIncrement(QSize(0, 0))
         font = QFont()
+        font.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
         font.setPointSize(18)
-        font.setBold(True)
         self.button_argee_disargee.setFont(font)
         self.button_argee_disargee.setLayoutDirection(Qt.LeftToRight)
         self.button_argee_disargee.setOrientation(Qt.Horizontal)
@@ -58,8 +58,8 @@ class Ui_RegisterWindow(object):
         sizePolicy2.setHeightForWidth(self.static_text_1.sizePolicy().hasHeightForWidth())
         self.static_text_1.setSizePolicy(sizePolicy2)
         font1 = QFont()
+        font1.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
         font1.setPointSize(12)
-        font1.setBold(False)
         self.static_text_1.setFont(font1)
 
         self.gridLayout.addWidget(self.static_text_1, 0, 0, 1, 2)
@@ -73,6 +73,7 @@ class Ui_RegisterWindow(object):
         self.input_box_register_server_ip_port.setSizePolicy(sizePolicy3)
         self.input_box_register_server_ip_port.setMaximumSize(QSize(16777215, 90))
         font2 = QFont()
+        font2.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
         font2.setPointSize(14)
         self.input_box_register_server_ip_port.setFont(font2)
 

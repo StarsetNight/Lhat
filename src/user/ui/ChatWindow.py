@@ -55,7 +55,7 @@ class Ui_ChatWindow(object):
         sizePolicy1.setHeightForWidth(self.output_box_online_user.sizePolicy().hasHeightForWidth())
         self.output_box_online_user.setSizePolicy(sizePolicy1)
         font = QFont()
-        font.setFamilies([u"\u5e7c\u5706"])
+        font.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
         self.output_box_online_user.setFont(font)
 
         self.hbox2.addWidget(self.output_box_online_user)
@@ -83,8 +83,8 @@ class Ui_ChatWindow(object):
         sizePolicy3.setHeightForWidth(self.button_send_message.sizePolicy().hasHeightForWidth())
         self.button_send_message.setSizePolicy(sizePolicy3)
         font1 = QFont()
+        font1.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
         font1.setPointSize(20)
-        font1.setBold(True)
         self.button_send_message.setFont(font1)
 
         self.hbox1.addWidget(self.button_send_message)

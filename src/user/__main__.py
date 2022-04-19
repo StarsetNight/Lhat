@@ -16,7 +16,6 @@ from ui.Signal import chat_window_signal
 from ui.Signal import login_window_signal
 from ui.Signal import register_window_signal
 
-
 server_ip = chatops.ip  # 定义服务器IP
 server_port = chatops.port  # 定义服务器端口
 username = chatops.user  # 定义用户名
@@ -110,6 +109,7 @@ class RegisterApplication(QDialog):
 class ChatApplication(QMainWindow):
     def __init__(self):
         global username  # 用户名是需要在窗口关闭时重新赋值的，所以需要全局变量
+        self.receive_thread = None  # 定义接收线程
 
         super().__init__()
         self.ui = Ui_ChatWindow()  # UI类的实例化()
@@ -190,9 +190,9 @@ class ChatApplication(QMainWindow):
 
     def startReceive(self):
         # 你懂的，这是一个线程，用于接收消息，函数呢？在模块里面的函数，可以直接调用，但是要加模块名
-        receive_thread = threading.Thread(target=chatops.receive,
-                                          args=(username, self, chat_window_signal, QMessageBox))
-        receive_thread.start()  # 开始线程接收信息
+        self.receive_thread = threading.Thread(target=chatops.receive,
+                                               args=(username, self, chat_window_signal))
+        self.receive_thread.start()  # 开始线程接收信息
 
     def triggeredMenubar(self, triggeres):
         jump_map = {"发送": self.sendMessage,
