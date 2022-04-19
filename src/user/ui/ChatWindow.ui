@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>656</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -586,6 +586,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
           <verstretch>5</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
        </widget>
       </item>
       <item>
@@ -599,6 +604,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         <property name="font">
          <font>
           <family>幼圆</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
        </widget>
@@ -615,6 +621,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
           <verstretch>1</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
        </widget>
       </item>
       <item>
@@ -628,12 +639,16 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         <property name="font">
          <font>
           <family>微软雅黑</family>
-          <pointsize>20</pointsize>
+          <pointsize>24</pointsize>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
          <string>发送</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+Return</string>
         </property>
        </widget>
       </item>
@@ -646,7 +661,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>766</width>
+     <width>800</width>
      <height>19</height>
     </rect>
    </property>

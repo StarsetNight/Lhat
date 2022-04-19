@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>429</height>
+    <width>500</width>
+    <height>350</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -602,7 +602,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
      <widget class="QLabel" name="static_text_3">
       <property name="font">
        <font>
-        <family>微软雅黑</family>
+        <family>Microsoft YaHei UI</family>
         <pointsize>14</pointsize>
         <bold>false</bold>
        </font>
@@ -631,8 +631,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
       </property>
       <property name="font">
        <font>
-        <family>微软雅黑</family>
-        <pointsize>20</pointsize>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>18</pointsize>
         <bold>false</bold>
        </font>
       </property>
@@ -657,7 +657,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
       </property>
       <property name="font">
        <font>
-        <family>微软雅黑</family>
+        <family>Microsoft YaHei UI</family>
         <pointsize>20</pointsize>
         <bold>false</bold>
        </font>
@@ -708,7 +708,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
      <widget class="QLabel" name="static_text_2">
       <property name="font">
        <font>
-        <family>微软雅黑</family>
+        <family>Microsoft YaHei UI</family>
         <pointsize>14</pointsize>
         <bold>false</bold>
        </font>
@@ -763,7 +763,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
       </property>
       <property name="font">
        <font>
-        <family>微软雅黑</family>
+        <family>Microsoft YaHei UI</family>
         <pointsize>12</pointsize>
         <bold>false</bold>
        </font>

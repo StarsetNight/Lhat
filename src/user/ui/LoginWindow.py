@@ -23,7 +23,7 @@ class Ui_LoginWindow(object):
     def setupUi(self, LoginWindow):
         if not LoginWindow.objectName():
             LoginWindow.setObjectName(u"LoginWindow")
-        LoginWindow.resize(530, 429)
+        LoginWindow.resize(500, 350)
         LoginWindow.setStyleSheet(u"/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
@@ -623,7 +623,7 @@ class Ui_LoginWindow(object):
         self.static_text_3 = QLabel(self.centralwidget)
         self.static_text_3.setObjectName(u"static_text_3")
         font1 = QFont()
-        font1.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
+        font1.setFamilies([u"Microsoft YaHei UI"])
         font1.setPointSize(14)
         font1.setBold(False)
         self.static_text_3.setFont(font1)
@@ -640,8 +640,8 @@ class Ui_LoginWindow(object):
         self.button_register.setSizePolicy(sizePolicy)
         self.button_register.setMaximumSize(QSize(16777215, 80))
         font2 = QFont()
-        font2.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font2.setPointSize(20)
+        font2.setFamilies([u"Microsoft YaHei UI"])
+        font2.setPointSize(18)
         font2.setBold(False)
         self.button_register.setFont(font2)
 
@@ -652,7 +652,11 @@ class Ui_LoginWindow(object):
         sizePolicy.setHeightForWidth(self.button_login.sizePolicy().hasHeightForWidth())
         self.button_login.setSizePolicy(sizePolicy)
         self.button_login.setMaximumSize(QSize(16777215, 80))
-        self.button_login.setFont(font2)
+        font3 = QFont()
+        font3.setFamilies([u"Microsoft YaHei UI"])
+        font3.setPointSize(20)
+        font3.setBold(False)
+        self.button_login.setFont(font3)
 
         self.gridLayout.addWidget(self.button_login, 5, 2, 1, 1)
 
@@ -696,11 +700,11 @@ class Ui_LoginWindow(object):
         sizePolicy2.setVerticalStretch(1)
         sizePolicy2.setHeightForWidth(self.static_text_1.sizePolicy().hasHeightForWidth())
         self.static_text_1.setSizePolicy(sizePolicy2)
-        font3 = QFont()
-        font3.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font3.setPointSize(12)
-        font3.setBold(False)
-        self.static_text_1.setFont(font3)
+        font4 = QFont()
+        font4.setFamilies([u"Microsoft YaHei UI"])
+        font4.setPointSize(12)
+        font4.setBold(False)
+        self.static_text_1.setFont(font4)
 
         self.gridLayout.addWidget(self.static_text_1, 1, 1, 1, 2)
 

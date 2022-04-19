@@ -23,7 +23,7 @@ class Ui_RegisterWindow(object):
     def setupUi(self, RegisterWindow):
         if not RegisterWindow.objectName():
             RegisterWindow.setObjectName(u"RegisterWindow")
-        RegisterWindow.resize(646, 374)
+        RegisterWindow.resize(540, 360)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(2)

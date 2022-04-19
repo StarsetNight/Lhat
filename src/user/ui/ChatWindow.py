@@ -24,7 +24,7 @@ class Ui_ChatWindow(object):
     def setupUi(self, ChatWindow):
         if not ChatWindow.objectName():
             ChatWindow.setObjectName(u"ChatWindow")
-        ChatWindow.resize(766, 656)
+        ChatWindow.resize(800, 600)
         ChatWindow.setStyleSheet(u"/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
@@ -630,6 +630,9 @@ class Ui_ChatWindow(object):
         sizePolicy.setVerticalStretch(5)
         sizePolicy.setHeightForWidth(self.output_box_message.sizePolicy().hasHeightForWidth())
         self.output_box_message.setSizePolicy(sizePolicy)
+        font1 = QFont()
+        font1.setPointSize(12)
+        self.output_box_message.setFont(font1)
 
         self.hbox2.addWidget(self.output_box_message)
 
@@ -640,9 +643,10 @@ class Ui_ChatWindow(object):
         sizePolicy1.setVerticalStretch(5)
         sizePolicy1.setHeightForWidth(self.output_box_online_user.sizePolicy().hasHeightForWidth())
         self.output_box_online_user.setSizePolicy(sizePolicy1)
-        font1 = QFont()
-        font1.setFamilies([u"\u5e7c\u5706"])
-        self.output_box_online_user.setFont(font1)
+        font2 = QFont()
+        font2.setFamilies([u"\u5e7c\u5706"])
+        font2.setPointSize(12)
+        self.output_box_online_user.setFont(font2)
 
         self.hbox2.addWidget(self.output_box_online_user)
 
@@ -658,6 +662,7 @@ class Ui_ChatWindow(object):
         sizePolicy2.setVerticalStretch(1)
         sizePolicy2.setHeightForWidth(self.input_box_message.sizePolicy().hasHeightForWidth())
         self.input_box_message.setSizePolicy(sizePolicy2)
+        self.input_box_message.setFont(font1)
 
         self.hbox1.addWidget(self.input_box_message)
 
@@ -668,11 +673,12 @@ class Ui_ChatWindow(object):
         sizePolicy3.setVerticalStretch(1)
         sizePolicy3.setHeightForWidth(self.button_send_message.sizePolicy().hasHeightForWidth())
         self.button_send_message.setSizePolicy(sizePolicy3)
-        font2 = QFont()
-        font2.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font2.setPointSize(20)
-        font2.setBold(False)
-        self.button_send_message.setFont(font2)
+        font3 = QFont()
+        font3.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
+        font3.setPointSize(24)
+        font3.setBold(False)
+        font3.setStyleStrategy(QFont.PreferAntialias)
+        self.button_send_message.setFont(font3)
 
         self.hbox1.addWidget(self.button_send_message)
 
@@ -682,7 +688,7 @@ class Ui_ChatWindow(object):
         ChatWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(ChatWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 766, 19))
+        self.menubar.setGeometry(QRect(0, 0, 800, 19))
         self.menu = QMenu(self.menubar)
         self.menu.setObjectName(u"menu")
         self.menu.setFont(font)
@@ -709,6 +715,9 @@ class Ui_ChatWindow(object):
         self.menubar_logoff.setText(QCoreApplication.translate("ChatWindow", u"\u65ad\u5f00\u8fde\u63a5", None))
         self.menubar_exit.setText(QCoreApplication.translate("ChatWindow", u"\u9000\u51fa", None))
         self.button_send_message.setText(QCoreApplication.translate("ChatWindow", u"\u53d1\u9001", None))
+#if QT_CONFIG(shortcut)
+        self.button_send_message.setShortcut(QCoreApplication.translate("ChatWindow", u"Ctrl+Return", None))
+#endif // QT_CONFIG(shortcut)
         self.menu.setTitle(QCoreApplication.translate("ChatWindow", u"\u64cd\u4f5c", None))
     # retranslateUi
 
