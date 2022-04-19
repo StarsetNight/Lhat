@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>429</height>
+    <width>500</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <widget class="QLabel" name="static_text_3">
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
-        <bold>true</bold>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -47,8 +47,8 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>20</pointsize>
-        <bold>true</bold>
+        <pointsize>18</pointsize>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -132,8 +132,8 @@
      <widget class="QLabel" name="static_text_2">
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
-        <bold>true</bold>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
        </font>
       </property>
       <property name="contextMenuPolicy">
@@ -166,8 +166,8 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>20</pointsize>
-        <bold>true</bold>
+        <pointsize>18</pointsize>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -186,7 +186,7 @@
       <property name="font">
        <font>
         <pointsize>12</pointsize>
-        <bold>true</bold>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -215,7 +215,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>530</width>
+     <width>500</width>
      <height>22</height>
     </rect>
    </property>

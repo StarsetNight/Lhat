@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>656</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,6 +25,11 @@
           <verstretch>5</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
        </widget>
       </item>
       <item>
@@ -37,8 +42,16 @@
         </property>
         <property name="font">
          <font>
-          <family>幼圆</family>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>12</pointsize>
          </font>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Microsoft YaHei UI'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -54,6 +67,11 @@
           <verstretch>1</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
        </widget>
       </item>
       <item>
@@ -67,11 +85,16 @@
         <property name="font">
          <font>
           <pointsize>20</pointsize>
-          <bold>true</bold>
+          <italic>false</italic>
+          <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
          <string>发送</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+Return</string>
         </property>
        </widget>
       </item>
@@ -84,7 +107,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>766</width>
+     <width>800</width>
      <height>22</height>
     </rect>
    </property>

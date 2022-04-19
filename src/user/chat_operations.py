@@ -119,6 +119,8 @@ def receive(username, window_object, signals):
     """
     # 待办 更人性化且更先进的接收函数，所以函数体要更改
     # 用unpack()来解包消息
+    signals.appendOutPutBox.emit('欢迎来到Lhat聊天室！大家开始聊天吧！\n'
+                                 '[小提示] 使用 /tell <用户名> 来私聊！\n')
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
@@ -141,8 +143,8 @@ def receive(username, window_object, signals):
             message_body = message[1]
             online_users = message_body
             signals.clearOnlineUserList.emit()
-            signals.appendOnlineUserList.emit('Lhat! Chatting Room\n')
-            signals.appendOnlineUserList.emit('====在线用户====\n')
+            signals.appendOnlineUserList.emit('Lhat! Chatting Room')
+            signals.appendOnlineUserList.emit('====在线用户====')
             for user_index, online_username in enumerate(online_users):
                 # online_username是用于显示在线用户的，不要与username混淆
                 signals.appendOnlineUserList.emit(str(online_username))

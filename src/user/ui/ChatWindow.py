@@ -24,7 +24,7 @@ class Ui_ChatWindow(object):
     def setupUi(self, ChatWindow):
         if not ChatWindow.objectName():
             ChatWindow.setObjectName(u"ChatWindow")
-        ChatWindow.resize(766, 656)
+        ChatWindow.resize(800, 600)
         self.menubar_send = QAction(ChatWindow)
         self.menubar_send.setObjectName(u"menubar_send")
         self.menubar_logoff = QAction(ChatWindow)
@@ -44,6 +44,9 @@ class Ui_ChatWindow(object):
         sizePolicy.setVerticalStretch(5)
         sizePolicy.setHeightForWidth(self.output_box_message.sizePolicy().hasHeightForWidth())
         self.output_box_message.setSizePolicy(sizePolicy)
+        font = QFont()
+        font.setPointSize(12)
+        self.output_box_message.setFont(font)
 
         self.hbox2.addWidget(self.output_box_message)
 
@@ -54,9 +57,10 @@ class Ui_ChatWindow(object):
         sizePolicy1.setVerticalStretch(5)
         sizePolicy1.setHeightForWidth(self.output_box_online_user.sizePolicy().hasHeightForWidth())
         self.output_box_online_user.setSizePolicy(sizePolicy1)
-        font = QFont()
-        font.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        self.output_box_online_user.setFont(font)
+        font1 = QFont()
+        font1.setFamilies([u"Microsoft YaHei UI"])
+        font1.setPointSize(12)
+        self.output_box_online_user.setFont(font1)
 
         self.hbox2.addWidget(self.output_box_online_user)
 
@@ -72,6 +76,9 @@ class Ui_ChatWindow(object):
         sizePolicy2.setVerticalStretch(1)
         sizePolicy2.setHeightForWidth(self.input_box_message.sizePolicy().hasHeightForWidth())
         self.input_box_message.setSizePolicy(sizePolicy2)
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.input_box_message.setFont(font2)
 
         self.hbox1.addWidget(self.input_box_message)
 
@@ -82,10 +89,12 @@ class Ui_ChatWindow(object):
         sizePolicy3.setVerticalStretch(1)
         sizePolicy3.setHeightForWidth(self.button_send_message.sizePolicy().hasHeightForWidth())
         self.button_send_message.setSizePolicy(sizePolicy3)
-        font1 = QFont()
-        font1.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font1.setPointSize(20)
-        self.button_send_message.setFont(font1)
+        font3 = QFont()
+        font3.setPointSize(20)
+        font3.setBold(False)
+        font3.setItalic(False)
+        font3.setStyleStrategy(QFont.PreferAntialias)
+        self.button_send_message.setFont(font3)
 
         self.hbox1.addWidget(self.button_send_message)
 
@@ -95,7 +104,7 @@ class Ui_ChatWindow(object):
         ChatWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(ChatWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 766, 22))
+        self.menubar.setGeometry(QRect(0, 0, 800, 22))
         self.menu = QMenu(self.menubar)
         self.menu.setObjectName(u"menu")
         ChatWindow.setMenuBar(self.menubar)
@@ -120,7 +129,15 @@ class Ui_ChatWindow(object):
         self.menubar_send.setText(QCoreApplication.translate("ChatWindow", u"\u53d1\u9001", None))
         self.menubar_logoff.setText(QCoreApplication.translate("ChatWindow", u"\u65ad\u5f00\u8fde\u63a5", None))
         self.menubar_exit.setText(QCoreApplication.translate("ChatWindow", u"\u9000\u51fa", None))
+        self.output_box_online_user.setHtml(QCoreApplication.translate("ChatWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Microsoft YaHei UI'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.button_send_message.setText(QCoreApplication.translate("ChatWindow", u"\u53d1\u9001", None))
+#if QT_CONFIG(shortcut)
+        self.button_send_message.setShortcut(QCoreApplication.translate("ChatWindow", u"Ctrl+Return", None))
+#endif // QT_CONFIG(shortcut)
         self.menu.setTitle(QCoreApplication.translate("ChatWindow", u"\u64cd\u4f5c", None))
     # retranslateUi
 
