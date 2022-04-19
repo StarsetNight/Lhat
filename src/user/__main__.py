@@ -16,7 +16,6 @@ from ui.Signal import chat_window_signal
 from ui.Signal import login_window_signal
 from ui.Signal import register_window_signal
 
-
 server_ip = chatops.ip  # 定义服务器IP
 server_port = chatops.port  # 定义服务器端口
 username = chatops.user  # 定义用户名
@@ -26,12 +25,6 @@ chat_with = chatops.chat  # 定义聊天对象，默认为群聊
 
 
 # ---调试信息专用
-
-'''
-备忘录：
-250行？我删掉了exec方法还能显示欸？
-'''
-
 
 class LoginApplication(QMainWindow):
     def __init__(self):
@@ -116,6 +109,7 @@ class RegisterApplication(QDialog):
 class ChatApplication(QMainWindow):
     def __init__(self):
         global username  # 用户名是需要在窗口关闭时重新赋值的，所以需要全局变量
+        self.receive_thread = None  # 定义接收线程
 
         super().__init__()
         self.ui = Ui_ChatWindow()  # UI类的实例化()
@@ -150,44 +144,44 @@ class ChatApplication(QMainWindow):
         self.startReceive()  # 创建线程用于接收消息
 
     def band(self):
-        chat_window_signal.appendOutPutBox.connect(self.appendOutPut)
-        chat_window_signal.setOutPutBox.connect(self.setOutPut)
-        chat_window_signal.clearOutPutBox.connect(self.clearOutPut)
+        def appendOutPut(msg: str):
+            self.ui.output_box_message.append(msg)
 
-        chat_window_signal.appendInPutBox.connect(self.appendInPut)
-        chat_window_signal.setInPutBox.connect(self.setInPut)
-        chat_window_signal.clearInPutBox.connect(self.clearInPut)
+        def clearOutPut():
+            self.ui.output_box_message.clear()
 
-        chat_window_signal.appendOnlineUserList.connect(self.appendOnlineUser)
-        chat_window_signal.setOnlineUserList.connect(self.setOnlineUser)
-        chat_window_signal.clearOnlineUserList.connect(self.clearOnlineUser)
+        def setOutPut(msg: str):
+            self.ui.output_box_message.setText(msg)
 
-    def appendOutPut(self, msg: str):
-        self.ui.output_box_message.append(msg)
+        def appendInPut(msg: str):
+            self.ui.input_box_message.append(msg)
 
-    def clearOutPut(self):
-        self.ui.output_box_message.clear()
+        def clearInPut():
+            self.ui.input_box_message.clear()
 
-    def setOutPut(self, msg: str):
-        self.ui.output_box_message.setText(msg)
+        def setInPut(msg: str):
+            self.ui.input_box_message.setText(msg)
 
-    def appendInPut(self, msg: str):
-        self.ui.input_box_message.append(msg)
+        def appendOnlineUser(msg: str):
+            self.ui.output_box_online_user.append(msg)
 
-    def clearInPut(self):
-        self.ui.input_box_message.clear()
+        def clearOnlineUser():
+            self.ui.output_box_online_user.clear()
 
-    def setInPut(self, msg: str):
-        self.ui.input_box_message.setText(msg)
+        def setOnlineUser(msg: str):
+            self.ui.output_box_online_user.setText(msg)
 
-    def appendOnlineUser(self, msg: str):
-        self.ui.output_box_online_user.append(msg)
+        chat_window_signal.appendOutPutBox.connect(appendOutPut)
+        chat_window_signal.setOutPutBox.connect(setOutPut)
+        chat_window_signal.clearOutPutBox.connect(clearOutPut)
 
-    def clearOnlineUser(self):
-        self.ui.output_box_online_user.clear()
+        chat_window_signal.appendInPutBox.connect(appendInPut)
+        chat_window_signal.setInPutBox.connect(setInPut)
+        chat_window_signal.clearInPutBox.connect(clearInPut)
 
-    def setOnlineUser(self, msg: str):
-        self.ui.output_box_online_user.setText(msg)
+        chat_window_signal.appendOnlineUserList.connect(appendOnlineUser)
+        chat_window_signal.setOnlineUserList.connect(setOnlineUser)
+        chat_window_signal.clearOnlineUserList.connect(clearOnlineUser)
 
     def sendMessage(self):
         raw_message = self.ui.input_box_message.toPlainText()
@@ -196,9 +190,9 @@ class ChatApplication(QMainWindow):
 
     def startReceive(self):
         # 你懂的，这是一个线程，用于接收消息，函数呢？在模块里面的函数，可以直接调用，但是要加模块名
-        receive_thread = threading.Thread(target=chatops.receive,
-                                          args=(username, self, chat_window_signal, QMessageBox))
-        receive_thread.start()  # 开始线程接收信息
+        self.receive_thread = threading.Thread(target=chatops.receive,
+                                               args=(username, self, chat_window_signal))
+        self.receive_thread.start()  # 开始线程接收信息
 
     def triggeredMenubar(self, triggeres):
         jump_map = {"发送": self.sendMessage,

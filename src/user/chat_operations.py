@@ -109,7 +109,7 @@ def send(connection, raw_message: str, send_from, output_box):
     connection.send(message)  # 发送消息
 
 
-def receive(username, window_object, signals, tips_box):
+def receive(username, window_object, signals):
     """
     接收消息，但是得要TCP连接。
     :param username: 当前接收的用户名
@@ -119,46 +119,15 @@ def receive(username, window_object, signals, tips_box):
     """
     # 待办 更人性化且更先进的接收函数，所以函数体要更改
     # 用unpack()来解包消息
+    signals.appendOutPutBox.emit('欢迎来到Lhat聊天室！大家开始聊天吧！\n'
+                                 '[小提示] 使用 /tell <用户名> 来私聊！\n')
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
-        except ConnectionAbortedError or ConnectionResetError or ConnectionRefusedError as conn_err:
-            tips_box.critical(window_object, "错误", f'与服务器的连接已中断或无法连接到服务器，\n将退回登录界面。\n'
-                                                   f'错误原因：{conn_err}')
-            window_object.backLoginWindow()  # 退回登录界面
+        except ConnectionError:
             return
         received_data = received_data.decode('utf-8')
         print(received_data)  # ---
-        '''
-        try:  # 如果JSON解码成功，则是用户列表
-            online_users = json.loads(received_data)
-            signals.clearOnlineUserList.emit()
-            signals.appendOnlineUserList.emit('Lhat! Chatting Room\n')
-            signals.appendOnlineUserList.emit('====在线用户====\n')
-            for user_index, online_username in enumerate(online_users):
-                # online_username是用于显示在线用户的，不要与username混淆
-                signals.appendOnlineUserList.emit(str(online_username))
-                # online_users[user_index] + '\n')
-            online_users.append('Lhat! Chatting Room')
-        except json.decoder.JSONDecodeError:  # 如果JSON解码失败，则说明是普通消息
-            received_data = received_data.split(r'\+-*/')
-            article = received_data[0]  # 正文
-            send_from = received_data[1]  # 发送者
-            send_to = received_data[2]  # 接收者
-            article = '\n' + article  # 添加换行符
-            if send_to == 'Lhat! Chatting Room':  # 群聊
-                # if send_from == username:
-                #     chat_window_signal.appendOutPutBox.emit(article)
-                # else:
-                #     chat_window_signal.appendOutPutBox.emit(article)
-                signals.appendOutPutBox.emit(article)
-            elif send_from == username or send_to == username:  # 私聊
-                # if send_from == username:
-                #     chat_window_signal.appendOutPutBox.emit(article)
-                # else:
-                #     chat_window_signal.appendOutPutBox.emit(article)
-                signals.appendOutPutBox.emit(article)
-        '''
         message = unpack(received_data)  # 解包消息
         message_type = message[0]
         if message_type == 'TEXT_MESSAGE_ARTICLE':
@@ -174,8 +143,8 @@ def receive(username, window_object, signals, tips_box):
             message_body = message[1]
             online_users = message_body
             signals.clearOnlineUserList.emit()
-            signals.appendOnlineUserList.emit('Lhat! Chatting Room\n')
-            signals.appendOnlineUserList.emit('====在线用户====\n')
+            signals.appendOnlineUserList.emit('Lhat! Chatting Room')
+            signals.appendOnlineUserList.emit('====在线用户====')
             for user_index, online_username in enumerate(online_users):
                 # online_username是用于显示在线用户的，不要与username混淆
                 signals.appendOnlineUserList.emit(str(online_username))
