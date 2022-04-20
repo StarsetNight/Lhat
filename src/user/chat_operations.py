@@ -3,7 +3,7 @@ import json
 import time
 # import os.path
 
-# import chat_functions
+import crypt_module as crypt
 
 ip = ''
 port = ''
