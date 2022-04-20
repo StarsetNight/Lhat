@@ -100,7 +100,7 @@ def send(connection, raw_message: str, send_from, output_box):
     # 待办 更人性化且更先进的发送函数，所以函数体要更改
     # 消息类型，消息类型要改，以后使用pack()来打包消息
     chat_with = 'Lhat! Chatting Room'
-    if not raw_message:
+    if not raw_message or not raw_message.strip():
         output_box.emit('\n[提示] 发送的消息不能为空！')
         return
     elif raw_message.startswith('//tell'):  # 如果是私聊
