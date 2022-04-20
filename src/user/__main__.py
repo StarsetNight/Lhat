@@ -171,6 +171,12 @@ class ChatApplication(QMainWindow):
         def setOnlineUser(msg: str):
             self.ui.output_box_online_user.setText(msg)
 
+        def savePubKey(key: str):
+            self.public_key = key
+
+        def savePrivateKey(key: str):
+            self.private_key = key
+
         chat_window_signal.appendOutPutBox.connect(appendOutPut)
         chat_window_signal.setOutPutBox.connect(setOutPut)
         chat_window_signal.clearOutPutBox.connect(clearOutPut)
@@ -182,6 +188,9 @@ class ChatApplication(QMainWindow):
         chat_window_signal.appendOnlineUserList.connect(appendOnlineUser)
         chat_window_signal.setOnlineUserList.connect(setOnlineUser)
         chat_window_signal.clearOnlineUserList.connect(clearOnlineUser)
+
+        chat_window_signal.saveRsaPublicKey.connect(savePubKey)
+        chat_window_signal.saveRsaPrivateKey.connect(savePrivateKey)
 
     def sendMessage(self):
         raw_message = self.ui.input_box_message.toPlainText()
