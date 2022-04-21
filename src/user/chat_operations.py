@@ -3,7 +3,7 @@ import json
 import time
 # import os.path
 
-# import chat_functions
+import crypt_module as crypt
 
 ip = ''
 port = ''
@@ -86,6 +86,9 @@ def unpack(json_message: str):
         return 'FILE_SAVED'
         '''
         # 待办 接收文件
+    elif message['type'] == 'RSA_PUBLIC_KEY' or \
+            message['type'] == 'RSA_PRIVATE_KEY':
+        return message['type'], message['message']
     else:
         return 'UNKNOWN_MESSAGE_TYPE'
 
@@ -97,7 +100,7 @@ def send(connection, raw_message: str, send_from, output_box):
     # 待办 更人性化且更先进的发送函数，所以函数体要更改
     # 消息类型，消息类型要改，以后使用pack()来打包消息
     chat_with = 'Lhat! Chatting Room'
-    if not raw_message:
+    if not raw_message or not raw_message.strip():
         output_box.emit('\n[提示] 发送的消息不能为空！')
         return
     elif raw_message.startswith('//tell'):  # 如果是私聊
@@ -115,7 +118,6 @@ def receive(username, window_object, signals):
     :param username: 当前接收的用户名
     :param window_object: 窗口对象，内含connection，是TCP连接
     :param signals: 绑定的信号，用于触发方法
-    :param tips_box: 对话框
     """
     # 待办 更人性化且更先进的接收函数，所以函数体要更改
     # 用unpack()来解包消息
@@ -149,3 +151,10 @@ def receive(username, window_object, signals):
                 # online_username是用于显示在线用户的，不要与username混淆
                 signals.appendOnlineUserList.emit(str(online_username))
                 # online_users[user_index] + '\n')
+
+        elif message_type == 'RSA_PUBLIC_KEY':
+            signals.appendOutPutBox.emit('[提示] 锵锵！已接收公钥！\n')
+            signals.saveRsaPublicKey.emit(message[2])
+        elif message_type == 'RSA_PRIVATE_KEY':
+            signals.appendOutPutBox.emit('[提示] 锵锵！已接收私钥！\n')
+            signals.saveRsaPrivateKey.emit(message[2])
