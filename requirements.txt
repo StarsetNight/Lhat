@@ -1,2 +1,2 @@
-wxpython
 pyside6
+rsa
