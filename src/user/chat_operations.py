@@ -137,9 +137,9 @@ def receive(username, window_object, signals):
             message_body = message[2]
             message_send_by = message[3]
             if message_send_to == 'Lhat! Chatting Room':  # 群聊
-                signals.appendOutPutBox.emit(message_body)
+                signals.appendOutPutBox.emit(message_body + '\n')
             elif message_send_to == username or message_send_by == username:  # 私聊
-                signals.appendOutPutBox.emit(message_body)
+                signals.appendOutPutBox.emit(message_body + '\n')
 
         elif message_type == 'USER_MANIFEST':
             message_body = message[1]
