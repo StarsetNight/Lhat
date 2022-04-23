@@ -1,5 +1,6 @@
 import re
 import json
+import sys
 import time
 # import os.path
 
@@ -76,19 +77,8 @@ def unpack(json_message: str):
         except json.decoder.JSONDecodeError:
             return 'MANIFEST_NOT_JSON'
 
-    elif message['type'] == 'FILE_RECV_DATA':
-        '''
-        output_box.emit('锵锵！正在接收文件...')
-        file_path = os.path.join('/files/', message['message'])
-        with open(file_path, 'wb') as opened_file:
-            opened_file.write(message['message'])
-        output_box.emit(f'接收完毕！保存路径为：{file_path}')
-        return 'FILE_SAVED'
-        '''
-        # 待办 接收文件
-    elif message['type'] == 'RSA_PUBLIC_KEY' or \
-            message['type'] == 'RSA_PRIVATE_KEY':
-        return message['type'], message['message']
+    elif message['file'] and message['type'] == 'FILE_RECV_DATA':
+        return message['type'], message['file'], message['message']
     else:
         return 'UNKNOWN_MESSAGE_TYPE'
 
@@ -97,18 +87,20 @@ def send(connection, raw_message: str, send_from, output_box):
     """
     发送消息，但是得要TCP连接。
     """
-    # 待办 更人性化且更先进的发送函数，所以函数体要更改
     # 消息类型，消息类型要改，以后使用pack()来打包消息
     chat_with = 'Lhat! Chatting Room'
-    if not raw_message or not raw_message.strip():
+    if not raw_message.strip():
         output_box.emit('\n[提示] 发送的消息不能为空！')
         return
-    elif raw_message.startswith('//tell'):  # 如果是私聊
-        command_message = raw_message.split(' ')  # 分割完之后，分辨一下是否为命令
-        chat_with = command_message[1]
-        raw_message = re.sub('//tell', '[私聊消息] 到', raw_message)
-    # message = raw_message + r'\+-*/' + send_from + r'\+-*/' + chat_with  # 打包消息，旧版的
-    message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE_ARTICLE')  # 被替换
+    elif raw_message.startswith('//tell '):  # 如果是私聊
+        if sys.getsizeof(raw_message) <= 1024:
+            command_message = raw_message.split(' ')  # 分割完之后，分辨一下是否为命令
+            chat_with = command_message[1]
+            raw_message = re.sub('//tell', '[私聊消息] 到', raw_message)
+        else:
+            output_box.emit('[提示] 发送的私聊消息长度不能大于1024字节！\n'
+                            '  建议不要大于300个汉字、900个英文字母和数字！')
+    message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE_ARTICLE')
     connection.send(message)  # 发送消息
 
 
@@ -136,10 +128,13 @@ def receive(username, window_object, signals):
             message_send_to = message[1]
             message_body = message[2]
             message_send_by = message[3]
+            '''
             if message_send_to == 'Lhat! Chatting Room':  # 群聊
-                signals.appendOutPutBox.emit(message_body)
+                signals.appendOutPutBox.emit(message_body + '\n')
             elif message_send_to == username or message_send_by == username:  # 私聊
-                signals.appendOutPutBox.emit(message_body)
+                signals.appendOutPutBox.emit(message_body + '\n')
+            '''
+            signals.appendOutPutBox.emit(message_body + '\n')
 
         elif message_type == 'USER_MANIFEST':
             message_body = message[1]
@@ -152,9 +147,13 @@ def receive(username, window_object, signals):
                 signals.appendOnlineUserList.emit(str(online_username))
                 # online_users[user_index] + '\n')
 
-        elif message_type == 'RSA_PUBLIC_KEY':
-            signals.appendOutPutBox.emit('[提示] 锵锵！已接收公钥！\n')
-            signals.saveRsaPublicKey.emit(message[2])
-        elif message_type == 'RSA_PRIVATE_KEY':
-            signals.appendOutPutBox.emit('[提示] 锵锵！已接收私钥！\n')
-            signals.saveRsaPrivateKey.emit(message[2])
+        elif message_type == 'FILE_RECV_DATA':
+            file_name = message[1]
+            file_data = message[2]
+            signals.appendOutPutBox.emit('[文件] 锵锵！正在接收文件！\n')
+            with open(file_name, 'ab') as chat_file:
+                if isinstance(file_data, str):
+                    chat_file.write(file_data.encode('utf-8'))
+                else:
+                    chat_file.write(file_data)
+            signals.appendOutPutBox.emit('[文件] 锵锵！文件已接收！\n')
