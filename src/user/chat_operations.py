@@ -17,8 +17,7 @@ chat = 'Lhat! Chatting Room'  # 聊天对象
 
 '''
 注意：
-receive函数里的用json判断用户列表和普通消息是要改的，
-所以后续专门改这个东西，还有打包函数。
+所有要更新的操作已更新。
 '''
 
 
@@ -87,7 +86,6 @@ def send(connection, raw_message: str, send_from, output_box):
     """
     发送消息，但是得要TCP连接。
     """
-    # 消息类型，消息类型要改，以后使用pack()来打包消息
     chat_with = 'Lhat! Chatting Room'
     if not raw_message.strip():
         output_box.emit('\n[提示] 发送的消息不能为空！')
@@ -111,10 +109,8 @@ def receive(username, window_object, signals):
     :param window_object: 窗口对象，内含connection，是TCP连接
     :param signals: 绑定的信号，用于触发方法
     """
-    # 待办 更人性化且更先进的接收函数，所以函数体要更改
-    # 用unpack()来解包消息
     signals.appendOutPutBox.emit('欢迎来到Lhat聊天室！大家开始聊天吧！\n'
-                                 '[小提示] 使用 /tell <用户名> 来私聊！\n')
+                                 '[小提示] 使用 //tell <用户名> 来私聊！\n')
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
@@ -125,15 +121,9 @@ def receive(username, window_object, signals):
         message = unpack(received_data)  # 解包消息
         message_type = message[0]
         if message_type == 'TEXT_MESSAGE_ARTICLE':
-            message_send_to = message[1]
+            # message_send_to = message[1]
             message_body = message[2]
-            message_send_by = message[3]
-            '''
-            if message_send_to == 'Lhat! Chatting Room':  # 群聊
-                signals.appendOutPutBox.emit(message_body + '\n')
-            elif message_send_to == username or message_send_by == username:  # 私聊
-                signals.appendOutPutBox.emit(message_body + '\n')
-            '''
+            # message_send_by = message[3]
             signals.appendOutPutBox.emit(message_body + '\n')
 
         elif message_type == 'USER_MANIFEST':
@@ -145,7 +135,6 @@ def receive(username, window_object, signals):
             for user_index, online_username in enumerate(online_users):
                 # online_username是用于显示在线用户的，不要与username混淆
                 signals.appendOnlineUserList.emit(str(online_username))
-                # online_users[user_index] + '\n')
 
         elif message_type == 'FILE_RECV_DATA':
             file_name = message[1]
