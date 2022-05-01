@@ -4,7 +4,7 @@ import sys
 import time
 # import os.path
 
-import crypt_module as crypt
+# import crypt_module as crypt
 
 ip = ''
 port = ''
