@@ -91,21 +91,20 @@ def send(connection, raw_message: str, send_from, output_box):
         output_box.emit('\n[提示] 发送的消息不能为空！')
         return
     elif raw_message.startswith('//tell '):  # 如果是私聊
-        if sys.getsizeof(raw_message) <= 1024:
+        if sys.getsizeof(raw_message) <= 968:
             command_message = raw_message.split(' ')  # 分割完之后，分辨一下是否为命令
             chat_with = command_message[1]
             raw_message = re.sub('//tell', '[私聊消息] 到', raw_message)
         else:
-            output_box.emit('[提示] 发送的私聊消息长度不能大于1024字节！\n'
-                            '  建议不要大于300个汉字、900个英文字母和数字！')
+            output_box.emit('[提示] 发送的私聊消息长度不能大于968字节！\n'
+                            '  建议不要大于300个汉字或900个英文字母和数字！')
     message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE_ARTICLE')
     connection.send(message)  # 发送消息
 
 
-def receive(username, window_object, signals):
+def receive(window_object, signals):
     """
     接收消息，但是得要TCP连接。
-    :param username: 当前接收的用户名
     :param window_object: 窗口对象，内含connection，是TCP连接
     :param signals: 绑定的信号，用于触发方法
     """
