@@ -200,14 +200,15 @@ class ChatApplication(QMainWindow):
     def startReceive(self):
         # 你懂的，这是一个线程，用于接收消息，函数呢？在模块里面的函数，可以直接调用，但是要加模块名
         self.receive_thread = threading.Thread(target=chatops.receive,
-                                               args=(username, self, chat_window_signal))
+                                               args=(self, chat_window_signal))
         self.receive_thread.start()  # 开始线程接收信息
 
     def triggeredMenubar(self, triggeres):
-        jump_map = {"发送": self.sendMessage,
-                    "断开连接": self.onLogoff,
-                    "退出": self.onExit
-                    }
+        jump_map = {
+            "发送": self.sendMessage,
+            "断开连接": self.onLogoff,
+            "退出": self.onExit
+        }
         jump_map[triggeres.text()]()
 
     def backLoginWindow(self):
@@ -215,7 +216,6 @@ class ChatApplication(QMainWindow):
         self.close()
         login_window = LoginApplication()  # 这里就成功覆盖旧实例了
         login_window.show()
-        # ？删掉了还能显示欸？不知道你那边啥情况。
 
     def onLogoff(self):
         dlg = QMessageBox.warning(self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
