@@ -13,6 +13,11 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normalon>:/ico/Lhat.ico</normalon>
+   </iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">/*
 Aqua Style Sheet for QT Applications
@@ -574,6 +579,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    background: none;
 }</string>
   </property>
+  <property name="iconSize">
+   <size>
+    <width>768</width>
+    <height>768</height>
+   </size>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="4" column="2">
@@ -782,7 +793,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
   <tabstop>button_login</tabstop>
   <tabstop>button_register</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../resources/images.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>button_login</sender>
