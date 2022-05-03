@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/images.qrc">
+    <normaloff>:/ico/Lhat.ico</normaloff>:/ico/Lhat.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">/*
 Aqua Style Sheet for QT Applications
@@ -716,7 +720,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/images.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>button_send_message</sender>

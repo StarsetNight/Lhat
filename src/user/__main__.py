@@ -38,7 +38,7 @@ class LoginApplication(QMainWindow):
 
         self.login_window_signal = login_window_signal
 
-        self.setWindowTitle(f"登录到一个 Lhat！服务器   Lhat！版本{Doc.version}")
+        self.setWindowTitle(f"Lhat！{Doc.version} - 登录到一个 Lhat！服务器")
 
     def band(self):
         pass
@@ -51,16 +51,15 @@ class LoginApplication(QMainWindow):
         try:
             server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')
         except ValueError:
-            QMessageBox.warning(self, "警告", '请输入正确的IP地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
+            QMessageBox.warning(self, "警告", '请输入正确的服务器地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
             self.ui.input_box_server_ip_port.setFocus()
             return
         username = self.ui.input_box_nickname.text()  # 获取用户名
         if not username:  # 如果用户名为空
-            dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用IP地址\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
+            dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用socket地址，\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
                                        QMessageBox.Yes)
             if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
                 self.close()
-                # del dlg, self
             else:
                 print('[Selection] No')  # ---调试信息专用
                 self.ui.input_box_nickname.setFocus()
@@ -68,14 +67,12 @@ class LoginApplication(QMainWindow):
 
         else:
             self.close()
-            # del self
 
         chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
         chat_window.show()
 
     def onRegister(self):  # 安全认证按钮事件
         dlg = RegisterApplication()
-        # self.close()
         return dlg.exec()
 
 
@@ -83,7 +80,6 @@ class RegisterApplication(QDialog):
     def __init__(self):
         super().__init__()
         self.ui = Ui_RegisterWindow()  # UI类的实例化()
-        # self.ui.setupUi(self)
         self.ui.setupUi(self)
         self.band()  # 信号和槽的绑定
 
@@ -91,18 +87,18 @@ class RegisterApplication(QDialog):
 
         self.register_window_signal = register_window_signal
 
-        self.setWindowTitle("服务器安全验证")
+        self.setWindowTitle("Lhat服务器安全验证程序")
 
     def band(self):
         pass
 
     def accept(self):
-        print("accept")  # --
+        # print("accept")
         webbrowser.open(f'https://{self.ui.input_box_register_server_ip_port.toPlainText()}')  # 打开安全认证网页
         return self.done(0)
 
     def reject(self):
-        print("reject")  # --
+        # print("reject")
         return self.done(0)
 
 
@@ -118,16 +114,16 @@ class ChatApplication(QMainWindow):
 
         self.chat_window_signal = chat_window_signal
 
-        self.setWindowTitle(f'欢迎来到Lhat！聊天室 Lhat！版本{Doc.version} - 登录为：{username}')
+        self.setWindowTitle(f'欢迎来到Lhat！{Doc.version} - 登录为：{username}')
 
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.connection.connect((server_ip, int(server_port)))
         except ValueError:
-            QMessageBox.critical(self, "错误", '非法的IP地址及端口，\n将退回登录界面。')
+            QMessageBox.critical(self, "错误", '抱歉，地址无效，请输入正确的服务器地址，\n将退回登录界面。')
             self.backLoginWindow()
             return
-        except ConnectionAbortedError or ConnectionRefusedError as conn_err:
+        except ConnectionError as conn_err:
             QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
             self.backLoginWindow()
             return

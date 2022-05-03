@@ -18,12 +18,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
     QMainWindow, QPlainTextEdit, QPushButton, QSizePolicy,
     QSpacerItem, QWidget)
+from resources import images_rc
 
 class Ui_LoginWindow(object):
     def setupUi(self, LoginWindow):
         if not LoginWindow.objectName():
             LoginWindow.setObjectName(u"LoginWindow")
         LoginWindow.resize(500, 350)
+        icon = QIcon()
+        icon.addFile(u":/ico/Lhat.ico", QSize(), QIcon.Normal, QIcon.On)
+        LoginWindow.setWindowIcon(icon)
         LoginWindow.setStyleSheet(u"/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
@@ -604,6 +608,7 @@ class Ui_LoginWindow(object):
                         "{\n"
 "   background: none;\n"
 "}")
+        LoginWindow.setIconSize(QSize(768, 768))
         self.centralwidget = QWidget(LoginWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
