@@ -129,45 +129,47 @@ def receive(window_object, signals):
                                          f'错误原因：{error_reason}')
             return
         received_data = received_data.decode('utf-8')
-        print(received_data)  # ---
-        if received_long_data:  # 如果有长消息，则尝试读取长消息
-            message = unpack(received_long_data)  # 解包消息
-        else:
-            message = unpack(received_data)  # 解包消息
-        message_type = message[0]
-        if message_type == 'TEXT_MESSAGE_ARTICLE':
-            message_body = message[2]
-            signals.appendOutPutBox.emit(message_body + '\n')
-            received_long_data = ''  # 正常解包之后，清空长消息
+        received_data_list = re.findall(r'\{.*?}', received_data)
+        for finded_data in received_data_list:  # finded_data指正则匹配后的列表遍历
+            print(finded_data)  # ---
+            if received_long_data:  # 如果有长消息，则尝试读取长消息
+                message = unpack(received_long_data)  # 解包消息
+            else:
+                message = unpack(finded_data)  # 解包消息
+            message_type = message[0]
+            if message_type == 'TEXT_MESSAGE_ARTICLE':
+                message_body = message[2]
+                signals.appendOutPutBox.emit(message_body + '\n')
+                received_long_data = ''  # 正常解包之后，清空长消息
 
-        elif message_type == 'USER_MANIFEST':
-            message_body = message[1]
-            online_users = message_body
-            signals.clearOnlineUserList.emit()
-            signals.appendOnlineUserList.emit(chat)
-            signals.appendOnlineUserList.emit('====在线用户====')
-            for user_index, online_username in enumerate(online_users):
-                # online_username是用于显示在线用户的，不要与username混淆
-                signals.appendOnlineUserList.emit(str(online_username))
-            received_long_data = ''  # 正常解包之后，清空长消息
+            elif message_type == 'USER_MANIFEST':
+                message_body = message[1]
+                online_users = message_body
+                signals.clearOnlineUserList.emit()
+                signals.appendOnlineUserList.emit(chat)
+                signals.appendOnlineUserList.emit('====在线用户====')
+                for user_index, online_username in enumerate(online_users):
+                    # online_username是用于显示在线用户的，不要与username混淆
+                    signals.appendOnlineUserList.emit(str(online_username))
+                received_long_data = ''  # 正常解包之后，清空长消息
 
-        elif message_type == 'FILE_RECV_DATA':
-            file_name = message[1]
-            file_data = message[2]
-            signals.appendOutPutBox.emit('[文件] 锵锵！正在接收文件！\n')
-            with open(file_name, 'ab') as chat_file:
-                if isinstance(file_data, str):
-                    chat_file.write(file_data.encode('utf-8'))
-                else:
-                    chat_file.write(file_data)
-            signals.appendOutPutBox.emit('[文件] 锵锵！文件已接收！\n')
-            received_long_data = ''  # 正常解包之后，清空长消息
+            elif message_type == 'FILE_RECV_DATA':
+                file_name = message[1]
+                file_data = message[2]
+                signals.appendOutPutBox.emit('[文件] 锵锵！正在接收文件！\n')
+                with open(file_name, 'ab') as chat_file:
+                    if isinstance(file_data, str):
+                        chat_file.write(file_data.encode('utf-8'))
+                    else:
+                        chat_file.write(file_data)
+                signals.appendOutPutBox.emit('[文件] 锵锵！文件已接收！\n')
+                received_long_data = ''  # 正常解包之后，清空长消息
 
-        elif message_type == 'NOT_JSON_MESSAGE':  # 如果无法解包，说明是长消息
-            received_long_data += message[1]
+            elif message_type == 'NOT_JSON_MESSAGE':  # 如果无法解包，说明是长消息
+                received_long_data += message[1]
 
-        elif message_type == 'DEFAULT_ROOM':
-            chat = message[1]
-            signals.appendOutPutBox.emit(f'[提示] 已分配至默认聊天室：{chat}\n')
+            elif message_type == 'DEFAULT_ROOM':
+                chat = message[1]
+                signals.appendOutPutBox.emit(f'[提示] 已分配至默认聊天室：{chat}\n')
 
         time.sleep(0.0001)
