@@ -36,7 +36,7 @@ class LoginApplication(QMainWindow):
         self.ui.setupUi(self)
         self.band()  # 信号和槽的绑定
 
-        self.login_window_signal = login_window_signal
+        self.login_window_signal = login_window_signal  # 将信号绑定到登录窗口
 
         self.setWindowTitle(f"Lhat！{Doc.version} - 登录到一个 Lhat！服务器")
 
@@ -49,8 +49,8 @@ class LoginApplication(QMainWindow):
         """
         global server_ip, server_port, username
         try:
-            server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')
-        except ValueError:
+            server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  # 获取服务器IP和端口
+        except ValueError:  # 如果输入的不是IP:端口的格式，则报错
             QMessageBox.warning(self, "警告", '请输入正确的服务器地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
             self.ui.input_box_server_ip_port.setFocus()
             return
@@ -61,15 +61,18 @@ class LoginApplication(QMainWindow):
             if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
                 self.close()
             else:
-                print('[Selection] No')  # ---调试信息专用
                 self.ui.input_box_nickname.setFocus()
                 return
-
+        elif len(username) > 20:
+            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字符。', QMessageBox.Yes, QMessageBox.Yes)
+            self.ui.input_box_nickname.setFocus()  # 设置焦点
+            return
         else:
             self.close()
-
-        chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
-        chat_window.show()
+            self.ui.input_box_nickname.setText('')
+            self.ui.input_box_server_ip_port.setPlainText('')
+            chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
+            chat_window.show()
 
     def onRegister(self):  # 安全认证按钮事件
         dlg = RegisterApplication()
@@ -83,22 +86,20 @@ class RegisterApplication(QDialog):
         self.ui.setupUi(self)
         self.band()  # 信号和槽的绑定
 
-        self.setModal(True)
+        self.setModal(True)  # 设置为模态窗口
 
         self.register_window_signal = register_window_signal
 
-        self.setWindowTitle("Lhat服务器安全验证程序")
+        self.setWindowTitle("Lhat服务器安全验证程序")  # 设置窗口标题
 
     def band(self):
         pass
 
     def accept(self):
-        # print("accept")
         webbrowser.open(f'https://{self.ui.input_box_register_server_ip_port.toPlainText()}')  # 打开安全认证网页
         return self.done(0)
 
     def reject(self):
-        # print("reject")
         return self.done(0)
 
 
@@ -116,18 +117,18 @@ class ChatApplication(QMainWindow):
 
         self.setWindowTitle(f'欢迎来到Lhat！{Doc.version} - 登录为：{username}')
 
-        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象
         try:
             self.connection.connect((server_ip, int(server_port)))
-        except ValueError:
+        except ValueError:  # 如果端口输入不是数字，则报错
             QMessageBox.critical(self, "错误", '抱歉，地址无效，请输入正确的服务器地址，\n将退回登录界面。')
             self.backLoginWindow()
             return
-        except ConnectionError as conn_err:
+        except ConnectionError as conn_err:  # 如果连接失败，则报错
             QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
             self.backLoginWindow()
             return
-        except socket.gaierror:
+        except socket.gaierror:  # 如果输入的地址无效，则报错
             QMessageBox.critical(self, "错误", '获取地址信息失败，\n将退回登录界面。')
             self.backLoginWindow()
             return
@@ -210,7 +211,6 @@ class ChatApplication(QMainWindow):
     def backLoginWindow(self):
         global login_window  # 登录窗口实例总是要被覆盖的，所以要全局变量，以便后续开发
         self.close()
-        login_window = LoginApplication()  # 这里就成功覆盖旧实例了
         login_window.show()
 
     def onLogoff(self):
@@ -252,8 +252,6 @@ HELLO_WORLD 常量(NEVER_GIVE_UP)全部大写，使用下划线连接单词
 if __name__ == '__main__':
     app = QApplication([])  # 启动一个应用
     login_window = LoginApplication()  # 实例化主窗口
-
-    # app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='PySide6'))
     app.setStyle(QStyleFactory.create("Fusion"))  # fusion风格
     login_window.show()  # 展示主窗口
     app.exec()  # 避免程序执行到这一行后直接退出

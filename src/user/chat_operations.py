@@ -2,6 +2,7 @@ import re
 import json
 import sys
 import time
+
 # import os.path
 
 # import crypt_module as crypt
@@ -13,7 +14,6 @@ textbox = ''  # 用于显示在线用户的列表框
 show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
 chat = 'Lhat! Chatting Room'  # 聊天对象
-
 
 '''
 注意：
@@ -59,23 +59,20 @@ def unpack(json_message: str):
     <一个列表>: 这是用户名单，有用的
     """
     try:
-        message = json.loads(json_message)
-    except json.decoder.JSONDecodeError:
+        message = json.loads(json_message)  # JSON加载
+    except json.decoder.JSONDecodeError:  # 如果加载失败，两种可能，第一种，长消息，第二种，断了。
         return 'NOT_JSON_MESSAGE', json_message
 
     if message['type'] == 'TEXT_MESSAGE_ARTICLE':  # 如果是纯文本消息
-        message_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(message['time']))
+        message_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(message['time']))  # 将时间戳转成日期时间
         return message['type'], message['to'], \
-               (message['by'] + f' [{message_time}] : \n  ' + message['message']), message['by']
+            (message['by'] + f' [{message_time}] : \n  ' + message['message']), message['by']
     elif message['type'] == 'USER_MANIFEST':  # 如果是用户列表
         try:
-            manifest = json.loads(message['message'])
+            manifest = json.loads(message['message'])  # 将用户列表转成列表
             return message['type'], manifest
-        except json.decoder.JSONDecodeError:
-            return 'MANIFEST_NOT_JSON'
-
-    elif message['file'] and message['type'] == 'FILE_RECV_DATA':
-        return message['type'], message['file'], message['message']
+        except json.decoder.JSONDecodeError:  # 如果转换失败，则返回错误
+            return 'MANIFEST_NOT_JSON'  # 用户名单不是JSON格式
     else:
         return 'UNKNOWN_MESSAGE_TYPE'
 
@@ -85,17 +82,17 @@ def send(connection, raw_message: str, send_from, output_box):
     发送消息，但是得要TCP连接。
     """
     chat_with = 'Lhat! Chatting Room'
-    if not raw_message.strip():
+    if not raw_message.strip():  # 如果消息为空，则不发送，strip的作用是去掉首尾空格
         output_box.emit('\n[提示] 发送的消息不能为空！')
-        return
+        return  # 因为无法发送空消息，所以直接返回
     elif raw_message.startswith('//tell '):  # 如果是私聊
-        if sys.getsizeof(raw_message) <= 968:
+        if sys.getsizeof(raw_message) <= 968:  # 经过计算，1024个字节的消息以968个字节为正文差不多可以。
             command_message = raw_message.split(' ')  # 分割完之后，分辨一下是否为命令
             chat_with = command_message[1]
-            raw_message = re.sub('//tell', '[私聊消息] 到', raw_message)
+            raw_message = re.sub('^//tell', '[私聊消息] 到', raw_message)  # 命令转正文，使用正则替换
         else:
             output_box.emit('[提示] 发送的私聊消息长度不能大于968字节！\n'
-                            '  建议不要大于300个汉字或900个英文字母和数字！')
+                            '  建议不要大于300个汉字或900个英文字母和数字！')  # 私聊消息不能超过1024个字节
     elif raw_message.startswith('//help'):  # 如果是帮助请求
         output_box.emit('[提示] Lhat使用指南！\n'
                         '1.左上有“工具”一栏，分别是：\n'
@@ -124,7 +121,7 @@ def receive(window_object, signals):
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
-        except ConnectionError as error_reason:
+        except ConnectionError as error_reason:  # 如果与服务器断开连接
             signals.appendOutPutBox.emit(f'[严重错误] 呜……看起来与服务器断开了连接，请断开连接并重试。\n'
                                          f'错误原因：{error_reason}')
             return
@@ -136,9 +133,7 @@ def receive(window_object, signals):
             message = unpack(received_data)  # 解包消息
         message_type = message[0]
         if message_type == 'TEXT_MESSAGE_ARTICLE':
-            # message_send_to = message[1]
             message_body = message[2]
-            # message_send_by = message[3]
             signals.appendOutPutBox.emit(message_body + '\n')
             received_long_data = ''  # 正常解包之后，清空长消息
 
