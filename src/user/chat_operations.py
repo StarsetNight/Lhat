@@ -13,7 +13,7 @@ user = ''
 textbox = ''  # 用于显示在线用户的列表框
 show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
-chat = 'Lhat! Chatting Room'  # 聊天对象
+chat = ''  # 聊天对象，先定义为空，因为不同的服务端，需要的聊天对象不同
 
 '''
 注意：
@@ -73,6 +73,8 @@ def unpack(json_message: str):
             return message['type'], manifest
         except json.decoder.JSONDecodeError:  # 如果转换失败，则返回错误
             return 'MANIFEST_NOT_JSON'  # 用户名单不是JSON格式
+    elif message['type'] == 'DEFAULT_ROOM':
+        return message['type'], message['message']
     else:
         return 'UNKNOWN_MESSAGE_TYPE'
 
@@ -81,9 +83,9 @@ def send(connection, raw_message: str, send_from, output_box):
     """
     发送消息，但是得要TCP连接。
     """
-    chat_with = 'Lhat! Chatting Room'
+    chat_with = chat
     if not raw_message.strip():  # 如果消息为空，则不发送，strip的作用是去掉首尾空格
-        output_box.emit('\n[提示] 发送的消息不能为空！')
+        output_box.emit('[提示] 发送的消息不能为空！\n')
         return  # 因为无法发送空消息，所以直接返回
     elif raw_message.startswith('//tell '):  # 如果是私聊
         if sys.getsizeof(raw_message) <= 968:  # 经过计算，1024个字节的消息以968个字节为正文差不多可以。
@@ -115,6 +117,7 @@ def receive(window_object, signals):
     :param window_object: 窗口对象，内含connection，是TCP连接
     :param signals: 绑定的信号，用于触发方法
     """
+    global chat  # 这个要引用的
     signals.appendOutPutBox.emit('欢迎来到Lhat聊天室！大家开始聊天吧！\n'
                                  '更多操作提示请输入 //help 并发送！\n')
     received_long_data = ''
@@ -141,7 +144,7 @@ def receive(window_object, signals):
             message_body = message[1]
             online_users = message_body
             signals.clearOnlineUserList.emit()
-            signals.appendOnlineUserList.emit('Lhat! Chatting Room')
+            signals.appendOnlineUserList.emit(chat)
             signals.appendOnlineUserList.emit('====在线用户====')
             for user_index, online_username in enumerate(online_users):
                 # online_username是用于显示在线用户的，不要与username混淆
@@ -162,5 +165,9 @@ def receive(window_object, signals):
 
         elif message_type == 'NOT_JSON_MESSAGE':  # 如果无法解包，说明是长消息
             received_long_data += message[1]
+
+        elif message_type == 'DEFAULT_ROOM':
+            chat = message[1]
+            signals.appendOutPutBox.emit(f'[提示] 已分配至默认聊天室：{chat}\n')
 
         time.sleep(0.0001)
