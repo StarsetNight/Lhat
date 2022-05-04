@@ -1,4 +1,4 @@
-version = "v1.1.2"
+version = "v1.1.0"
 
 update_log = """
 20220418日志：
