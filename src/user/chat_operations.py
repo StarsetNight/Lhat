@@ -109,6 +109,7 @@ def send(connection, raw_message: str, send_from, output_box):
     message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE_ARTICLE')
     # 发送消息直到发送完毕
     connection.sendall(message)
+    time.sleep(0.05)
 
 
 def receive(window_object, signals):
