@@ -5,6 +5,7 @@ __pycache__/
 .vscode/
 .idea/
 .cspell/
+.history/
 打包用/
 *.bat
 *.fbp
