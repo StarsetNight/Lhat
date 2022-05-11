@@ -5,7 +5,6 @@ import webbrowser
 
 # 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
 
-from . import resources as resources
 from . import Doc
 from . import chat_operations as chatops
 

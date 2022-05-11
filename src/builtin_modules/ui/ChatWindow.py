@@ -19,7 +19,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QMainWindow,
     QMenu, QMenuBar, QPushButton, QSizePolicy,
     QStatusBar, QTextBrowser, QTextEdit, QWidget)
-import images_rc
+from ..resources import images_rc
 
 class Ui_ChatWindow(object):
     def setupUi(self, ChatWindow):

@@ -1,1 +1,1 @@
-from . import images_rc
+from ..resources import images_rc
