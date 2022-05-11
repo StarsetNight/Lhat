@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'ChatWindow.ui'
+## Form generated from reading UI file 'LoginWindow.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.2.4
 ##
@@ -11,25 +11,24 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QMainWindow,
-    QMenu, QMenuBar, QPushButton, QSizePolicy,
-    QStatusBar, QTextBrowser, QTextEdit, QWidget)
-from resources import images_rc
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
+    QMainWindow, QPlainTextEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QWidget)
+from ..resources import images_rc
 
-class Ui_ChatWindow(object):
-    def setupUi(self, ChatWindow):
-        if not ChatWindow.objectName():
-            ChatWindow.setObjectName(u"ChatWindow")
-        ChatWindow.resize(800, 600)
+class Ui_LoginWindow(object):
+    def setupUi(self, LoginWindow):
+        if not LoginWindow.objectName():
+            LoginWindow.setObjectName(u"LoginWindow")
+        LoginWindow.resize(500, 350)
         icon = QIcon()
-        icon.addFile(u":/ico/Lhat.ico", QSize(), QIcon.Normal, QIcon.Off)
-        ChatWindow.setWindowIcon(icon)
-        ChatWindow.setStyleSheet(u"/*\n"
+        icon.addFile(u":/ico/Lhat.ico", QSize(), QIcon.Normal, QIcon.On)
+        LoginWindow.setWindowIcon(icon)
+        LoginWindow.setStyleSheet(u"/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
 "Company: GTRONICK\n"
@@ -609,119 +608,130 @@ class Ui_ChatWindow(object):
                         "{\n"
 "   background: none;\n"
 "}")
-        self.menubar_send = QAction(ChatWindow)
-        self.menubar_send.setObjectName(u"menubar_send")
-        font = QFont()
-        font.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font.setPointSize(12)
-        self.menubar_send.setFont(font)
-        self.menubar_logoff = QAction(ChatWindow)
-        self.menubar_logoff.setObjectName(u"menubar_logoff")
-        self.menubar_logoff.setFont(font)
-        self.menubar_exit = QAction(ChatWindow)
-        self.menubar_exit.setObjectName(u"menubar_exit")
-        self.menubar_exit.setFont(font)
-        self.centralwidget = QWidget(ChatWindow)
+        LoginWindow.setIconSize(QSize(768, 768))
+        self.centralwidget = QWidget(LoginWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.hbox2 = QHBoxLayout()
-        self.hbox2.setObjectName(u"hbox2")
-        self.output_box_message = QTextBrowser(self.centralwidget)
-        self.output_box_message.setObjectName(u"output_box_message")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(5)
-        sizePolicy.setVerticalStretch(5)
-        sizePolicy.setHeightForWidth(self.output_box_message.sizePolicy().hasHeightForWidth())
-        self.output_box_message.setSizePolicy(sizePolicy)
+        self.input_box_nickname = QLineEdit(self.centralwidget)
+        self.input_box_nickname.setObjectName(u"input_box_nickname")
+        font = QFont()
+        font.setPointSize(14)
+        self.input_box_nickname.setFont(font)
+
+        self.gridLayout.addWidget(self.input_box_nickname, 4, 2, 1, 1)
+
+        self.vSpacer2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout.addItem(self.vSpacer2, 0, 1, 1, 1)
+
+        self.static_text_3 = QLabel(self.centralwidget)
+        self.static_text_3.setObjectName(u"static_text_3")
         font1 = QFont()
-        font1.setPointSize(12)
-        self.output_box_message.setFont(font1)
+        font1.setFamilies([u"Microsoft YaHei UI"])
+        font1.setPointSize(14)
+        font1.setBold(False)
+        self.static_text_3.setFont(font1)
+        self.static_text_3.setAlignment(Qt.AlignCenter)
 
-        self.hbox2.addWidget(self.output_box_message)
+        self.gridLayout.addWidget(self.static_text_3, 4, 1, 1, 1)
 
-        self.output_box_online_user = QTextBrowser(self.centralwidget)
-        self.output_box_online_user.setObjectName(u"output_box_online_user")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy1.setHorizontalStretch(2)
-        sizePolicy1.setVerticalStretch(5)
-        sizePolicy1.setHeightForWidth(self.output_box_online_user.sizePolicy().hasHeightForWidth())
-        self.output_box_online_user.setSizePolicy(sizePolicy1)
+        self.button_register = QPushButton(self.centralwidget)
+        self.button_register.setObjectName(u"button_register")
+        sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(2)
+        sizePolicy.setHeightForWidth(self.button_register.sizePolicy().hasHeightForWidth())
+        self.button_register.setSizePolicy(sizePolicy)
+        self.button_register.setMaximumSize(QSize(16777215, 80))
         font2 = QFont()
-        font2.setFamilies([u"\u5e7c\u5706"])
-        font2.setPointSize(12)
-        self.output_box_online_user.setFont(font2)
+        font2.setFamilies([u"Microsoft YaHei UI"])
+        font2.setPointSize(18)
+        font2.setBold(False)
+        self.button_register.setFont(font2)
 
-        self.hbox2.addWidget(self.output_box_online_user)
+        self.gridLayout.addWidget(self.button_register, 5, 1, 1, 1)
 
-
-        self.gridLayout.addLayout(self.hbox2, 0, 0, 1, 1)
-
-        self.hbox1 = QHBoxLayout()
-        self.hbox1.setObjectName(u"hbox1")
-        self.input_box_message = QTextEdit(self.centralwidget)
-        self.input_box_message.setObjectName(u"input_box_message")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        sizePolicy2.setHorizontalStretch(4)
-        sizePolicy2.setVerticalStretch(1)
-        sizePolicy2.setHeightForWidth(self.input_box_message.sizePolicy().hasHeightForWidth())
-        self.input_box_message.setSizePolicy(sizePolicy2)
-        self.input_box_message.setFont(font1)
-
-        self.hbox1.addWidget(self.input_box_message)
-
-        self.button_send_message = QPushButton(self.centralwidget)
-        self.button_send_message.setObjectName(u"button_send_message")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        sizePolicy3.setHorizontalStretch(1)
-        sizePolicy3.setVerticalStretch(1)
-        sizePolicy3.setHeightForWidth(self.button_send_message.sizePolicy().hasHeightForWidth())
-        self.button_send_message.setSizePolicy(sizePolicy3)
+        self.button_login = QPushButton(self.centralwidget)
+        self.button_login.setObjectName(u"button_login")
+        sizePolicy.setHeightForWidth(self.button_login.sizePolicy().hasHeightForWidth())
+        self.button_login.setSizePolicy(sizePolicy)
+        self.button_login.setMaximumSize(QSize(16777215, 80))
         font3 = QFont()
-        font3.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font3.setPointSize(24)
+        font3.setFamilies([u"Microsoft YaHei UI"])
+        font3.setPointSize(20)
         font3.setBold(False)
-        font3.setStyleStrategy(QFont.PreferAntialias)
-        self.button_send_message.setFont(font3)
+        self.button_login.setFont(font3)
 
-        self.hbox1.addWidget(self.button_send_message)
+        self.gridLayout.addWidget(self.button_login, 5, 2, 1, 1)
 
+        self.vSpacer1 = QSpacerItem(20, 50, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout.addLayout(self.hbox1, 1, 0, 1, 1)
+        self.gridLayout.addItem(self.vSpacer1, 6, 2, 1, 1)
 
-        ChatWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(ChatWindow)
-        self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 800, 19))
-        self.menu = QMenu(self.menubar)
-        self.menu.setObjectName(u"menu")
-        self.menu.setFont(font)
-        ChatWindow.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(ChatWindow)
-        self.statusbar.setObjectName(u"statusbar")
-        ChatWindow.setStatusBar(self.statusbar)
+        self.input_box_server_ip_port = QPlainTextEdit(self.centralwidget)
+        self.input_box_server_ip_port.setObjectName(u"input_box_server_ip_port")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(1)
+        sizePolicy1.setHeightForWidth(self.input_box_server_ip_port.sizePolicy().hasHeightForWidth())
+        self.input_box_server_ip_port.setSizePolicy(sizePolicy1)
+        self.input_box_server_ip_port.setMaximumSize(QSize(16777215, 90))
+        self.input_box_server_ip_port.setFont(font)
 
-        self.menubar.addAction(self.menu.menuAction())
-        self.menu.addAction(self.menubar_send)
-        self.menu.addAction(self.menubar_logoff)
-        self.menu.addAction(self.menubar_exit)
+        self.gridLayout.addWidget(self.input_box_server_ip_port, 2, 2, 1, 1)
 
-        self.retranslateUi(ChatWindow)
-        self.button_send_message.clicked.connect(ChatWindow.sendMessage)
-        self.menubar.triggered.connect(ChatWindow.triggeredMenubar)
+        self.static_text_2 = QLabel(self.centralwidget)
+        self.static_text_2.setObjectName(u"static_text_2")
+        self.static_text_2.setFont(font1)
+        self.static_text_2.setContextMenuPolicy(Qt.DefaultContextMenu)
+        self.static_text_2.setLayoutDirection(Qt.LeftToRight)
+        self.static_text_2.setAlignment(Qt.AlignCenter)
 
-        QMetaObject.connectSlotsByName(ChatWindow)
+        self.gridLayout.addWidget(self.static_text_2, 2, 1, 1, 1)
+
+        self.hSpacer2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout.addItem(self.hSpacer2, 2, 0, 1, 1)
+
+        self.hSpacer1 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout.addItem(self.hSpacer1, 2, 3, 1, 1)
+
+        self.static_text_1 = QLabel(self.centralwidget)
+        self.static_text_1.setObjectName(u"static_text_1")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(1)
+        sizePolicy2.setHeightForWidth(self.static_text_1.sizePolicy().hasHeightForWidth())
+        self.static_text_1.setSizePolicy(sizePolicy2)
+        font4 = QFont()
+        font4.setFamilies([u"Microsoft YaHei UI"])
+        font4.setPointSize(12)
+        font4.setBold(False)
+        self.static_text_1.setFont(font4)
+
+        self.gridLayout.addWidget(self.static_text_1, 1, 1, 1, 2)
+
+        LoginWindow.setCentralWidget(self.centralwidget)
+        QWidget.setTabOrder(self.input_box_server_ip_port, self.button_login)
+        QWidget.setTabOrder(self.button_login, self.button_register)
+
+        self.retranslateUi(LoginWindow)
+        self.button_login.clicked.connect(LoginWindow.onCheckLogin)
+        self.button_register.clicked.connect(LoginWindow.onRegister)
+
+        QMetaObject.connectSlotsByName(LoginWindow)
     # setupUi
 
-    def retranslateUi(self, ChatWindow):
-        ChatWindow.setWindowTitle(QCoreApplication.translate("ChatWindow", u"MainWindow", None))
-        self.menubar_send.setText(QCoreApplication.translate("ChatWindow", u"\u53d1\u9001", None))
-        self.menubar_logoff.setText(QCoreApplication.translate("ChatWindow", u"\u65ad\u5f00\u8fde\u63a5", None))
-        self.menubar_exit.setText(QCoreApplication.translate("ChatWindow", u"\u9000\u51fa", None))
-        self.button_send_message.setText(QCoreApplication.translate("ChatWindow", u"\u53d1\u9001", None))
-#if QT_CONFIG(shortcut)
-        self.button_send_message.setShortcut(QCoreApplication.translate("ChatWindow", u"Ctrl+Return", None))
-#endif // QT_CONFIG(shortcut)
-        self.menu.setTitle(QCoreApplication.translate("ChatWindow", u"\u64cd\u4f5c", None))
+    def retranslateUi(self, LoginWindow):
+        LoginWindow.setWindowTitle(QCoreApplication.translate("LoginWindow", u"MainWindow", None))
+        self.static_text_3.setText(QCoreApplication.translate("LoginWindow", u"\u663e\u793a\u6635\u79f0", None))
+        self.button_register.setText(QCoreApplication.translate("LoginWindow", u"\u5b89\u5168\u8ba4\u8bc1", None))
+        self.button_login.setText(QCoreApplication.translate("LoginWindow", u"\u767b\u5f55\u670d\u52a1\u5668", None))
+        self.input_box_server_ip_port.setPlainText("")
+        self.static_text_2.setText(QCoreApplication.translate("LoginWindow", u"\u670d\u52a1\u5668IP\u53ca\u7aef\u53e3", None))
+        self.static_text_1.setText(QCoreApplication.translate("LoginWindow", u"\u6b22\u8fce\u6765\u5230Lhat\uff01\u8bf7\u8fde\u63a5\u804a\u5929\u670d\u52a1\u5668\u4ee5\u5f00\u59cb\u4f60\u7684\u804a\u5929\u4e4b\u65c5\uff01\n"
+"\u5c0f\u63d0\u793a\uff1a\u5982\u679c\u65e0\u6cd5\u8fde\u63a5\uff0c\u8bf7\u5c1d\u8bd5\u5b89\u5168\u8ba4\u8bc1\uff01", None))
     # retranslateUi
 

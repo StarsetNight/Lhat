@@ -8,6 +8,8 @@ __pycache__/
 打包用/
 *.bat
 *.fbp
+out/
+*.ps1
 
 # C extensions
 *.so

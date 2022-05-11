@@ -3,28 +3,28 @@ import threading
 import sys
 import webbrowser
 
-import Doc
-import chat_operations as chatops
+# 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
+
+from . import resources as resources
+from . import Doc
+from . import chat_operations as chatops
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QStyleFactory, QMessageBox, QDialog
 
-from ui.ChatWindow import Ui_ChatWindow
-from ui.LoginWindow import Ui_LoginWindow
-from ui.RegisterWindow import Ui_RegisterWindow
+from .ui.ChatWindow import Ui_ChatWindow
+from .ui.LoginWindow import Ui_LoginWindow
+from .ui.RegisterWindow import Ui_RegisterWindow
 
-from ui.Signal import chat_window_signal
-from ui.Signal import login_window_signal
-from ui.Signal import register_window_signal
+from .ui.Signal import chat_window_signal
+from .ui.Signal import login_window_signal
+from .ui.Signal import register_window_signal
 
 server_ip = chatops.ip  # 定义服务器IP
 server_port = chatops.port  # 定义服务器端口
 username = chatops.user  # 定义用户名
-# textbox = chatops.textbox
 online_users = chatops.users  # 定义在线用户列表
 chat_with = chatops.chat  # 定义聊天对象，默认为群聊
 
-
-# ---调试信息专用
 
 class LoginApplication(QMainWindow):
     def __init__(self):
@@ -49,9 +49,11 @@ class LoginApplication(QMainWindow):
         """
         global server_ip, server_port, username
         try:
-            server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  # 获取服务器IP和端口
+            server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(
+                ':')  # 获取服务器IP和端口
         except ValueError:  # 如果输入的不是IP:端口的格式，则报错
-            QMessageBox.warning(self, "警告", '请输入正确的服务器地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
+            QMessageBox.warning(
+                self, "警告", '请输入正确的服务器地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
             self.ui.input_box_server_ip_port.setFocus()
             return
         username = self.ui.input_box_nickname.text()  # 获取用户名
@@ -64,7 +66,8 @@ class LoginApplication(QMainWindow):
                 self.ui.input_box_nickname.setFocus()
                 return
         elif len(username) > 20:
-            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字符。', QMessageBox.Yes, QMessageBox.Yes)
+            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字符。',
+                                QMessageBox.Yes, QMessageBox.Yes)
             self.ui.input_box_nickname.setFocus()  # 设置焦点
             return
         else:
@@ -96,7 +99,8 @@ class RegisterApplication(QDialog):
         pass
 
     def accept(self):
-        webbrowser.open(f'https://{self.ui.input_box_register_server_ip_port.toPlainText()}')  # 打开安全认证网页
+        webbrowser.open(
+            f'https://{self.ui.input_box_register_server_ip_port.toPlainText()}')  # 打开安全认证网页
         return self.done(0)
 
     def reject(self):
@@ -117,7 +121,8 @@ class ChatApplication(QMainWindow):
 
         self.setWindowTitle(f'欢迎来到Lhat！{Doc.version} - 登录为：{username}')
 
-        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象
+        self.connection = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象
         try:
             self.connection.connect((server_ip, int(server_port)))
         except ValueError:  # 如果端口输入不是数字，则报错
@@ -125,7 +130,8 @@ class ChatApplication(QMainWindow):
             self.backLoginWindow()
             return
         except ConnectionError as conn_err:  # 如果连接失败，则报错
-            QMessageBox.critical(self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
+            QMessageBox.critical(
+                self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
             self.backLoginWindow()
             return
         except socket.gaierror:  # 如果输入的地址无效，则报错
@@ -133,9 +139,11 @@ class ChatApplication(QMainWindow):
             self.backLoginWindow()
             return
         if username:
-            self.connection.send(chatops.pack(username, None, None, 'USER_NAME'))  # 发送用户名
+            self.connection.send(chatops.pack(
+                username, None, None, 'USER_NAME'))  # 发送用户名
         else:
-            self.connection.send(chatops.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
+            self.connection.send(chatops.pack(
+                '用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
             username = server_ip + ':' + server_port
 
         self.startReceive()  # 创建线程用于接收消息
@@ -191,7 +199,8 @@ class ChatApplication(QMainWindow):
 
     def sendMessage(self):
         raw_message = self.ui.input_box_message.toPlainText()
-        chatops.send(self.connection, raw_message, username, chat_window_signal.appendOutPutBox)
+        chatops.send(self.connection, raw_message, username,
+                     chat_window_signal.appendOutPutBox)
         chat_window_signal.clearInPutBox.emit()  # 清空输入框
 
     def startReceive(self):
@@ -214,7 +223,8 @@ class ChatApplication(QMainWindow):
         login_window.show()
 
     def onLogoff(self):
-        dlg = QMessageBox.warning(self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        dlg = QMessageBox.warning(
+            self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
             self.backLoginWindow()
@@ -223,7 +233,8 @@ class ChatApplication(QMainWindow):
             return
 
     def onExit(self):
-        dlg = QMessageBox.warning(self, "警告", '你真的要退出Lhat！吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        dlg = QMessageBox.warning(
+            self, "警告", '你真的要退出Lhat！吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
             self.close()
