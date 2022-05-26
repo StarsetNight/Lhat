@@ -219,6 +219,7 @@ class ChatApplication(QMainWindow):
     def backLoginWindow(self):
         global login_window  # 登录窗口实例总是要被覆盖的，所以要全局变量，以便后续开发
         self.close()
+        login_window = LoginApplication()
         login_window.show()
 
     def onLogoff(self):
