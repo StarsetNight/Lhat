@@ -58,15 +58,18 @@ def unpack(json_message: str):
     FILE_SAVED: 文件保存成功
     <一个列表>: 这是用户名单，有用的
     """
+    by_color = 'blue'
     try:
         message = json.loads(json_message)  # JSON加载
     except json.decoder.JSONDecodeError:  # 如果加载失败，两种可能，第一种，长消息，第二种，断了。
         return 'NOT_JSON_MESSAGE', json_message
 
-    if message['type'] == 'TEXT_MESSAGE_ARTICLE':  # 如果是纯文本消息
+    if message['type'] == 'TEXT_MESSAGE':  # 如果是纯文本消息
         message_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(message['time']))  # 将时间戳转成日期时间
+        if message['by'] == 'Server':
+            by_color = 'red'
         return message['type'], message['to'], \
-            f"<font color='blue'>{message['by']}</font> <font color='grey'>[{message_time}]</font> : " \
+            f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]</font> : " \
             f"<br/>&nbsp;&nbsp;{message['message']}", \
             message['by']
     elif message['type'] == 'USER_MANIFEST':  # 如果是用户列表
@@ -111,9 +114,17 @@ def send(connection, raw_message: str, send_from, output_box):
                         '3.输入框命令：<br/>'
                         '- //tell <用户名> <正文>：私聊用户名。<br/>'
                         '- //help：显示此帮助<br/>'
-                        '- //color <颜色> <正文>：改变颜色，支持16进制（#号开头）。<br/>')
+                        '- //color <颜色> <正文>：改变颜色，支持16进制（#号开头）。<br/>'
+                        '- //room <create/join/delete>：创建/加入/删除房间。<br/>'
+                        '- //root <password>：成为管理员，留空以成为普通用户。<br/>')
         return
-    message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE_ARTICLE')
+    elif raw_message.startswith('//'):  # 如果是命令
+        raw_message = re.sub('^//', '', raw_message)
+        message = pack(raw_message, send_from, None, 'COMMAND')
+        connection.send(message)
+        time.sleep(0.05)
+        return
+    message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE')
     # 发送消息直到发送完毕
     connection.sendall(message)
     time.sleep(0.05)
@@ -139,12 +150,12 @@ def receive(window_object, signals):
         received_data = received_data.decode('utf-8')
         print(received_data)  # ---
         # if received_long_data:  # 如果有长消息，则尝试读取长消息
-            # message = unpack(received_long_data)  # 解包消息
+        #     message = unpack(received_long_data)  # 解包消息
         # else:
-            # message = unpack(received_data)  # 解包消息
+        #     message = unpack(received_data)  # 解包消息
         message = unpack(received_data)  # 解包消息
         message_type = message[0]
-        if message_type == 'TEXT_MESSAGE_ARTICLE':
+        if message_type == 'TEXT_MESSAGE':
             message_body = message[2]
             signals.appendOutPutBox.emit(message_body + '<br/>')
             # received_long_data = ''  # 正常解包之后，清空长消息
