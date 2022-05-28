@@ -1,3 +1,4 @@
+import os.path
 import re
 import json
 import sys
@@ -116,7 +117,10 @@ def send(connection, raw_message: str, send_from, output_box):
                         '- //help：显示此帮助<br/>'
                         '- //color <颜色> <正文>：改变颜色，支持16进制（#号开头）。<br/>'
                         '- //room <create/join/delete>：创建/加入/删除房间。<br/>'
-                        '- //root <password>：成为管理员，留空以成为普通用户。<br/>')
+                        '- //root <password>：成为管理员，留空以成为普通用户。<br/>'
+                        '4.聊天记录：<br/>'
+                        '- 聊天记录会在登录后自动更新，可以通过删除软件根目录的chat_<服务器地址>.txt'
+                        '来清除聊天记录<br/>')
         return
     elif raw_message.startswith('//'):  # 如果是命令
         raw_message = re.sub('^//', '', raw_message)
@@ -140,6 +144,18 @@ def receive(window_object, signals):
     signals.appendOutPutBox.emit('欢迎来到Lhat聊天室！大家开始聊天吧！<br/>'
                                  '更多操作提示请输入 //help 并发送！<br/>')
     # received_long_data = ''
+    if os.path.exists(f'chat_{window_object.server_address}.txt'):
+        print('已找到聊天记录文件，正在读取旧服务器聊天记录……')
+        with open(f'chat_{window_object.server_address}.txt', 'r', encoding='utf-8') as f:
+            data = 'RECORD READ START'
+            while data:
+                data = f.readline().strip()
+                message = unpack(data)  # 解包消息
+                try:
+                    message_body = message[2]
+                except IndexError:
+                    continue
+                signals.appendOutPutBox.emit(message_body + '<br/>')
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
@@ -158,6 +174,8 @@ def receive(window_object, signals):
         if message_type == 'TEXT_MESSAGE':
             message_body = message[2]
             signals.appendOutPutBox.emit(message_body + '<br/>')
+            with open(f'chat_{window_object.server_address}.txt', 'a', encoding='utf-8') as chat_file:
+                chat_file.write(received_data + '\n')
             # received_long_data = ''  # 正常解包之后，清空长消息
 
         elif message_type == 'USER_MANIFEST':
