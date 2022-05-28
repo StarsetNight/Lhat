@@ -3,6 +3,7 @@ import re
 import json
 import sys
 import time
+import threading
 
 # import os.path
 
@@ -146,16 +147,9 @@ def receive(window_object, signals):
     # received_long_data = ''
     if os.path.exists(f'chat_{window_object.server_address}.txt'):
         print('已找到聊天记录文件，正在读取旧服务器聊天记录……')
-        with open(f'chat_{window_object.server_address}.txt', 'r', encoding='utf-8') as f:
-            data = 'RECORD READ START'
-            while data:
-                data = f.readline().strip()
-                message = unpack(data)  # 解包消息
-                try:
-                    message_body = message[2]
-                except IndexError:
-                    continue
-                signals.appendOutPutBox.emit(message_body + '<br/>')
+        threading.Thread(target=read_record, args=(signals.appendOutPutBox,
+                                                   window_object.server_address)).start()
+
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
@@ -209,3 +203,22 @@ def receive(window_object, signals):
             signals.appendOutPutBox.emit(f'[提示] 已分配至默认聊天室：<font color="blue">{chat}</font><br/>')
 
         time.sleep(0.0001)
+
+
+def read_record(output_box, server_address):
+    """
+    读取聊天记录，这个不算入四大函数，因为这是Lhat专有的。
+    :param output_box: 输出框
+    :param server_address: 服务器地址
+    """
+    with open(f'chat_{server_address}.txt', 'r', encoding='utf-8') as f:
+        data = 'RECORD READ START'
+        while data:
+            data = f.readline().strip()
+            message = unpack(data)  # 解包消息
+            try:
+                message_body = message[2]
+            except IndexError:
+                continue
+            output_box.emit(message_body + '<br/>')
+

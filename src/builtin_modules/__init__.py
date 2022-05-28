@@ -2,6 +2,7 @@ import socket
 import threading
 import sys
 import webbrowser
+import time
 
 # 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
 
