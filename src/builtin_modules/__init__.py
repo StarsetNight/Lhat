@@ -119,11 +119,12 @@ class ChatApplication(QMainWindow):
         self.chat_window_signal = chat_window_signal
 
         self.setWindowTitle(f'欢迎来到Lhat！{Doc.version} - 登录为：{username}')
+        self.server_address = (server_ip, int(server_port))  # 服务器地址
 
         self.connection = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象
         try:
-            self.connection.connect((server_ip, int(server_port)))
+            self.connection.connect(self.server_address)
         except ValueError:  # 如果端口输入不是数字，则报错
             QMessageBox.critical(self, "错误", '抱歉，地址无效，请输入正确的服务器地址，\n将退回登录界面。')
             self.backLoginWindow()
