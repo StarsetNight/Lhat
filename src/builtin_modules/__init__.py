@@ -121,8 +121,8 @@ class ChatApplication(QMainWindow):
         self.setWindowTitle(f'欢迎来到Lhat！{Doc.version} - 登录为：{username}')
         self.server_address = (server_ip, int(server_port))  # 服务器地址
 
-        self.connection = socket.socket(
-            socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象
+        self.connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
         try:
             self.connection.connect(self.server_address)
         except ValueError:  # 如果端口输入不是数字，则报错
