@@ -23,7 +23,8 @@ server_ip = chatops.ip  # 定义服务器IP
 server_port = chatops.port  # 定义服务器端口
 username = chatops.user  # 定义用户名
 online_users = chatops.users  # 定义在线用户列表
-chat_with = chatops.chat  # 定义聊天对象，默认为群聊
+chat_with = chatops.default_chat  # 定义聊天对象，默认为群聊
+chatting_rooms = chatops.chatting_rooms  # 定义自己所在的聊天室列表
 
 
 class LoginApplication(QMainWindow):
@@ -65,8 +66,8 @@ class LoginApplication(QMainWindow):
             else:
                 self.ui.input_box_nickname.setFocus()
                 return
-        elif len(username) > 20:
-            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字符。',
+        elif len(username.encode('utf-8')) > 20 or len(username.encode('utf-8')) < 2:  # 因为TCP会粘包
+            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字符或少于2个字符。',
                                 QMessageBox.Yes, QMessageBox.Yes)
             self.ui.input_box_nickname.setFocus()  # 设置焦点
             return

@@ -15,12 +15,8 @@ user = ''
 textbox = ''  # 用于显示在线用户的列表框
 show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
-chat = ''  # 聊天对象，先定义为空，因为不同的服务端，需要的聊天对象不同
-
-'''
-注意：
-所有要更新的操作已更新。
-'''
+default_chat = ''  # 聊天对象，先定义为空，因为不同的服务端，需要的聊天对象不同
+chatting_rooms = []  # 自己所在的聊天室列表
 
 
 def pack(raw_message: str, send_from, chat_with, message_type, file_name=None):
@@ -74,7 +70,8 @@ def unpack(json_message: str):
             f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]</font> : " \
             f"<br/>&nbsp;&nbsp;{message['message']}", \
             message['by']
-    elif message['type'] == 'USER_MANIFEST':  # 如果是用户列表
+    elif message['type'] == 'USER_MANIFEST' or \
+        message['type'] == 'ROOM_MANIFEST':  # 如果是用户列表
         try:
             manifest = json.loads(message['message'])  # 将用户列表转成列表
             return message['type'], manifest
@@ -90,7 +87,7 @@ def send(connection, raw_message: str, send_from, output_box):
     """
     发送消息，但是得要TCP连接。
     """
-    chat_with = chat
+    chat_with = default_chat
     if not raw_message.strip():  # 如果消息为空，则不发送，strip的作用是去掉首尾空格
         output_box.emit('[提示] 发送的消息不能为空！<br/>')
         return  # 因为无法发送空消息，所以直接返回
@@ -104,7 +101,7 @@ def send(connection, raw_message: str, send_from, output_box):
                             '&nbsp;&nbsp;建议不要大于300个汉字或900个英文字母和数字！')  # 私聊消息不能超过1024个字节
     elif raw_message.startswith('//color '):  # 如果是彩色消息
         command_message = raw_message.split(' ')
-        raw_message = re.sub('^//color .* ', f'<font color={command_message[1]}>', raw_message)
+        raw_message = re.sub('^//color .* ', f'<font color={" ".join(command_message[1:])}>', raw_message)
         raw_message += '</font>'
     elif raw_message.startswith('//help'):  # 如果是帮助请求
         output_box.emit('[提示] Lhat使用指南！<br/>'
@@ -141,21 +138,22 @@ def receive(window_object, signals):
     :param window_object: 窗口对象，内含connection，是TCP连接
     :param signals: 绑定的信号，用于触发方法
     """
-    global chat  # 这个要引用的
-    signals.appendOutPutBox.emit('欢迎来到Lhat聊天室！大家开始聊天吧！<br/>'
-                                 '更多操作提示请输入 //help 并发送！<br/>')
+    global default_chat, chatting_rooms  # 这个要引用的是全局变量
     # received_long_data = ''
     if os.path.exists(f'chat_{window_object.server_address}.txt'):
         print('已找到聊天记录文件，正在读取旧服务器聊天记录……')
         threading.Thread(target=read_record, args=(signals.appendOutPutBox,
                                                    window_object.server_address)).start()
+    else:
+        signals.appendOutPutBox.emit('哒哒！欢迎来到Lhat聊天室！大家开始聊天吧！<br/>'
+                                     '更多操作提示请输入 //help 并发送！<br/>')
 
     while True:
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
-        except ConnectionError as error_reason:  # 如果与服务器断开连接
-            signals.appendOutPutBox.emit(f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，请断开连接并重试。</font><br/>'
-                                         f'错误原因：{error_reason}')
+        except ConnectionError:  # 如果与服务器断开连接
+            signals.appendOutPutBox.emit(f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>'
+                                         f'主人可以试试断开连接并重新登录哦！<br/>')
             return
         received_data = received_data.decode('utf-8')
         print(received_data)  # ---
@@ -166,7 +164,7 @@ def receive(window_object, signals):
         message = unpack(received_data)  # 解包消息
         message_type = message[0]
         if message_type == 'TEXT_MESSAGE':
-            message_body = message[2]
+            message_body = re.sub('\n', '<br/>', message[2])  # HTML不支持\n换行符，替换为<br/>
             signals.appendOutPutBox.emit(message_body + '<br/>')
             with open(f'chat_{window_object.server_address}.txt', 'a', encoding='utf-8') as chat_file:
                 chat_file.write(received_data + '\n')
@@ -176,12 +174,15 @@ def receive(window_object, signals):
             message_body = message[1]
             online_users = message_body
             signals.clearOnlineUserList.emit()
-            signals.appendOnlineUserList.emit(chat)
+            signals.appendOnlineUserList.emit(default_chat)
             signals.appendOnlineUserList.emit('<font color="#3333FF">====在线用户====</font>')
             for user_index, online_username in enumerate(online_users):
                 # online_username是用于显示在线用户的，不要与username混淆
                 signals.appendOnlineUserList.emit(str(online_username))
             # received_long_data = ''  # 正常解包之后，清空长消息
+
+        elif message_type == 'ROOM_MANIFEST':
+            chatting_rooms = message[1]
 
         elif message_type == 'FILE_RECV_DATA':
             file_name = message[1]
@@ -199,8 +200,8 @@ def receive(window_object, signals):
             # received_long_data += message[1]
 
         elif message_type == 'DEFAULT_ROOM':
-            chat = message[1]
-            signals.appendOutPutBox.emit(f'[提示] 已分配至默认聊天室：<font color="blue">{chat}</font><br/>')
+            default_chat = message[1]
+            signals.appendOutPutBox.emit(f'[提示] 锵锵！已分配至默认聊天室：<font color="blue">{default_chat}</font><br/>')
 
         time.sleep(0.0001)
 
@@ -221,4 +222,5 @@ def read_record(output_box, server_address):
             except IndexError:
                 continue
             output_box.emit(message_body + '<br/>')
-
+    output_box.emit('哒哒！欢迎来到Lhat聊天室！大家开始聊天吧！<br/>'
+                    '更多操作提示请输入 //help 并发送！<br/>')
