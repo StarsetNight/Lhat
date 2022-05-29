@@ -62,21 +62,24 @@ def unpack(json_message: str):
     except json.decoder.JSONDecodeError:  # 如果加载失败，两种可能，第一种，长消息，第二种，断了。
         return 'NOT_JSON_MESSAGE', json_message
 
-    if message['type'] == 'TEXT_MESSAGE':  # 如果是纯文本消息
+    if message['type'] == 'TEXT_MESSAGE' or message['type'] == 'COLOR_MESSAGE':  # 如果是纯文本消息
         message_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(message['time']))  # 将时间戳转成日期时间
         if message['by'] == 'Server':
             by_color = 'red'
-        message_body = re.sub(r'\t', '&nbsp;&nbsp;&nbsp;&nbsp;', message['message'])  # 替换tab符
-        message_body = re.sub('<', '&lt;', message_body)  # 替换<
-        message_body = re.sub('>', '&gt;', message_body)  # 替换>
+        message_body = re.sub('&', '&amp;', message['message'])  # 将&替换成&amp;
+        message_body = re.sub(r'\t', '&nbsp;&nbsp;&nbsp;&nbsp;', message_body)  # 替换tab符
+        if message['type'] == 'TEXT_MESSAGE':
+            message_body = re.sub('<', '&lt;', message_body)  # 替换<
+            message_body = re.sub('>', '&gt;', message_body)  # 替换>
         message_body = re.sub(' ', '&nbsp;', message_body)  # 替换空格
         message_body = re.sub(r'\n', '<br/>', message_body)  # 替换换行符
         message_body = f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]" \
                        f"</font> : <br/>&nbsp;&nbsp;{message_body}"
         return message['type'], message['to'], \
-            message_body, message['by']
+               message_body, message['by']
     elif message['type'] == 'USER_MANIFEST' or \
-        message['type'] == 'ROOM_MANIFEST':  # 如果是用户列表
+            message['type'] == 'ROOM_MANIFEST' or \
+            message['type'] == 'MANAGER_LIST':  # 如果是用户列表
         try:
             manifest = json.loads(message['message'])  # 将用户列表转成列表
             return message['type'], manifest
@@ -93,6 +96,7 @@ def send(connection, raw_message: str, send_from, output_box):
     发送消息，但是得要TCP连接。
     """
     chat_with = default_chat
+    color = False
     if not raw_message.strip():  # 如果消息为空，则不发送，strip的作用是去掉首尾空格
         output_box.emit('[提示] 发送的消息不能为空！<br/>')
         return  # 因为无法发送空消息，所以直接返回
@@ -108,22 +112,9 @@ def send(connection, raw_message: str, send_from, output_box):
         command_message = raw_message.split(' ')
         raw_message = re.sub('^//color .* ', f'<font color={" ".join(command_message[1:])}>', raw_message)
         raw_message += '</font>'
+        color = True
     elif raw_message.startswith('//help'):  # 如果是帮助请求
-        output_box.emit('[提示] Lhat使用指南！<br/>'
-                        '1.左上有“工具”一栏，分别是：<br/>'
-                        '(1) 发送：简单发送消息。<br/>'
-                        '(2) 断开连接：断开与服务器的连接并返回登录界面。<br/>'
-                        '(3) 退出：彻底退出Lhat。<br/>'
-                        '2.点按Ctrl+Enter键发送，Enter键用于换行。<br/>'
-                        '3.输入框命令：<br/>'
-                        '- //tell <用户名> <正文>：私聊用户名。<br/>'
-                        '- //help：显示此帮助<br/>'
-                        '- //color <颜色> <正文>：改变颜色，支持16进制（#号开头）。<br/>'
-                        '- //room <create/join/delete>：创建/加入/删除房间。<br/>'
-                        '- //root <password>：成为管理员，留空以成为普通用户。<br/>'
-                        '4.聊天记录：<br/>'
-                        '- 聊天记录会在登录后自动更新，可以通过删除软件根目录的chat_<服务器地址>.txt'
-                        '来清除聊天记录<br/>')
+        os.system('notepad help.txt')
         return
     elif raw_message.startswith('//'):  # 如果是命令
         raw_message = re.sub('^//', '', raw_message)
@@ -131,7 +122,10 @@ def send(connection, raw_message: str, send_from, output_box):
         connection.send(message)
         time.sleep(0.05)
         return
-    message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE')
+    if not color:
+        message = pack(raw_message, send_from, chat_with, 'TEXT_MESSAGE')
+    else:
+        message = pack(raw_message, send_from, chat_with, 'COLOR_MESSAGE')
     # 发送消息直到发送完毕
     connection.sendall(message)
     time.sleep(0.05)
@@ -168,7 +162,7 @@ def receive(window_object, signals):
         #     message = unpack(received_data)  # 解包消息
         message = unpack(received_data)  # 解包消息
         message_type = message[0]
-        if message_type == 'TEXT_MESSAGE':
+        if message_type == 'TEXT_MESSAGE' or message_type == 'COLOR_MESSAGE':  # 如果是文本消息
             message_body = message[2]
             signals.appendOutPutBox.emit(message_body + '<br/>')
             with open(f'chat_{window_object.server_address}.txt', 'a', encoding='utf-8') as chat_file:
@@ -186,6 +180,14 @@ def receive(window_object, signals):
                 signals.appendOnlineUserList.emit(str(online_username))
             # received_long_data = ''  # 正常解包之后，清空长消息
 
+        elif message_type == 'MANAGER_LIST':
+            if message[1]:
+                signals.appendOutPutBox.emit('在线的维护者有：<br/>')
+                for manager_index, manager_username in enumerate(message[1]):
+                    signals.appendOutPutBox.emit(f'{manager_index + 1} {manager_username}<br/>')
+            else:
+                signals.appendOutPutBox.emit('暂无在线的维护者！<br/>')
+
         elif message_type == 'ROOM_MANIFEST':
             chatting_rooms = message[1]
 
@@ -201,14 +203,15 @@ def receive(window_object, signals):
             signals.appendOutPutBox.emit('[文件] 锵锵！文件已接收！<br/>')
             # received_long_data = ''  # 正常解包之后，清空长消息
 
-        # elif message_type == 'NOT_JSON_MESSAGE':  # 如果无法解包，说明是长消息
-            # received_long_data += message[1]
+        elif message_type == 'NOT_JSON_MESSAGE':
+            # 匹配JSON字符串
+            # login_message = re.match(r'{"by": null, "to": null, "type": "(.+|[^,])", "time": (.+|[^,]), '
+            # r'"message": (.+|[^,}])}', received_data)
+            signals.appendOutPutBox.emit('呜……可能登录失败了，重进一下试试？<br/>')
 
         elif message_type == 'DEFAULT_ROOM':
             default_chat = message[1]
             signals.appendOutPutBox.emit(f'[提示] 锵锵！已分配至默认聊天室：<font color="blue">{default_chat}</font><br/>')
-
-        time.sleep(0.0001)
 
 
 def read_record(output_box, server_address):

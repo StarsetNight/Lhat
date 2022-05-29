@@ -67,7 +67,7 @@ class LoginApplication(QMainWindow):
                 self.ui.input_box_nickname.setFocus()
                 return
         elif len(username.encode('utf-8')) > 20 or len(username.encode('utf-8')) < 2:  # 因为TCP会粘包
-            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字符或少于2个字符。',
+            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字节或少于2个字节。',
                                 QMessageBox.Yes, QMessageBox.Yes)
             self.ui.input_box_nickname.setFocus()  # 设置焦点
             return
@@ -133,7 +133,7 @@ class ChatApplication(QMainWindow):
             return
         except ConnectionError as conn_err:  # 如果连接失败，则报错
             QMessageBox.critical(
-                self, "错误", '似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
+                self, "错误", '呜……似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
             self.backLoginWindow()
             return
         except socket.gaierror:  # 如果输入的地址无效，则报错
@@ -142,10 +142,10 @@ class ChatApplication(QMainWindow):
             return
         if username:
             self.connection.send(chatops.pack(
-                username, None, None, 'USER_NAME'))  # 发送用户名
+                username + ' ' * (256 - len(username.encode('utf-8'))), None, None, 'USER_NAME'))  # 发送用户名
         else:
             self.connection.send(chatops.pack(
-                '用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
+                '用户名不存在  ', None, None, 'USER_NAME'))  # 发送用户名
             username = server_ip + ':' + server_port
 
         self.startReceive()  # 创建线程用于接收消息
