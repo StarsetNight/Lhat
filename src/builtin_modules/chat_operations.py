@@ -17,6 +17,7 @@ show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
 default_chat = ''  # 聊天对象，先定义为空，因为不同的服务端，需要的聊天对象不同
 chatting_rooms = []  # 自己所在的聊天室列表
+logable = False  # 定义是否可以记录日志
 
 
 def pack(raw_message: str, send_from, chat_with, message_type, file_name=None):
@@ -76,7 +77,7 @@ def unpack(json_message: str):
         message_body = f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]" \
                        f"</font> : <br/>&nbsp;&nbsp;{message_body}"
         return message['type'], message['to'], \
-               message_body, message['by']
+            message_body, message['by']
     elif message['type'] == 'USER_MANIFEST' or \
             message['type'] == 'ROOM_MANIFEST' or \
             message['type'] == 'MANAGER_LIST':  # 如果是用户列表
@@ -114,7 +115,7 @@ def send(connection, raw_message: str, send_from, output_box):
         raw_message += '</font>'
         color = True
     elif raw_message.startswith('//help'):  # 如果是帮助请求
-        os.system('notepad help.txt')
+        os.system('start notepad help.txt')
         return
     elif raw_message.startswith('//'):  # 如果是命令
         raw_message = re.sub('^//', '', raw_message)
@@ -151,6 +152,10 @@ def receive(window_object, signals):
         try:
             received_data = window_object.connection.recv(1024)  # 接收信息
         except ConnectionError:  # 如果与服务器断开连接
+            signals.appendOutPutBox.emit(f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>'
+                                         f'主人可以试试断开连接并重新登录哦！<br/>')
+            return
+        if not received_data:  # 如果接收到的数据为空，则说明服务器已经关闭
             signals.appendOutPutBox.emit(f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>'
                                          f'主人可以试试断开连接并重新登录哦！<br/>')
             return
@@ -191,23 +196,22 @@ def receive(window_object, signals):
         elif message_type == 'ROOM_MANIFEST':
             chatting_rooms = message[1]
 
-        elif message_type == 'FILE_RECV_DATA':
-            file_name = message[1]
-            file_data = message[2]
-            signals.appendOutPutBox.emit('[文件] 锵锵！正在接收文件！<br/>')
-            with open(file_name, 'ab') as chat_file:
-                if isinstance(file_data, str):
-                    chat_file.write(file_data.encode('utf-8'))
-                else:
-                    chat_file.write(file_data)
-            signals.appendOutPutBox.emit('[文件] 锵锵！文件已接收！<br/>')
-            # received_long_data = ''  # 正常解包之后，清空长消息
+        # elif message_type == 'FILE_RECV_DATA':
+        # file_name = message[1]
+        # file_data = message[2]
+        # signals.appendOutPutBox.emit('[文件] 锵锵！正在接收文件！<br/>')
+        # with open(file_name, 'ab') as chat_file:
+        # if isinstance(file_data, str):
+        # chat_file.write(file_data.encode('utf-8'))
+        # else:
+        # chat_file.write(file_data)
+        # signals.appendOutPutBox.emit('[文件] 锵锵！文件已接收！<br/>')
+        # received_long_data = ''  # 正常解包之后，清空长消息
 
-        elif message_type == 'NOT_JSON_MESSAGE':
-            # 匹配JSON字符串
-            # login_message = re.match(r'{"by": null, "to": null, "type": "(.+|[^,])", "time": (.+|[^,]), '
-            # r'"message": (.+|[^,}])}', received_data)
-            signals.appendOutPutBox.emit('呜……可能登录失败了，重进一下试试？<br/>')
+        # elif message_type == 'NOT_JSON_MESSAGE':
+        # 匹配JSON字符串
+        # login_message = re.match(r'{"by": null, "to": null, "type": "(.+|[^,])", "time": (.+|[^,]), '
+        # r'"message": (.+|[^,}])}', received_data)
 
         elif message_type == 'DEFAULT_ROOM':
             default_chat = message[1]
