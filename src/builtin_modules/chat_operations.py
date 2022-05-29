@@ -66,10 +66,15 @@ def unpack(json_message: str):
         message_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(message['time']))  # 将时间戳转成日期时间
         if message['by'] == 'Server':
             by_color = 'red'
+        message_body = re.sub(r'\t', '&nbsp;&nbsp;&nbsp;&nbsp;', message['message'])  # 替换tab符
+        message_body = re.sub('<', '&lt;', message_body)  # 替换<
+        message_body = re.sub('>', '&gt;', message_body)  # 替换>
+        message_body = re.sub(' ', '&nbsp;', message_body)  # 替换空格
+        message_body = re.sub(r'\n', '<br/>', message_body)  # 替换换行符
+        message_body = f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]" \
+                       f"</font> : <br/>&nbsp;&nbsp;{message_body}"
         return message['type'], message['to'], \
-            f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]</font> : " \
-            f"<br/>&nbsp;&nbsp;{message['message']}", \
-            message['by']
+            message_body, message['by']
     elif message['type'] == 'USER_MANIFEST' or \
         message['type'] == 'ROOM_MANIFEST':  # 如果是用户列表
         try:
@@ -164,7 +169,7 @@ def receive(window_object, signals):
         message = unpack(received_data)  # 解包消息
         message_type = message[0]
         if message_type == 'TEXT_MESSAGE':
-            message_body = re.sub('\n', '<br/>', message[2])  # HTML不支持\n换行符，替换为<br/>
+            message_body = message[2]
             signals.appendOutPutBox.emit(message_body + '<br/>')
             with open(f'chat_{window_object.server_address}.txt', 'a', encoding='utf-8') as chat_file:
                 chat_file.write(received_data + '\n')
