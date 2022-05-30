@@ -25,6 +25,7 @@ username = chatops.user  # 定义用户名
 online_users = chatops.users  # 定义在线用户列表
 chat_with = chatops.default_chat  # 定义聊天对象，默认为群聊
 chatting_rooms = chatops.chatting_rooms  # 定义自己所在的聊天室列表
+logable = chatops.logable  # 定义是否可以记录日志
 
 
 class LoginApplication(QMainWindow):
@@ -245,6 +246,23 @@ class ChatApplication(QMainWindow):
         else:
             self.ui.input_box_message.setFocus()
             return
+
+    @staticmethod
+    def log(content: str, end='\n', show_time=True):
+        """
+        日志
+        :param content: 日志内容
+        :param end: 日志结尾
+        :param show_time: 是否显示时间
+        :return: 无返回值
+        """
+        if show_time:
+            print(f'[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}] {content}', end=end)
+        else:
+            print(content, end=end)
+        if logable:
+            with open('lhat_server.log', 'a') as f:
+                f.write(f'[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}] {content}{end}')
 
 
 """
