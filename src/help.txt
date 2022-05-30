@@ -17,6 +17,7 @@ A：Lhat所在的目录中有一个logs文件夹，里面存放了日志文件�
 - //room <create/join/list/leave/delete>：创建/加入/列出/退出/删除房间。
 - //root <password>：成为最高管理员，留空以成为普通用户。
 - //manager <add/remove/list>：添加/撤掉/列出维护者。
+- //update：更新最新的用户列表，请在输入命令后无反应时输入。
 4.聊天记录：
 - 聊天记录会在登录后自动更新，可以通过删除软件根目录的chat_<服务器地址>.txt
 来清除聊天记录。

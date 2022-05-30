@@ -29,7 +29,7 @@ show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
 default_chat = ''  # 聊天对象，先定义为空，因为不同的服务端，需要的聊天对象不同
 chatting_rooms = []  # 自己所在的聊天室列表
-logable = False  # 定义是否可以记录日志
+logable = True  # 定义是否可以记录日志
 
 
 class LoginApplication(QMainWindow):
@@ -134,6 +134,7 @@ class ChatApplication(QMainWindow):
 
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建一个socket对象
         self.connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
+        self.log(f'{username} 登录了服务器 {server_ip}:{server_port}')
         try:
             self.connection.connect(self.server_address)
         except ValueError:  # 如果端口输入不是数字，则报错
@@ -204,6 +205,7 @@ class ChatApplication(QMainWindow):
         # 你懂的，这是一个线程，用于接收消息，函数呢？在模块里面的函数，可以直接调用，但是要加模块名
         self.receive_thread = threading.Thread(target=self.receive)
         self.receive_thread.start()  # 开始线程接收信息
+        self.log('已启动消息接收线程。')
 
     def triggeredMenubar(self, triggeres):
         jump_map = {
@@ -221,14 +223,17 @@ class ChatApplication(QMainWindow):
 
     def reConnect(self):
         self.chat_window_signal.appendOutPutBox.emit('正在尝试重新连接……<br/>')
+        self.log('正在尝试重新连接……')
         self.connection.close()
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
         try:
             self.connection.connect(self.server_address)
         except ConnectionError:
+            self.log('重新连接失败。')
             return False
         else:
+            self.log('重新连接成功。')
             return True
 
     def reLogin(self):
@@ -238,6 +243,10 @@ class ChatApplication(QMainWindow):
                 f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>'
                 f'正在尝试在5秒后重新连接（还剩{3 - try_time}次重连机会）……<br/>')
             self.log('与服务器断开了连接，也许服务端宕机了。')
+            if not self.isVisible() and not login_window.isVisible():
+                self.log('发生了后台滞留，退出程序。')
+                QMessageBox.critical(self, '严重错误', '后台滞留，将自动退出Lhat。')
+                sys.exit()
             time.sleep(5)
             if self.reConnect():
                 self.chat_window_signal.appendOutPutBox.emit('[提示] 已重新连接！<br/>')
@@ -251,6 +260,7 @@ class ChatApplication(QMainWindow):
             else:
                 self.log('重新连接失败，重新尝试中。')
         self.chat_window_signal.appendOutPutBox.emit('[提示] 尝试重连失败，请重新启动程序！<br/>')
+        # 如果没有窗口存在，则自动退出
         return False
 
     def onLogoff(self):
@@ -269,6 +279,7 @@ class ChatApplication(QMainWindow):
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
             self.close()
+            os.system('taskkill /f /im Lhat.exe')
             sys.exit(0)
         else:
             self.ui.input_box_message.setFocus()
