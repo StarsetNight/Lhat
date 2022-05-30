@@ -134,23 +134,21 @@ class ChatApplication(QMainWindow):
         except ValueError:  # 如果端口输入不是数字，则报错
             QMessageBox.critical(self, "错误", '抱歉，地址无效，请输入正确的服务器地址，\n将退回登录界面。')
             self.backLoginWindow()
-            return
         except ConnectionError as conn_err:  # 如果连接失败，则报错
             QMessageBox.critical(
                 self, "错误", '呜……似乎无法连接到服务器……\n将退回登录界面。\n错误信息：\n' + str(conn_err))
             self.backLoginWindow()
-            return
         except socket.gaierror:  # 如果输入的地址无效，则报错
             QMessageBox.critical(self, "错误", '获取地址信息失败，\n将退回登录界面。')
             self.backLoginWindow()
-            return
-        if username:
-            self.connection.send(self.pack(username, None, None, 'USER_NAME'))  # 发送用户名
         else:
-            self.connection.send(self.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
-            username = server_ip + ':' + server_port
+            if username:
+                self.connection.send(self.pack(username, None, None, 'USER_NAME'))  # 发送用户名
+            else:
+                self.connection.send(self.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
+                username = server_ip + ':' + server_port
 
-        self.startReceive()  # 创建线程用于接收消息
+            self.startReceive()  # 创建线程用于接收消息
 
     def band(self):
         def appendOutPut(msg: str):
@@ -215,6 +213,40 @@ class ChatApplication(QMainWindow):
         self.close()
         login_window = LoginApplication()
         login_window.show()
+
+    def reConnect(self):
+        self.chat_window_signal.appendOutPutBox.emit('正在尝试重新连接……<br/>')
+        self.connection.close()
+        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, True)
+        try:
+            self.connection.connect(self.server_address)
+        except ConnectionError:
+            return False
+        else:
+            return True
+
+    def reLogin(self):
+        global username
+        for try_time in range(3):
+            self.chat_window_signal.appendOutPutBox.emit(
+                f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>'
+                f'正在尝试在5秒后重新连接（还剩{3 - try_time}次重连机会）……<br/>')
+            self.log('与服务器断开了连接，也许服务端宕机了。')
+            time.sleep(5)
+            if self.reConnect():
+                self.chat_window_signal.appendOutPutBox.emit('[提示] 已重新连接！<br/>')
+                self.log('重新连接成功！正在重新登录……')
+                if username:
+                    self.connection.send(self.pack(username, None, None, 'USER_NAME'))  # 发送用户名
+                else:
+                    self.connection.send(self.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
+                    username = server_ip + ':' + server_port
+                return True
+            else:
+                self.log('重新连接失败，重新尝试中。')
+        self.chat_window_signal.appendOutPutBox.emit('[提示] 尝试重连失败，请重新启动程序！<br/>')
+        return False
 
     def onLogoff(self):
         dlg = QMessageBox.warning(
@@ -297,7 +329,7 @@ class ChatApplication(QMainWindow):
             message_body = re.sub(r'\n', '<br/>', message_body)  # 替换换行符
             message_body = f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]" \
                            f"</font> : <br/>&nbsp;&nbsp;{message_body}"
-            return message['type'], message['to'], message_body, message['by']
+            return message['type'], message['to'], message_body, message['by'], message['message']
         elif message['type'] == 'USER_MANIFEST' or \
                 message['type'] == 'ROOM_MANIFEST' or \
                 message['type'] == 'MANAGER_LIST':  # 如果是用户列表
@@ -354,7 +386,7 @@ class ChatApplication(QMainWindow):
         """
         接收消息，但是得要TCP连接。
         """
-        global default_chat, chatting_rooms  # 这个要引用的是全局变量
+        global default_chat, chatting_rooms, username  # 这个要引用的是全局变量
         # received_long_data = ''
         if os.path.exists(f'chat_{self.server_address}.txt'):
             print('已找到聊天记录文件，正在读取旧服务器聊天记录……')
@@ -367,17 +399,15 @@ class ChatApplication(QMainWindow):
             try:
                 received_data = self.connection.recv(1024)  # 接收信息
             except ConnectionError:  # 如果与服务器断开连接
-                self.chat_window_signal.appendOutPutBox.emit(
-                    f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>'
-                    f'主人可以试试断开连接并重新登录哦！<br/>')
-                self.log('与服务器断开了连接。')
-                return
+                if self.reLogin():  # 如果重新连接成功
+                    continue
+                else:
+                    return
             if not received_data:  # 如果接收到的数据为空，则说明服务器已经关闭
-                self.chat_window_signal.appendOutPutBox.emit(
-                    f'<font color="red">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>'
-                    f'主人可以试试断开连接并重新登录哦！<br/>')
-                self.log('与服务器断开了连接。')
-                return
+                if self.reLogin():  # 如果重新连接成功
+                    continue
+                else:
+                    return
             received_data = received_data.decode('utf-8')
             print(received_data)  # ---
             # if received_long_data:  # 如果有长消息，则尝试读取长消息
@@ -391,6 +421,10 @@ class ChatApplication(QMainWindow):
                 self.chat_window_signal.appendOutPutBox.emit(message_body + '<br/>')
                 with open(f'chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
                     chat_file.write(received_data + '\n')
+                if message[4] == '你已被管理员踢出服务器。':
+                    self.chat_window_signal.appendOutPutBox.emit('与服务器断开了连接。<br/>')
+                    self.connection.close()
+                    return
                 # received_long_data = ''  # 正常解包之后，清空长消息
 
             elif message_type == 'USER_MANIFEST':
