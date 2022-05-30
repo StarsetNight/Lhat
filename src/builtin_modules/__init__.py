@@ -46,6 +46,11 @@ class LoginApplication(QMainWindow):
 
         self.setWindowTitle(f"Lhat！{Doc.version} - 登录到一个 Lhat！服务器")
 
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        if not os.path.exists('records'):
+            os.mkdir('records')
+
     def band(self):
         pass
 
@@ -419,7 +424,7 @@ class ChatApplication(QMainWindow):
             if message_type == 'TEXT_MESSAGE' or message_type == 'COLOR_MESSAGE':  # 如果是文本消息
                 message_body = message[2]
                 self.chat_window_signal.appendOutPutBox.emit(message_body + '<br/>')
-                with open(f'chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
+                with open(f'records/chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
                     chat_file.write(received_data + '\n')
                 if message[4] == '你已被管理员踢出服务器。':
                     self.chat_window_signal.appendOutPutBox.emit('与服务器断开了连接。<br/>')
@@ -478,7 +483,7 @@ class ChatApplication(QMainWindow):
         """
         读取聊天记录，这个不算入四大函数，因为这是Lhat专有的。
         """
-        with open(f'chat_{self.server_address}.txt', 'r', encoding='utf-8') as f:
+        with open(f'records/chat_{self.server_address}.txt', 'r', encoding='utf-8') as f:
             data = 'RECORD READ START'
             while data:
                 data = f.readline().strip()
@@ -505,7 +510,7 @@ class ChatApplication(QMainWindow):
         else:
             print(content, end=end)
         if logable:
-            with open('lhat_server.log', 'a') as f:
+            with open(f'logs/lhat{time.strftime("%Y-%m-%d", time.localtime())}.log', 'a') as f:
                 f.write(f'[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}] {content}{end}')
 
 
