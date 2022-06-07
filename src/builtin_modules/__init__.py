@@ -6,7 +6,6 @@ import json
 import sys
 import time
 import threading
-import ctypes
 
 # 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
 
@@ -25,6 +24,7 @@ from .ui.Signal import register_window_signal
 server_ip = ''
 server_port = ''
 username = ''
+password = ''
 textbox = ''  # 用于显示在线用户的列表框
 show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
@@ -59,7 +59,7 @@ class LoginApplication(QMainWindow):
         """
         其实这个方法并不能真正实现登录，登陆方法都在ChatApplication中实现，这只是在处理登录前的事情罢了。
         """
-        global server_ip, server_port, username
+        global server_ip, server_port, username, password
         try:
             server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  # 获取服务器IP和端口
         except ValueError:  # 如果输入的不是IP:端口的格式，则报错
@@ -68,6 +68,7 @@ class LoginApplication(QMainWindow):
             self.ui.input_box_server_ip_port.setFocus()
             return
         username = self.ui.input_box_nickname.text()  # 获取用户名
+        password = self.ui.input_box_password.text()  # 获取密码
         if not username:  # 如果用户名为空
             dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用socket地址，\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
                                        QMessageBox.Yes)
@@ -85,6 +86,7 @@ class LoginApplication(QMainWindow):
             self.close()
             self.ui.input_box_nickname.setText('')
             self.ui.input_box_server_ip_port.setPlainText('')
+            self.ui.input_box_password.setText('')
             chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
             chat_window.show()
 
@@ -150,7 +152,7 @@ class ChatApplication(QMainWindow):
             self.backLoginWindow()
         else:
             if username:
-                self.connection.send(self.pack(username, None, None, 'USER_NAME'))  # 发送用户名
+                self.connection.send(self.pack(f'{username}\r\n{password}', None, None, 'USER_NAME'))  # 发送用户名
             else:
                 self.connection.send(self.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
                 username = server_ip + ':' + server_port
@@ -253,7 +255,7 @@ class ChatApplication(QMainWindow):
                 self.chat_window_signal.appendOutPutBox.emit('[提示] 已重新连接！<br/>')
                 self.log('重新连接成功！正在重新登录……')
                 if username:
-                    self.connection.send(self.pack(username, None, None, 'USER_NAME'))  # 发送用户名
+                    self.connection.send(self.pack(f'{username}\r\n{password}', None, None, 'USER_NAME'))  # 发送用户名
                 else:
                     self.connection.send(self.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
                     username = server_ip + ':' + server_port
@@ -444,7 +446,10 @@ class ChatApplication(QMainWindow):
                 self.chat_window_signal.appendOutPutBox.emit(message_body + '<br/>')
                 with open(f'records/chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
                     chat_file.write(received_data + '\n')
-                if message[4] == '你已被管理员踢出服务器。':
+                if (message[4] == '你已被管理员踢出服务器。' or
+                        message[4] == '用户名或密码错误。' or
+                        message[4] == '请不要重复登录。') and \
+                        message[1] == 'Server':
                     self.chat_window_signal.appendOutPutBox.emit('与服务器断开了连接。<br/>')
                     self.connection.close()
                     return
