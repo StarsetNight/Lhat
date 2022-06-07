@@ -6,6 +6,7 @@ import json
 import sys
 import time
 import threading
+import ctypes
 
 # 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
 
@@ -268,6 +269,7 @@ class ChatApplication(QMainWindow):
             self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
+            # 强制结束接收线程
             self.backLoginWindow()
         else:
             self.ui.input_box_message.setFocus()
@@ -414,12 +416,17 @@ class ChatApplication(QMainWindow):
         while True:
             try:
                 received_data = self.connection.recv(1024)  # 接收信息
-            except ConnectionError:  # 如果与服务器断开连接
+            except ConnectionResetError as error:  # 如果与服务器断开连接
+                self.log(f'与服务器断开了连接，因为{error}')
                 if self.reLogin():  # 如果重新连接成功
                     continue
                 else:
                     return
+            except ConnectionAbortedError:  # 如果与服务器断开连接
+                self.log('用户主动断开连接。')
+                return
             if not received_data:  # 如果接收到的数据为空，则说明服务器已经关闭
+                self.log('因为接收空消息，与服务器断开连接！')
                 if self.reLogin():  # 如果重新连接成功
                     continue
                 else:
