@@ -6,6 +6,7 @@ import json
 import sys
 import time
 import threading
+import hashlib
 
 # 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
 
@@ -25,6 +26,7 @@ server_ip = ''
 server_port = ''
 username = ''
 password = ''
+guest = True
 textbox = ''  # 用于显示在线用户的列表框
 show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
@@ -59,7 +61,7 @@ class LoginApplication(QMainWindow):
         """
         其实这个方法并不能真正实现登录，登陆方法都在ChatApplication中实现，这只是在处理登录前的事情罢了。
         """
-        global server_ip, server_port, username, password
+        global server_ip, server_port, username, password, guest
         try:
             server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  # 获取服务器IP和端口
         except ValueError:  # 如果输入的不是IP:端口的格式，则报错
@@ -83,6 +85,9 @@ class LoginApplication(QMainWindow):
             self.ui.input_box_nickname.setFocus()  # 设置焦点
             return
         else:
+            if password:
+                password = hashlib.md5(password.encode()).hexdigest()  # 对密码进行加密
+                guest = False
             self.close()
             self.ui.input_box_nickname.setText('')
             self.ui.input_box_server_ip_port.setPlainText('')
@@ -433,6 +438,9 @@ class ChatApplication(QMainWindow):
                     continue
                 else:
                     return
+            if not self.isVisible():
+                self.log('退出了接收线程。')
+                return
             received_data = received_data.decode('utf-8')
             print(received_data)  # ---
             # if received_long_data:  # 如果有长消息，则尝试读取长消息
@@ -444,12 +452,14 @@ class ChatApplication(QMainWindow):
             if message_type == 'TEXT_MESSAGE' or message_type == 'COLOR_MESSAGE':  # 如果是文本消息
                 message_body = message[2]
                 self.chat_window_signal.appendOutPutBox.emit(message_body + '<br/>')
-                with open(f'records/chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
-                    chat_file.write(received_data + '\n')
+                if message[3] != 'Server':
+                    with open(f'records/chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
+                        chat_file.write(received_data + '\n')
                 if (message[4] == '你已被管理员踢出服务器。' or
                         message[4] == '用户名或密码错误。' or
-                        message[4] == '请不要重复登录。') and \
-                        message[1] == 'Server':
+                        message[4] == '请不要重复登录。' or
+                        message[4] == '该服务器启用了强制用户系统，请使用帐号登录。') and \
+                        message[3] == 'Server':
                     self.chat_window_signal.appendOutPutBox.emit('与服务器断开了连接。<br/>')
                     self.connection.close()
                     return
