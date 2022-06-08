@@ -34,6 +34,12 @@ default_chat = ''  # 聊天对象，先定义为空，因为不同的服务端�
 chatting_rooms = []  # 自己所在的聊天室列表
 logable = True  # 定义是否可以记录日志
 
+server_exit_messages = ('你已被管理员踢出服务器。',
+                        '用户名或密码错误。',
+                        '请不要重复登录。',
+                        '该服务器启用了强制用户系统，请使用帐号登录。',
+                        '该用户名已存在。')
+
 
 class LoginApplication(QMainWindow):
     def __init__(self):
@@ -411,7 +417,7 @@ class ChatApplication(QMainWindow):
         """
         接收消息，但是得要TCP连接。
         """
-        global default_chat, chatting_rooms, username  # 这个要引用的是全局变量
+        global default_chat, chatting_rooms, username, server_exit_messages  # 这个要引用的是全局变量
         # received_long_data = ''
         if os.path.exists(f'chat_{self.server_address}.txt'):
             print('已找到聊天记录文件，正在读取旧服务器聊天记录……')
@@ -455,11 +461,7 @@ class ChatApplication(QMainWindow):
                 if message[3] != 'Server':
                     with open(f'records/chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
                         chat_file.write(received_data + '\n')
-                if (message[4] == '你已被管理员踢出服务器。' or
-                        message[4] == '用户名或密码错误。' or
-                        message[4] == '请不要重复登录。' or
-                        message[4] == '该服务器启用了强制用户系统，请使用帐号登录。') and \
-                        message[3] == 'Server':
+                if message[4] in server_exit_messages and message[3] == 'Server':
                     self.chat_window_signal.appendOutPutBox.emit('与服务器断开了连接。<br/>')
                     self.connection.close()
                     return
