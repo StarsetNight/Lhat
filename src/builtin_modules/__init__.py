@@ -294,7 +294,6 @@ class ChatApplication(QMainWindow):
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
             self.close()
-            os.system('taskkill /f /im Lhat.exe')
             sys.exit(0)
         else:
             self.ui.input_box_message.setFocus()
