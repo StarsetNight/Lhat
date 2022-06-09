@@ -15,5 +15,8 @@
 > ~~这样介绍软件那个重构代码的会不会打死我（~~
 ## 下载 DOWNLOADS  
 欲下载本软件，请访问 [发布页面](https://github.com/3rdBit/Lhat/releases)  
+## 鸣谢名单 THANKS
+- 一位不愿意透露姓名的人 信息：未知  
+- Github: [HowieHz](https://github.com/HowieHz)
   
 #### Powered by 3rdBit Studio  
