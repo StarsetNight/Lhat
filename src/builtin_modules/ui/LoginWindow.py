@@ -18,12 +18,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
     QMainWindow, QPlainTextEdit, QPushButton, QSizePolicy,
     QSpacerItem, QWidget)
+from ..resources import images_rc
 
 class Ui_LoginWindow(object):
     def setupUi(self, LoginWindow):
         if not LoginWindow.objectName():
             LoginWindow.setObjectName(u"LoginWindow")
-        LoginWindow.resize(500, 350)
+        LoginWindow.resize(500, 400)
+        icon = QIcon()
+        icon.addFile(u":/ico/Lhat.ico", QSize(), QIcon.Normal, QIcon.On)
+        LoginWindow.setWindowIcon(icon)
         LoginWindow.setStyleSheet(u"/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
@@ -604,86 +608,54 @@ class Ui_LoginWindow(object):
                         "{\n"
 "   background: none;\n"
 "}")
+        LoginWindow.setIconSize(QSize(768, 768))
         self.centralwidget = QWidget(LoginWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.input_box_nickname = QLineEdit(self.centralwidget)
-        self.input_box_nickname.setObjectName(u"input_box_nickname")
+        self.static_text_1 = QLabel(self.centralwidget)
+        self.static_text_1.setObjectName(u"static_text_1")
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(1)
+        sizePolicy.setHeightForWidth(self.static_text_1.sizePolicy().hasHeightForWidth())
+        self.static_text_1.setSizePolicy(sizePolicy)
         font = QFont()
-        font.setPointSize(14)
-        self.input_box_nickname.setFont(font)
+        font.setFamilies([u"Microsoft YaHei UI"])
+        font.setPointSize(12)
+        font.setBold(False)
+        self.static_text_1.setFont(font)
 
-        self.gridLayout.addWidget(self.input_box_nickname, 4, 2, 1, 1)
-
-        self.vSpacer2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout.addItem(self.vSpacer2, 0, 1, 1, 1)
-
-        self.static_text_3 = QLabel(self.centralwidget)
-        self.static_text_3.setObjectName(u"static_text_3")
-        font1 = QFont()
-        font1.setFamilies([u"Microsoft YaHei UI"])
-        font1.setPointSize(14)
-        font1.setBold(False)
-        self.static_text_3.setFont(font1)
-        self.static_text_3.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout.addWidget(self.static_text_3, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.static_text_1, 1, 1, 1, 2)
 
         self.button_register = QPushButton(self.centralwidget)
         self.button_register.setObjectName(u"button_register")
-        sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(2)
-        sizePolicy.setHeightForWidth(self.button_register.sizePolicy().hasHeightForWidth())
-        self.button_register.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(2)
+        sizePolicy1.setHeightForWidth(self.button_register.sizePolicy().hasHeightForWidth())
+        self.button_register.setSizePolicy(sizePolicy1)
         self.button_register.setMaximumSize(QSize(16777215, 80))
-        font2 = QFont()
-        font2.setFamilies([u"Microsoft YaHei UI"])
-        font2.setPointSize(18)
-        font2.setBold(False)
-        self.button_register.setFont(font2)
+        font1 = QFont()
+        font1.setFamilies([u"Microsoft YaHei UI"])
+        font1.setPointSize(18)
+        font1.setBold(False)
+        self.button_register.setFont(font1)
 
-        self.gridLayout.addWidget(self.button_register, 5, 1, 1, 1)
+        self.gridLayout.addWidget(self.button_register, 6, 1, 1, 1)
 
         self.button_login = QPushButton(self.centralwidget)
         self.button_login.setObjectName(u"button_login")
-        sizePolicy.setHeightForWidth(self.button_login.sizePolicy().hasHeightForWidth())
-        self.button_login.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.button_login.sizePolicy().hasHeightForWidth())
+        self.button_login.setSizePolicy(sizePolicy1)
         self.button_login.setMaximumSize(QSize(16777215, 80))
-        font3 = QFont()
-        font3.setFamilies([u"Microsoft YaHei UI"])
-        font3.setPointSize(20)
-        font3.setBold(False)
-        self.button_login.setFont(font3)
+        font2 = QFont()
+        font2.setFamilies([u"Microsoft YaHei UI"])
+        font2.setPointSize(20)
+        font2.setBold(False)
+        self.button_login.setFont(font2)
 
-        self.gridLayout.addWidget(self.button_login, 5, 2, 1, 1)
-
-        self.vSpacer1 = QSpacerItem(20, 50, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout.addItem(self.vSpacer1, 6, 2, 1, 1)
-
-        self.input_box_server_ip_port = QPlainTextEdit(self.centralwidget)
-        self.input_box_server_ip_port.setObjectName(u"input_box_server_ip_port")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(1)
-        sizePolicy1.setHeightForWidth(self.input_box_server_ip_port.sizePolicy().hasHeightForWidth())
-        self.input_box_server_ip_port.setSizePolicy(sizePolicy1)
-        self.input_box_server_ip_port.setMaximumSize(QSize(16777215, 90))
-        self.input_box_server_ip_port.setFont(font)
-
-        self.gridLayout.addWidget(self.input_box_server_ip_port, 2, 2, 1, 1)
-
-        self.static_text_2 = QLabel(self.centralwidget)
-        self.static_text_2.setObjectName(u"static_text_2")
-        self.static_text_2.setFont(font1)
-        self.static_text_2.setContextMenuPolicy(Qt.DefaultContextMenu)
-        self.static_text_2.setLayoutDirection(Qt.LeftToRight)
-        self.static_text_2.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout.addWidget(self.static_text_2, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.button_login, 6, 2, 1, 1)
 
         self.hSpacer2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -693,20 +665,70 @@ class Ui_LoginWindow(object):
 
         self.gridLayout.addItem(self.hSpacer1, 2, 3, 1, 1)
 
-        self.static_text_1 = QLabel(self.centralwidget)
-        self.static_text_1.setObjectName(u"static_text_1")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        self.static_text_3 = QLabel(self.centralwidget)
+        self.static_text_3.setObjectName(u"static_text_3")
+        font3 = QFont()
+        font3.setFamilies([u"Microsoft YaHei UI"])
+        font3.setPointSize(14)
+        font3.setBold(False)
+        self.static_text_3.setFont(font3)
+        self.static_text_3.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout.addWidget(self.static_text_3, 4, 1, 1, 1)
+
+        self.input_box_server_ip_port = QPlainTextEdit(self.centralwidget)
+        self.input_box_server_ip_port.setObjectName(u"input_box_server_ip_port")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(1)
-        sizePolicy2.setHeightForWidth(self.static_text_1.sizePolicy().hasHeightForWidth())
-        self.static_text_1.setSizePolicy(sizePolicy2)
+        sizePolicy2.setHeightForWidth(self.input_box_server_ip_port.sizePolicy().hasHeightForWidth())
+        self.input_box_server_ip_port.setSizePolicy(sizePolicy2)
+        self.input_box_server_ip_port.setMaximumSize(QSize(16777215, 90))
         font4 = QFont()
-        font4.setFamilies([u"Microsoft YaHei UI"])
-        font4.setPointSize(12)
-        font4.setBold(False)
-        self.static_text_1.setFont(font4)
+        font4.setPointSize(14)
+        self.input_box_server_ip_port.setFont(font4)
 
-        self.gridLayout.addWidget(self.static_text_1, 1, 1, 1, 2)
+        self.gridLayout.addWidget(self.input_box_server_ip_port, 2, 2, 1, 1)
+
+        self.static_text_2 = QLabel(self.centralwidget)
+        self.static_text_2.setObjectName(u"static_text_2")
+        self.static_text_2.setFont(font3)
+        self.static_text_2.setContextMenuPolicy(Qt.DefaultContextMenu)
+        self.static_text_2.setLayoutDirection(Qt.LeftToRight)
+        self.static_text_2.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout.addWidget(self.static_text_2, 2, 1, 1, 1)
+
+        self.vSpacer1 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout.addItem(self.vSpacer1, 7, 2, 1, 1)
+
+        self.vSpacer2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout.addItem(self.vSpacer2, 0, 1, 1, 1)
+
+        self.static_text_4 = QLabel(self.centralwidget)
+        self.static_text_4.setObjectName(u"static_text_4")
+        self.static_text_4.setFont(font4)
+        self.static_text_4.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout.addWidget(self.static_text_4, 5, 1, 1, 1)
+
+        self.input_box_password = QLineEdit(self.centralwidget)
+        self.input_box_password.setObjectName(u"input_box_password")
+        self.input_box_password.setFont(font4)
+        self.input_box_password.setEchoMode(QLineEdit.Password)
+        self.input_box_password.setReadOnly(False)
+        self.input_box_password.setClearButtonEnabled(False)
+
+        self.gridLayout.addWidget(self.input_box_password, 5, 2, 1, 1)
+
+        self.input_box_nickname = QLineEdit(self.centralwidget)
+        self.input_box_nickname.setObjectName(u"input_box_nickname")
+        self.input_box_nickname.setFont(font4)
+        self.input_box_nickname.setEchoMode(QLineEdit.Normal)
+
+        self.gridLayout.addWidget(self.input_box_nickname, 4, 2, 1, 1)
 
         LoginWindow.setCentralWidget(self.centralwidget)
         QWidget.setTabOrder(self.input_box_server_ip_port, self.button_login)
@@ -721,12 +743,23 @@ class Ui_LoginWindow(object):
 
     def retranslateUi(self, LoginWindow):
         LoginWindow.setWindowTitle(QCoreApplication.translate("LoginWindow", u"MainWindow", None))
-        self.static_text_3.setText(QCoreApplication.translate("LoginWindow", u"\u663e\u793a\u6635\u79f0", None))
-        self.button_register.setText(QCoreApplication.translate("LoginWindow", u"\u5b89\u5168\u8ba4\u8bc1", None))
-        self.button_login.setText(QCoreApplication.translate("LoginWindow", u"\u767b\u5f55\u670d\u52a1\u5668", None))
-        self.input_box_server_ip_port.setPlainText("")
-        self.static_text_2.setText(QCoreApplication.translate("LoginWindow", u"\u670d\u52a1\u5668IP\u53ca\u7aef\u53e3", None))
         self.static_text_1.setText(QCoreApplication.translate("LoginWindow", u"\u6b22\u8fce\u6765\u5230Lhat\uff01\u8bf7\u8fde\u63a5\u804a\u5929\u670d\u52a1\u5668\u4ee5\u5f00\u59cb\u4f60\u7684\u804a\u5929\u4e4b\u65c5\uff01\n"
 "\u5c0f\u63d0\u793a\uff1a\u5982\u679c\u65e0\u6cd5\u8fde\u63a5\uff0c\u8bf7\u5c1d\u8bd5\u5b89\u5168\u8ba4\u8bc1\uff01", None))
+        self.button_register.setText(QCoreApplication.translate("LoginWindow", u"\u5b89\u5168\u8ba4\u8bc1", None))
+        self.button_login.setText(QCoreApplication.translate("LoginWindow", u"\u767b\u5f55\u670d\u52a1\u5668", None))
+        self.static_text_3.setText(QCoreApplication.translate("LoginWindow", u"\u663e\u793a\u6635\u79f0", None))
+        self.input_box_server_ip_port.setPlainText("")
+        self.input_box_server_ip_port.setPlaceholderText("")
+        self.static_text_2.setText(QCoreApplication.translate("LoginWindow", u"\u670d\u52a1\u5668IP\u53ca\u7aef\u53e3", None))
+        self.static_text_4.setText(QCoreApplication.translate("LoginWindow", u"\u5bc6\u7801", None))
+#if QT_CONFIG(tooltip)
+        self.input_box_password.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(statustip)
+        self.input_box_password.setStatusTip("")
+#endif // QT_CONFIG(statustip)
+        self.input_box_password.setText("")
+        self.input_box_password.setPlaceholderText(QCoreApplication.translate("LoginWindow", u"\u7559\u7a7a\u4ee5\u4f5c\u4e3a\u8bbf\u5ba2\u767b\u5f55", None))
+        self.input_box_nickname.setPlaceholderText("")
     # retranslateUi
 

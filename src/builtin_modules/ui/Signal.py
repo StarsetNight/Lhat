@@ -10,8 +10,6 @@ class ChatWindowSignal(QObject):
     setOnlineUserList = Signal(str)
     clearOnlineUserList = Signal()
     appendOnlineUserList = Signal(str)
-    saveRsaPublicKey = Signal(str)
-    saveRsaPrivateKey = Signal(str)
 
 class LoginWindowSignal(QObject):
     setOutPutBox = Signal(str)

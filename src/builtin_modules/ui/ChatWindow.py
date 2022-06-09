@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'ChatWindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.2.4
+## Created by: Qt User Interface Compiler version 6.3.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,12 +19,16 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QMainWindow,
     QMenu, QMenuBar, QPushButton, QSizePolicy,
     QStatusBar, QTextBrowser, QTextEdit, QWidget)
+from ..resources import images_rc
 
 class Ui_ChatWindow(object):
     def setupUi(self, ChatWindow):
         if not ChatWindow.objectName():
             ChatWindow.setObjectName(u"ChatWindow")
         ChatWindow.resize(800, 600)
+        icon = QIcon()
+        icon.addFile(u":/ico/Lhat.ico", QSize(), QIcon.Normal, QIcon.Off)
+        ChatWindow.setWindowIcon(icon)
         ChatWindow.setStyleSheet(u"/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
