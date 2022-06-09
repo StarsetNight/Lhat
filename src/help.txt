@@ -18,6 +18,10 @@ A：Lhat所在的目录中有一个logs文件夹，里面存放了日志文件�
 - //root <password>：成为最高管理员，留空以成为普通用户。
 - //manager <add/remove/list>：添加/撤掉/列出维护者。
 - //update：更新最新的用户列表，请在输入命令后无反应时输入。
+- //user create <username> <permission> <password>：创建用户。
+- //user setpwd <username> <password>：修改用户密码。
+- //user setper <username> <permission>：修改用户权限。
+- //user delete <username>：删除用户。
 4.聊天记录：
 - 聊天记录会在登录后自动更新，可以通过删除软件根目录的chat_<服务器地址>.txt
 来清除聊天记录。
@@ -27,3 +31,4 @@ A：Lhat所在的目录中有一个logs文件夹，里面存放了日志文件�
 (3) 聊天室的创建和删除只能由维护者和最高管理员完成。
 (4) 使用root命令时，当输入了密码但是密码错误时，会被服务器记录到日志中。
 (5) 如果普通用户想要一些功能，可以联系最高管理员或维护者。
+(6) 数据库的操作只能由最高管理员完成。
