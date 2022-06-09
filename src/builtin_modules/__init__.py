@@ -55,9 +55,9 @@ class LoginApplication(QMainWindow):
 
         self.setWindowTitle(f"Lhat！{Doc.version} - 登录到一个 Lhat！服务器")
 
-        if not os.path.exists('logs'):
+        if not os.path.exists('logs/'):
             os.mkdir('logs')
-        if not os.path.exists('records'):
+        if not os.path.exists('records/'):
             os.mkdir('records')
 
     def band(self):
@@ -355,7 +355,7 @@ class ChatApplication(QMainWindow):
             if message['type'] == 'TEXT_MESSAGE':
                 message_body = re.sub('<', '&lt;', message_body)  # 替换<
                 message_body = re.sub('>', '&gt;', message_body)  # 替换>
-            message_body = re.sub(' ', '&nbsp;', message_body)  # 替换空格
+                message_body = re.sub(' ', '&nbsp;', message_body)  # 替换空格
             message_body = re.sub(r'\n', '<br/>', message_body)  # 替换换行符
             message_body = f"<font color='{by_color}'>{message['by']}</font> <font color='grey'>[{message_time}]" \
                            f"</font> : <br/>&nbsp;&nbsp;{message_body}"
@@ -392,7 +392,7 @@ class ChatApplication(QMainWindow):
                                                              '&nbsp;&nbsp;建议不要大于300个汉字或900个英文字母和数字！')  # 私聊消息不能超过1024个字节
         elif raw_message.startswith('//color '):  # 如果是彩色消息
             command_message = raw_message.split(' ')
-            raw_message = re.sub('^//color .* ', f'<font color={" ".join(command_message[1:])}>', raw_message)
+            raw_message = re.sub(r'^//color \w* ', f'<font color={command_message[1]}>', raw_message)
             raw_message += '</font>'
             color = True
         elif raw_message.startswith('//help'):  # 如果是帮助请求
@@ -418,7 +418,7 @@ class ChatApplication(QMainWindow):
         """
         global default_chat, chatting_rooms, username, server_exit_messages  # 这个要引用的是全局变量
         # received_long_data = ''
-        if os.path.exists(f'chat_{self.server_address}.txt'):
+        if os.path.exists(f'records/chat_{self.server_address}.txt'):
             print('已找到聊天记录文件，正在读取旧服务器聊天记录……')
             threading.Thread(target=self.read_record).start()
         else:
