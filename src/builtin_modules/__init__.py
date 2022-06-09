@@ -90,16 +90,19 @@ class LoginApplication(QMainWindow):
                                 QMessageBox.Yes, QMessageBox.Yes)
             self.ui.input_box_nickname.setFocus()  # 设置焦点
             return
-        else:
-            if password:
-                password = hashlib.md5(password.encode()).hexdigest()  # 对密码进行加密
-                guest = False
-            self.close()
-            self.ui.input_box_nickname.setText('')
-            self.ui.input_box_server_ip_port.setPlainText('')
-            self.ui.input_box_password.setText('')
-            chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
-            chat_window.show()
+        elif password:
+            password = hashlib.md5(password.encode()).hexdigest()  # 对密码进行加密
+            guest = False
+        if ' ' in username:
+            QMessageBox.warning(self, "警告", '用户名不能包含空格，\n'
+                                            '将自动替换为下划线。', QMessageBox.Yes, QMessageBox.Yes)
+            username = re.sub(' ', '_', username.strip())
+        self.close()
+        self.ui.input_box_nickname.setText('')
+        self.ui.input_box_server_ip_port.setPlainText('')
+        self.ui.input_box_password.setText('')
+        chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
+        chat_window.show()
 
     def onRegister(self):  # 安全认证按钮事件
         dlg = RegisterApplication()
