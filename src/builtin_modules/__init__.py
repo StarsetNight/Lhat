@@ -6,6 +6,7 @@ import json
 import sys
 import time
 import threading
+import hashlib
 
 # 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
 
@@ -24,12 +25,20 @@ from .ui.Signal import register_window_signal
 server_ip = ''
 server_port = ''
 username = ''
+password = ''
+guest = True
 textbox = ''  # 用于显示在线用户的列表框
 show = 1  # 用于判断是开还是关闭列表框
 users = []  # 在线用户列表
 default_chat = ''  # 聊天对象，先定义为空，因为不同的服务端，需要的聊天对象不同
 chatting_rooms = []  # 自己所在的聊天室列表
 logable = True  # 定义是否可以记录日志
+
+server_exit_messages = ('你已被管理员踢出服务器。',
+                        '用户名或密码错误。',
+                        '请不要重复登录。',
+                        '该服务器启用了强制用户系统，请使用帐号登录。',
+                        '该用户名已存在。')
 
 
 class LoginApplication(QMainWindow):
@@ -58,7 +67,7 @@ class LoginApplication(QMainWindow):
         """
         其实这个方法并不能真正实现登录，登陆方法都在ChatApplication中实现，这只是在处理登录前的事情罢了。
         """
-        global server_ip, server_port, username
+        global server_ip, server_port, username, password, guest
         try:
             server_ip, server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  # 获取服务器IP和端口
         except ValueError:  # 如果输入的不是IP:端口的格式，则报错
@@ -67,6 +76,7 @@ class LoginApplication(QMainWindow):
             self.ui.input_box_server_ip_port.setFocus()
             return
         username = self.ui.input_box_nickname.text()  # 获取用户名
+        password = self.ui.input_box_password.text()  # 获取密码
         if not username:  # 如果用户名为空
             dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用socket地址，\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
                                        QMessageBox.Yes)
@@ -81,9 +91,13 @@ class LoginApplication(QMainWindow):
             self.ui.input_box_nickname.setFocus()  # 设置焦点
             return
         else:
+            if password:
+                password = hashlib.md5(password.encode()).hexdigest()  # 对密码进行加密
+                guest = False
             self.close()
             self.ui.input_box_nickname.setText('')
             self.ui.input_box_server_ip_port.setPlainText('')
+            self.ui.input_box_password.setText('')
             chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
             chat_window.show()
 
@@ -149,7 +163,7 @@ class ChatApplication(QMainWindow):
             self.backLoginWindow()
         else:
             if username:
-                self.connection.send(self.pack(username, None, None, 'USER_NAME'))  # 发送用户名
+                self.connection.send(self.pack(f'{username}\r\n{password}', None, None, 'USER_NAME'))  # 发送用户名
             else:
                 self.connection.send(self.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
                 username = server_ip + ':' + server_port
@@ -252,7 +266,7 @@ class ChatApplication(QMainWindow):
                 self.chat_window_signal.appendOutPutBox.emit('[提示] 已重新连接！<br/>')
                 self.log('重新连接成功！正在重新登录……')
                 if username:
-                    self.connection.send(self.pack(username, None, None, 'USER_NAME'))  # 发送用户名
+                    self.connection.send(self.pack(f'{username}\r\n{password}', None, None, 'USER_NAME'))  # 发送用户名
                 else:
                     self.connection.send(self.pack('用户名不存在', None, None, 'USER_NAME'))  # 发送用户名
                     username = server_ip + ':' + server_port
@@ -268,6 +282,7 @@ class ChatApplication(QMainWindow):
             self, "警告", '你真的要注销登录到本服务器吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
+            # 强制结束接收线程
             self.backLoginWindow()
         else:
             self.ui.input_box_message.setFocus()
@@ -279,7 +294,6 @@ class ChatApplication(QMainWindow):
         if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
             self.connection.close()
             self.close()
-            os.system('taskkill /f /im Lhat.exe')
             sys.exit(0)
         else:
             self.ui.input_box_message.setFocus()
@@ -402,7 +416,7 @@ class ChatApplication(QMainWindow):
         """
         接收消息，但是得要TCP连接。
         """
-        global default_chat, chatting_rooms, username  # 这个要引用的是全局变量
+        global default_chat, chatting_rooms, username, server_exit_messages  # 这个要引用的是全局变量
         # received_long_data = ''
         if os.path.exists(f'chat_{self.server_address}.txt'):
             print('已找到聊天记录文件，正在读取旧服务器聊天记录……')
@@ -414,16 +428,24 @@ class ChatApplication(QMainWindow):
         while True:
             try:
                 received_data = self.connection.recv(1024)  # 接收信息
-            except ConnectionError:  # 如果与服务器断开连接
+            except ConnectionResetError as error:  # 如果与服务器断开连接
+                self.log(f'与服务器断开了连接，因为{error}')
                 if self.reLogin():  # 如果重新连接成功
                     continue
                 else:
                     return
+            except ConnectionAbortedError:  # 如果与服务器断开连接
+                self.log('用户主动断开连接。')
+                return
             if not received_data:  # 如果接收到的数据为空，则说明服务器已经关闭
+                self.log('因为接收空消息，与服务器断开连接！')
                 if self.reLogin():  # 如果重新连接成功
                     continue
                 else:
                     return
+            if not self.isVisible():
+                self.log('退出了接收线程。')
+                return
             received_data = received_data.decode('utf-8')
             print(received_data)  # ---
             # if received_long_data:  # 如果有长消息，则尝试读取长消息
@@ -435,9 +457,10 @@ class ChatApplication(QMainWindow):
             if message_type == 'TEXT_MESSAGE' or message_type == 'COLOR_MESSAGE':  # 如果是文本消息
                 message_body = message[2]
                 self.chat_window_signal.appendOutPutBox.emit(message_body + '<br/>')
-                with open(f'records/chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
-                    chat_file.write(received_data + '\n')
-                if message[4] == '你已被管理员踢出服务器。':
+                if message[3] != 'Server':
+                    with open(f'records/chat_{self.server_address}.txt', 'a', encoding='utf-8') as chat_file:
+                        chat_file.write(received_data + '\n')
+                if message[4] in server_exit_messages and message[3] == 'Server':
                     self.chat_window_signal.appendOutPutBox.emit('与服务器断开了连接。<br/>')
                     self.connection.close()
                     return
