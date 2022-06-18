@@ -1,6 +1,6 @@
 [提示] Lhat使用指南！
 重要的事情：
-如果你在使用过程中遇到问题，请将问题反馈到issue页面，并提交日志文件。
+如果你在使用过程中遇到问题，请将问题反馈到Issue页面，并提交日志文件。
 Q：如何查看日志文件？
 A：Lhat所在的目录中有一个logs文件夹，里面存放了日志文件，选择对应的日期并发送。
 
@@ -22,6 +22,8 @@ A：Lhat所在的目录中有一个logs文件夹，里面存放了日志文件�
 - //user setpwd <username> <password>：修改用户密码。
 - //user setper <username> <permission>：修改用户权限。
 - //user delete <username>：删除用户。
+- //user ban <username>：封禁用户。
+- //user restore <username>：解除封禁用户。
 4.聊天记录：
 - 聊天记录会在登录后自动更新，可以通过删除软件根目录的chat_<服务器地址>.txt
 来清除聊天记录。
