@@ -604,7 +604,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
       </property>
       <property name="text">
        <string>欢迎来到Lhat！请连接聊天服务器以开始你的聊天之旅！
-小提示：如果无法连接，请尝试安全认证！</string>
+如果想注册账户，可以先输入昵称和密码并注册！</string>
       </property>
      </widget>
     </item>
@@ -630,7 +630,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
        </font>
       </property>
       <property name="text">
-       <string>安全认证</string>
+       <string>注册账户</string>
       </property>
      </widget>
     </item>

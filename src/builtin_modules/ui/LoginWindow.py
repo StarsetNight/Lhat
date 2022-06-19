@@ -744,8 +744,8 @@ class Ui_LoginWindow(object):
     def retranslateUi(self, LoginWindow):
         LoginWindow.setWindowTitle(QCoreApplication.translate("LoginWindow", u"MainWindow", None))
         self.static_text_1.setText(QCoreApplication.translate("LoginWindow", u"\u6b22\u8fce\u6765\u5230Lhat\uff01\u8bf7\u8fde\u63a5\u804a\u5929\u670d\u52a1\u5668\u4ee5\u5f00\u59cb\u4f60\u7684\u804a\u5929\u4e4b\u65c5\uff01\n"
-"\u5c0f\u63d0\u793a\uff1a\u5982\u679c\u65e0\u6cd5\u8fde\u63a5\uff0c\u8bf7\u5c1d\u8bd5\u5b89\u5168\u8ba4\u8bc1\uff01", None))
-        self.button_register.setText(QCoreApplication.translate("LoginWindow", u"\u5b89\u5168\u8ba4\u8bc1", None))
+"\u5982\u679c\u60f3\u6ce8\u518c\u8d26\u6237\uff0c\u53ef\u4ee5\u5148\u8f93\u5165\u6635\u79f0\u548c\u5bc6\u7801\u5e76\u6ce8\u518c\uff01", None))
+        self.button_register.setText(QCoreApplication.translate("LoginWindow", u"\u6ce8\u518c\u8d26\u6237", None))
         self.button_login.setText(QCoreApplication.translate("LoginWindow", u"\u767b\u5f55\u670d\u52a1\u5668", None))
         self.static_text_3.setText(QCoreApplication.translate("LoginWindow", u"\u663e\u793a\u6635\u79f0", None))
         self.input_box_server_ip_port.setPlainText("")

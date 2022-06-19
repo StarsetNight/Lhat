@@ -16,7 +16,6 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QStyleFactory, QMessage
 
 from .ui.ChatWindow import Ui_ChatWindow
 from .ui.LoginWindow import Ui_LoginWindow
-from .ui.RegisterWindow import Ui_RegisterWindow
 
 from .ui.Signal import chat_window_signal
 from .ui.Signal import login_window_signal
@@ -105,34 +104,66 @@ class LoginApplication(QMainWindow):
         chat_window = ChatApplication()  # 销毁登录窗口，启动聊天窗口
         chat_window.show()
 
-    def onRegister(self):  # 安全认证按钮事件
-        dlg = RegisterApplication()
-        return dlg.exec()
-
-
-class RegisterApplication(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.ui = Ui_RegisterWindow()  # UI类的实例化()
-        self.ui.setupUi(self)
-        self.band()  # 信号和槽的绑定
-
-        self.setModal(True)  # 设置为模态窗口
-
-        self.register_window_signal = register_window_signal
-
-        self.setWindowTitle("Lhat服务器安全验证程序")  # 设置窗口标题
-
-    def band(self):
-        pass
-
-    def accept(self):
-        webbrowser.open(
-            f'https://{self.ui.input_box_register_server_ip_port.toPlainText()}')  # 打开安全认证网页
-        return self.done(0)
-
-    def reject(self):
-        return self.done(0)
+    def onRegister(self):  # 注册按钮事件
+        # 提交注册信息
+        self.setWindowTitle(f"Lhat！{Doc.version} - 正在提交注册信息……")
+        reg_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            reg_server_ip, reg_server_port = self.ui.input_box_server_ip_port.toPlainText().split(':')  # 获取服务器IP和端口
+        except ValueError:  # 如果输入的不是IP:端口的格式，则报错
+            QMessageBox.warning(
+                self, "警告", '请输入正确的服务器地址格式：\n<IP地址> : <外部端口>', QMessageBox.Yes, QMessageBox.Yes)
+            self.ui.input_box_server_ip_port.setFocus()
+            return
+        reg_username = self.ui.input_box_nickname.text()  # 获取用户名
+        reg_password = self.ui.input_box_password.text()  # 获取密码
+        if not reg_username:  # 如果用户名为空
+            dlg = QMessageBox.question(self, "警告", "用户名为空，如果确定，将使用socket地址，\n确认继续吗？", QMessageBox.Yes | QMessageBox.No,
+                                       QMessageBox.Yes)
+            if str(dlg) == "PySide6.QtWidgets.QMessageBox.StandardButton.Yes":
+                self.close()
+            else:
+                self.ui.input_box_nickname.setFocus()
+                return
+        if len(reg_username.encode('utf-8')) > 20 or len(reg_username.encode('utf-8')) < 2:  # 因为TCP会粘包
+            QMessageBox.warning(self, "警告", '用户名长度不能超过20个字节或少于2个字节。',
+                                QMessageBox.Yes, QMessageBox.Yes)
+            self.ui.input_box_nickname.setFocus()  # 设置焦点
+            return
+        if reg_password:
+            reg_password = hashlib.md5(reg_password.encode()).hexdigest()  # 对密码进行加密
+        else:
+            QMessageBox.warning(self, "警告", '密码不能为空。', QMessageBox.Yes, QMessageBox.Yes)
+            self.ui.input_box_password.setFocus()
+            return
+        if ' ' in reg_username:
+            QMessageBox.warning(self, "警告", '用户名不能包含空格，\n'
+                                            '将自动替换为下划线。', QMessageBox.Yes, QMessageBox.Yes)
+            reg_username = re.sub(' ', '_', reg_username.strip())
+        reg_connection.connect((reg_server_ip, int(reg_server_port)))  # 连接服务器
+        reg_content = {
+            'by': None,
+            'to': None,
+            'type': 'REGISTER',
+            'time': time.time(),
+            'message': f'{reg_username}\r\n{reg_password}',
+            'file': None,
+        }
+        reg_connection.send(json.dumps(reg_content).encode('utf-8'))  # 发送注册信息
+        try:
+            re_message = reg_connection.recv(64).decode('utf-8')  # 接收服务器的回应
+        except ConnectionResetError:
+            re_message = 'failed'
+        if re_message == 'successful':
+            QMessageBox.information(self, "提示", '注册成功，请登录。', QMessageBox.Yes, QMessageBox.Yes)
+        if re_message == 'failed':
+            QMessageBox.warning(self, "警告", '注册失败。', QMessageBox.Yes, QMessageBox.Yes)
+            self.setWindowTitle(f"Lhat！{Doc.version} - 登录到一个 Lhat！服务器")
+            return
+        self.ui.input_box_nickname.setText('')
+        self.ui.input_box_server_ip_port.setPlainText('')
+        self.ui.input_box_password.setText('')
+        self.setWindowTitle(f"Lhat！{Doc.version} - 登录到一个 Lhat！服务器")
 
 
 class ChatApplication(QMainWindow):
