@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QApplication, QStyleFactory
 import sys
 from builtin_modules import LoginApplication
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QApplication(sys.argv)  # 启动一个应用
     login_window = LoginApplication()  # 实例化主窗口
     app.setStyle(QStyleFactory.create("Fusion"))  # fusion风格
