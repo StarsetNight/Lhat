@@ -294,7 +294,7 @@ class ChatApplication(QMainWindow):
             lambda msg: self.ui.output_box_online_user.setText(msg)
         )
         chat_window_signal.clearOnlineUserList.connect(
-            self.ui.output_box_online_user.clea
+            self.ui.output_box_online_user.clear
         )
 
     def sendMessage(self) -> None:
