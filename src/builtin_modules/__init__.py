@@ -681,7 +681,7 @@ class ChatApplication(QMainWindow):
             print(content, end=end)
         if logable:
             with open(
-                f'logs/lhat{time.strftime("%Y-%m-%d", time.localtime())}.log', "a"
+                f'logs/lhat{time.strftime("%Y-%m-%d", time.localtime())}.log', "a", encoding="utf-8"
             ) as f:
                 f.write(
                     f'[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}] {content}{end}'
