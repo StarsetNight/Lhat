@@ -30,7 +30,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          base: LatestDev
+          base: dev
           branch: main
           delete-branch: false
           title: 'sync to main'
