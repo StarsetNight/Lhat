@@ -28,7 +28,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           base: main
-          branch: LatestDev
+          branch: dev
           delete-branch: false
           title: 'sync to LatestDev'
           body: |
