@@ -71,28 +71,26 @@ class LoginApplication(QMainWindow):
         pass
 
     @staticmethod
-    def processAddress(raw_ip_data: str) -> Union[tuple[str, int], bool]:
+    def processAddress(raw_ip_data: str) -> Union[tuple[str, int], tuple[bool, bool]]:
         """
         输入原始ipv6 ipv4 域名 解析出ip和端口
         """
         if "." in raw_ip_data or raw_ip_data.startswith("localhost"):  # v4解析 域名解析
-            (ip, port, *_) = raw_ip_data.split(
-                ":"
-            )  # 获取服务器IP和端口
+            (ip, port, *_) = raw_ip_data.split(":")  # 获取服务器IP和端口
             if not port.isdigit():
-                return False
+                return False, False
             port = int(port)
             if _:  # 如果输入的不是IP:端口的格式，则报错
-                return False
+                return False, False
         else:  # v6解析
             (ip, port, *_) = raw_ip_data.split("]")
             port = port[1:]  # 去掉:
             if not port.isdigit():
-                return False
+                return False, False
             port = int(port)
             ip = ip[1:]  # 去掉[
             if _:  # 如果输入的不是IP:端口的格式，则报错
-                return False
+                return False, False
         return ip, port
 
     def onCheckLogin(self):
