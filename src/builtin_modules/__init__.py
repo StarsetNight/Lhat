@@ -1,5 +1,4 @@
 import socket
-import webbrowser
 import os.path
 import re
 import json
@@ -17,7 +16,6 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QStyleFactory,
     QMessageBox,
-    QDialog,
 )
 
 from .ui.ChatWindow import Ui_ChatWindow
@@ -71,28 +69,50 @@ class LoginApplication(QMainWindow):
     def band(self):
         pass
 
+    @staticmethod
+    def processAddress(raw_ip_data: str) -> tuple[str, int] | bool:
+        """
+        输入原始ipv6 ipv4 域名 解析出ip和端口
+        """
+        if "." in raw_ip_data:  # v4解析 域名解析
+            (ip, port, *_,) = raw_ip_data.split(
+                ":"
+            )  # 获取服务器IP和端口
+            if not port.isdigit():
+                return False
+            port = int(port)
+            if _:  # 如果输入的不是IP:端口的格式，则报错
+                return False
+        else:  # v6解析
+            (ip, port, *_) = raw_ip_data.split("]")
+            port = port[1:]  # 去掉:
+            if not port.isdigit():
+                return False
+            port = int(port)
+            ip = ip[1:]  # 去掉[
+            if _:  # 如果输入的不是IP:端口的格式，则报错
+                return False
+        return ip, port
+
     def onCheckLogin(self):
         """
         其实这个方法并不能真正实现登录，登陆方法都在ChatApplication中实现，这只是在处理登录前的事情罢了。
         """
         global server_ip, server_port, username, password, guest
-        try:
-            (
-                server_ip,
-                server_port,
-            ) = self.ui.input_box_server_ip_port.toPlainText().split(
-                ":"
-            )  # 获取服务器IP和端口
-        except ValueError:  # 如果输入的不是IP:端口的格式，则报错
+
+        raw_ip_data = self.ui.input_box_server_ip_port.toPlainText()
+        (server_ip, *server_port) = self.processAddress(raw_ip_data)
+        if server_ip is False:  # 解析不成功
             QMessageBox.warning(
                 self,
                 "警告",
-                "请输入正确的服务器地址格式：\n<IP地址> : <外部端口>",
+                "请输入正确的服务器地址格式：\n[<IPV6地址>]:<外部端口> 或 <IPV4地址> : <外部端口> 或 <域名> : <外部端口>",
                 QMessageBox.Yes,
                 QMessageBox.Yes,
             )
             self.ui.input_box_server_ip_port.setFocus()
             return
+
         username = self.ui.input_box_nickname.text()  # 获取用户名
         password = self.ui.input_box_password.text()  # 获取密码
         if not username:  # 如果用户名为空
@@ -139,23 +159,20 @@ class LoginApplication(QMainWindow):
         # 提交注册信息
         self.setWindowTitle(f"Lhat！{Doc.version} - 正在提交注册信息……")
         reg_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            (
-                reg_server_ip,
-                reg_server_port,
-            ) = self.ui.input_box_server_ip_port.toPlainText().split(
-                ":"
-            )  # 获取服务器IP和端口
-        except ValueError:  # 如果输入的不是IP:端口的格式，则报错
+
+        raw_ip_data = self.ui.input_box_server_ip_port.toPlainText()
+        (reg_server_ip, *reg_server_port) = self.processAddress(raw_ip_data)
+        if reg_server_ip is False:  # 解析不成功
             QMessageBox.warning(
                 self,
                 "警告",
-                "请输入正确的服务器地址格式：\n<IP地址> : <外部端口>",
+                "请输入正确的服务器地址格式：\n[<IPV6地址>]:<外部端口> 或 <IPV4地址> : <外部端口> 或 <域名> : <外部端口>",
                 QMessageBox.Yes,
                 QMessageBox.Yes,
             )
             self.ui.input_box_server_ip_port.setFocus()
             return
+
         reg_username = self.ui.input_box_nickname.text()  # 获取用户名
         reg_password = self.ui.input_box_password.text()  # 获取密码
         if not reg_username:  # 如果用户名为空
@@ -195,7 +212,7 @@ class LoginApplication(QMainWindow):
                 QMessageBox.Yes,
             )
             reg_username = re.sub(" ", "_", reg_username.strip())
-        reg_connection.connect((reg_server_ip, int(reg_server_port)))  # 连接服务器
+        reg_connection.connect((reg_server_ip, reg_server_port))  # 连接服务器
         reg_content = {
             "by": None,
             "to": None,
@@ -681,7 +698,9 @@ class ChatApplication(QMainWindow):
             print(content, end=end)
         if logable:
             with open(
-                f'logs/lhat{time.strftime("%Y-%m-%d", time.localtime())}.log', "a", encoding="utf-8"
+                f'logs/lhat{time.strftime("%Y-%m-%d", time.localtime())}.log',
+                "a",
+                encoding="utf-8",
             ) as f:
                 f.write(
                     f'[{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}] {content}{end}'
