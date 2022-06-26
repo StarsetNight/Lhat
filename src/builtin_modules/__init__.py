@@ -6,6 +6,7 @@ import sys
 import time
 import threading
 import hashlib
+from typing import Union  # 导入Union类型
 
 # 记得改chatwindow和loginwindow里面的图片资源导入路径再打包
 
@@ -26,7 +27,7 @@ from .ui.Signal import login_window_signal
 from .ui.Signal import register_window_signal
 
 server_ip: str = ""
-server_port: str = ""
+server_port: int = 0
 username: str = ""
 password: str = ""
 guest: bool = True
@@ -70,12 +71,12 @@ class LoginApplication(QMainWindow):
         pass
 
     @staticmethod
-    def processAddress(raw_ip_data: str) -> tuple[str, int] | bool:
+    def processAddress(raw_ip_data: str) -> Union[tuple[str, int], bool]:
         """
         输入原始ipv6 ipv4 域名 解析出ip和端口
         """
-        if "." in raw_ip_data:  # v4解析 域名解析
-            (ip, port, *_,) = raw_ip_data.split(
+        if "." in raw_ip_data or raw_ip_data.startswith("localhost"):  # v4解析 域名解析
+            (ip, port, *_) = raw_ip_data.split(
                 ":"
             )  # 获取服务器IP和端口
             if not port.isdigit():
@@ -101,7 +102,7 @@ class LoginApplication(QMainWindow):
         global server_ip, server_port, username, password, guest
 
         raw_ip_data = self.ui.input_box_server_ip_port.toPlainText()
-        (server_ip, *server_port) = self.processAddress(raw_ip_data)
+        (server_ip, server_port) = self.processAddress(raw_ip_data)
         if server_ip is False:  # 解析不成功
             QMessageBox.warning(
                 self,
@@ -129,10 +130,10 @@ class LoginApplication(QMainWindow):
                 self.ui.input_box_nickname.setFocus()
                 return
         elif (
-            len(username.encode("utf-8")) > 20 or len(username.encode("utf-8")) < 2
+            len(username.encode("utf-8")) > 32 or len(username.encode("utf-8")) < 2
         ):  # 因为TCP会粘包
             QMessageBox.warning(
-                self, "警告", "用户名长度不能超过20个字节或少于2个字节。", QMessageBox.Yes, QMessageBox.Yes
+                self, "警告", "用户名长度不能超过32个字节或少于2个字节。", QMessageBox.Yes, QMessageBox.Yes
             )
             self.ui.input_box_nickname.setFocus()  # 设置焦点
             return
