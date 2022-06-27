@@ -162,7 +162,7 @@ class LoginApplication(QMainWindow):
         reg_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         raw_ip_data = self.ui.input_box_server_ip_port.toPlainText()
-        (reg_server_ip, *reg_server_port) = self.processAddress(raw_ip_data)
+        (reg_server_ip, reg_server_port) = self.processAddress(raw_ip_data)
         if reg_server_ip is False:  # 解析不成功
             QMessageBox.warning(
                 self,

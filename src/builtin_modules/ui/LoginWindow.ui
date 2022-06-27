@@ -27,7 +27,7 @@ Last updated: 22/01/2019, 07:55.
 Available at: https://github.com/GTRONICK/QSS/blob/master/Aqua.qss
 */
 QMainWindow {
-	background-color:#ececec;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 244, 235, 255), stop:1 rgba(233, 255, 255, 255));
 }
 QTextEdit {
 	border-width: 1px;
@@ -629,6 +629,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         <bold>false</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 248, 248, 255), stop:1 rgba(237, 255, 255, 255));
+}
+QPushButton:pressed {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 205, 205, 255), stop:1 rgba(198, 255, 254, 255));
+}</string>
+      </property>
       <property name="text">
        <string>注册账户</string>
       </property>
@@ -654,6 +662,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         <pointsize>20</pointsize>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 248, 248, 255), stop:1 rgba(237, 255, 255, 255));
+}
+QPushButton:pressed {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 205, 205, 255), stop:1 rgba(198, 255, 254, 255));
+}</string>
       </property>
       <property name="text">
        <string>登录服务器</string>
