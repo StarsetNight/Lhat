@@ -71,29 +71,25 @@ class LoginApplication(QMainWindow):
         pass
 
     @staticmethod
-    def processAddress(raw_ip_data: str) -> Union[tuple[str, int], bool]:
+    def processAddress(raw_ip_data: str) -> Union[tuple[str, int], tuple[bool, bool]]:
         """
         输入原始ipv6 ipv4 域名 解析出ip和端口
         """
         if "." in raw_ip_data or raw_ip_data.startswith("localhost"):  # v4解析 域名解析
-            (ip, port, *_) = raw_ip_data.split(
-                ":"
-            )  # 获取服务器IP和端口
+            (ip, port, *_) = raw_ip_data.split(":")  # 获取服务器IP和端口
             if not port.isdigit():
-                return False
-            port = int(port)
+                return False, False
             if _:  # 如果输入的不是IP:端口的格式，则报错
-                return False
+                return False, False
         else:  # v6解析
             (ip, port, *_) = raw_ip_data.split("]")
             port = port[1:]  # 去掉:
             if not port.isdigit():
-                return False
-            port = int(port)
+                return False, False
             ip = ip[1:]  # 去掉[
             if _:  # 如果输入的不是IP:端口的格式，则报错
-                return False
-        return ip, port
+                return False, False
+        return ip, int(port)
 
     def onCheckLogin(self):
         """
@@ -375,7 +371,7 @@ class ChatApplication(QMainWindow):
                     self.connection.send(
                         self.pack("用户名不存在", None, None, "USER_NAME")
                     )  # 发送用户名
-                    username = server_ip + ":" + server_port
+                    username = server_ip + ":" + str(server_port)
                 return True
             else:
                 self.log("重新连接失败，重新尝试中。")
@@ -727,6 +723,6 @@ HELLO_WORLD 常量(NEVER_GIVE_UP)全部大写，使用下划线连接单词
 if __name__ == "__main__":
     app = QApplication([])  # 启动一个应用
     login_window = LoginApplication()  # 实例化主窗口
-    app.setStyle(QStyleFactory.create("Fusion"))  # fusion风格
+    app.setStyle(QStyleFactory.create("Fusion"))  # type: ignore # fusion风格
     login_window.show()  # 展示主窗口
     app.exec()  # 避免程序执行到这一行后直接退出
