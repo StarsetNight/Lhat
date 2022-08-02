@@ -211,23 +211,22 @@ class LoginApplication(QMainWindow):
             reg_username = re.sub(" ", "_", reg_username.strip())
         reg_connection.connect((reg_server_ip, reg_server_port))  # 连接服务器
         reg_content = {
-            "by": None,
-            "to": None,
+            "by": "",
+            "to": "",
             "type": "REGISTER",
             "time": time.time(),
             "message": f"{reg_username}\r\n{reg_password}",
-            "file": None,
         }
         reg_connection.send(json.dumps(reg_content).encode("utf-8"))  # 发送注册信息
         try:
-            re_message = reg_connection.recv(64).decode("utf-8")  # 接收服务器的回应
+            re_message = reg_connection.recv(64).decode("utf-8").strip('\0')  # 接收服务器的回应
         except ConnectionResetError:
             re_message = "failed"
         if re_message == "successful":
             QMessageBox.information(
                 self, "提示", "注册成功，请登录。", QMessageBox.Yes, QMessageBox.Yes
             )
-        if re_message == "failed":
+        elif re_message == "failed":
             QMessageBox.warning(self, "警告", "注册失败。", QMessageBox.Yes, QMessageBox.Yes)
             self.setWindowTitle(f"Lhat！{Doc.version} - 登录到一个 Lhat！服务器")
             return
@@ -273,11 +272,11 @@ class ChatApplication(QMainWindow):
         else:
             if username:
                 self.connection.send(
-                    self.pack(f"{username}\r\n{password}", None, None, "USER_NAME")
+                    self.pack(f"{username}\r\n{password}", "", "", "USER_NAME")
                 )  # 发送用户名
             else:
                 self.connection.send(
-                    self.pack("用户名不存在", None, None, "USER_NAME")
+                    self.pack("用户名不存在", "", "", "USER_NAME")
                 )  # 发送用户名
                 username = server_ip + ":" + server_port
 
@@ -365,11 +364,11 @@ class ChatApplication(QMainWindow):
                 self.log("重新连接成功！正在重新登录……")
                 if username:
                     self.connection.send(
-                        self.pack(f"{username}\r\n{password}", None, None, "USER_NAME")
+                        self.pack(f"{username}\r\n{password}", "", "", "USER_NAME")
                     )  # 发送用户名
                 else:
                     self.connection.send(
-                        self.pack("用户名不存在", None, None, "USER_NAME")
+                        self.pack("用户名不存在", "", "", "USER_NAME")
                     )  # 发送用户名
                     username = server_ip + ":" + str(server_port)
                 return True
@@ -415,22 +414,20 @@ class ChatApplication(QMainWindow):
     # 四大函数开始
 
     @staticmethod
-    def pack(raw_message: str, send_from, chat_with, message_type, file_name=None):
+    def pack(raw_message: str, send_from, chat_with, message_type):
         """
         打包消息，用于发送
         :param raw_message: 正文消息
         :param send_from: 发送者
         :param chat_with: 聊天对象
         :param message_type: 消息类型
-        :param file_name: 文件名，如果不是文件类型，则为None
         """
         message = {
             "by": send_from,
             "to": chat_with,
             "type": message_type,
-            "time": time.time(),
+            "time": str(time.time()),
             "message": raw_message,
-            "file": file_name,
         }  # 先把收集到的信息存储到字典里
         return json.dumps(message).encode("utf-8")  # 再用json打包
 
@@ -462,7 +459,7 @@ class ChatApplication(QMainWindow):
             message["type"] == "TEXT_MESSAGE" or message["type"] == "COLOR_MESSAGE"
         ):  # 如果是纯文本消息
             message_time = time.strftime(
-                "%Y-%m-%d %H:%M:%S", time.localtime(message["time"])
+                "%Y-%m-%d %H:%M:%S", time.localtime(float(message["time"]))
             )  # 将时间戳转成日期时间
             if message["by"] == "Server":
                 by_color = "red"
@@ -532,7 +529,7 @@ class ChatApplication(QMainWindow):
             return
         elif raw_message.startswith("//"):  # 如果是命令
             raw_message = re.sub("^//", "", raw_message)
-            message = self.pack(raw_message, username, None, "COMMAND")
+            message = self.pack(raw_message, username, "", "COMMAND")
             self.connection.send(message)
             time.sleep(0.05)
             return
@@ -579,12 +576,8 @@ class ChatApplication(QMainWindow):
             if not self.isVisible():
                 self.log("退出了接收线程。")
                 return
-            received_data = received_data.decode("utf-8")
+            received_data = received_data.decode("utf-8").strip('\0')
             print(received_data)  # ---
-            # if received_long_data:  # 如果有长消息，则尝试读取长消息
-            #     message = unpack(received_long_data)  # 解包消息
-            # else:
-            #     message = unpack(received_data)  # 解包消息
             message = self.unpack(received_data)  # 解包消息
             message_type = message[0]
             if (
