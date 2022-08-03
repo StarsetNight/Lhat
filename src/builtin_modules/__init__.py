@@ -214,7 +214,7 @@ class LoginApplication(QMainWindow):
             "by": "",
             "to": "",
             "type": "REGISTER",
-            "time": time.time(),
+            "time": time.time_ns(),
             "message": f"{reg_username}\r\n{reg_password}",
         }
         reg_connection.send(json.dumps(reg_content).encode("utf-8"))  # 发送注册信息
@@ -426,7 +426,7 @@ class ChatApplication(QMainWindow):
             "by": send_from,
             "to": chat_with,
             "type": message_type,
-            "time": time.time(),
+            "time": time.time_ns(),
             "message": raw_message,
         }  # 先把收集到的信息存储到字典里
         return json.dumps(message).encode("utf-8")  # 再用json打包
