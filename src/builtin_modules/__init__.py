@@ -426,7 +426,7 @@ class ChatApplication(QMainWindow):
             "by": send_from,
             "to": chat_with,
             "type": message_type,
-            "time": str(time.time()),
+            "time": time.time(),
             "message": raw_message,
         }  # 先把收集到的信息存储到字典里
         return json.dumps(message).encode("utf-8")  # 再用json打包
@@ -459,7 +459,7 @@ class ChatApplication(QMainWindow):
             message["type"] == "TEXT_MESSAGE" or message["type"] == "COLOR_MESSAGE"
         ):  # 如果是纯文本消息
             message_time = time.strftime(
-                "%Y-%m-%d %H:%M:%S", time.localtime(float(message["time"]))
+                "%Y-%m-%d %H:%M:%S", time.localtime(message["time"])
             )  # 将时间戳转成日期时间
             if message["by"] == "Server":
                 by_color = "red"
