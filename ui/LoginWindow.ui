@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoginWindow</class>
+ <widget class="QMainWindow" name="LoginWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normalon>:/ico/Lhat.ico</normalon>
+   </iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*
+Aqua Style Sheet for QT Applications
+Author: Jaime A. Quiroga P.
+Company: GTRONICK
+Last updated: 22/01/2019, 07:55.
+Available at: https://github.com/GTRONICK/QSS/blob/master/Aqua.qss
+*/
+QMainWindow {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 244, 235, 255), stop:1 rgba(233, 255, 255, 255));
+}
+QTextEdit {
+	border-width: 1px;
+	border-style: solid;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QPlainTextEdit {
+	border-width: 1px;
+	border-style: solid;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QToolButton {
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: rgb(0,0,0);
+	padding: 2px;
+	background-color: rgb(255,255,255);
+}
+QToolButton:hover{
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(197, 197, 197), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(197, 197, 197));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: rgb(0,0,0);
+	padding: 2px;
+	background-color: rgb(255,255,255);
+}
+QToolButton:pressed{
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: rgb(0,0,0);
+	padding: 2px;
+	background-color: rgb(142,142,142);
+}
+QPushButton{
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: rgb(0,0,0);
+	padding: 2px;
+	background-color: rgb(255,255,255);
+}
+QPushButton::default{
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: rgb(0,0,0);
+	padding: 2px;
+	background-color: rgb(255,255,255);
+}
+QPushButton:hover{
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(197, 197, 197), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(197, 197, 197));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: rgb(0,0,0);
+	padding: 2px;
+	background-color: rgb(255,255,255);
+}
+QPushButton:pressed{
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: rgb(0,0,0);
+	padding: 2px;
+	background-color: rgb(142,142,142);
+}
+QPushButton:disabled{
+	border-style: solid;
+	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
+	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
+	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
+	border-width: 1px;
+	border-radius: 5px;
+	color: #808086;
+	padding: 2px;
+	background-color: rgb(142,142,142);
+}
+QLineEdit {
+	border-width: 1px; border-radius: 4px;
+	border-style: solid;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QLabel {
+	color: #000000;
+}
+QLCDNumber {
+	color: rgb(0, 113, 255, 255);
+}
+QProgressBar {
+	text-align: center;
+	color: rgb(240, 240, 240);
+	border-width: 1px; 
+	border-radius: 10px;
+	border-color: rgb(230, 230, 230);
+	border-style: solid;
+	background-color:rgb(207,207,207);
+}
+QProgressBar::chunk {
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));
+	border-radius: 10px;
+}
+QMenuBar {
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(207, 209, 207, 255), stop:1 rgba(230, 229, 230, 255));
+}
+QMenuBar::item {
+	color: #000000;
+  	spacing: 3px;
+  	padding: 1px 4px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(207, 209, 207, 255), stop:1 rgba(230, 229, 230, 255));
+}
+
+QMenuBar::item:selected {
+  	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+	color: #FFFFFF;
+}
+QMenu::item:selected {
+	border-style: solid;
+	border-top-color: transparent;
+	border-right-color: transparent;
+	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+	border-bottom-color: transparent;
+	border-left-width: 2px;
+	color: #000000;
+	padding-left:15px;
+	padding-top:4px;
+	padding-bottom:4px;
+	padding-right:7px;
+}
+QMenu::item {
+	border-style: solid;
+	border-top-color: transparent;
+	border-right-color: transparent;
+	border-left-color: transparent;
+	border-bottom-color: transparent;
+	border-bottom-width: 1px;
+	color: #000000;
+	padding-left:17px;
+	padding-top:4px;
+	padding-bottom:4px;
+	padding-right:7px;
+}
+QTabWidget {
+	color:rgb(0,0,0);
+	background-color:#000000;
+}
+QTabWidget::pane {
+		border-color: rgb(223,223,223);
+		background-color:rgb(226,226,226);
+		border-style: solid;
+		border-width: 2px;
+    	border-radius: 6px;
+}
+QTabBar::tab:first {
+	border-style: solid;
+	border-left-width:1px;
+	border-right-width:0px;
+	border-top-width:1px;
+	border-bottom-width:1px;
+	border-top-color: rgb(209,209,209);
+	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));
+	border-bottom-color: rgb(229,229,229);
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+	color: #000000;
+	padding: 3px;
+	margin-left:0px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(247, 247, 247, 255), stop:1 rgba(255, 255, 255, 255));
+}
+QTabBar::tab:last {
+	border-style: solid;
+	border-width:1px;
+	border-top-color: rgb(209,209,209);
+	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));
+	border-right-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));
+	border-bottom-color: rgb(229,229,229);
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	color: #000000;
+	padding: 3px;
+	margin-left:0px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(247, 247, 247, 255), stop:1 rgba(255, 255, 255, 255));
+}
+QTabBar::tab {
+	border-style: solid;
+	border-top-width:1px;
+	border-bottom-width:1px;
+	border-left-width:1px;
+	border-top-color: rgb(209,209,209);
+	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));
+	border-bottom-color: rgb(229,229,229);
+	color: #000000;
+	padding: 3px;
+	margin-left:0px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(247, 247, 247, 255), stop:1 rgba(255, 255, 255, 255));
+}
+QTabBar::tab:selected, QTabBar::tab:last:selected, QTabBar::tab:hover {
+  	border-style: solid;
+  	border-left-width:1px;
+	border-right-color: transparent;
+	border-top-color: rgb(209,209,209);
+	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));
+	border-bottom-color: rgb(229,229,229);
+	color: #FFFFFF;
+	padding: 3px;
+	margin-left:0px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+
+QTabBar::tab:selected, QTabBar::tab:first:selected, QTabBar::tab:hover {
+  	border-style: solid;
+  	border-left-width:1px;
+  	border-bottom-width:1px;
+  	border-top-width:1px;
+	border-right-color: transparent;
+	border-top-color: rgb(209,209,209);
+	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));
+	border-bottom-color: rgb(229,229,229);
+	color: #FFFFFF;
+	padding: 3px;
+	margin-left:0px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+
+QCheckBox {
+	color: #000000;
+	padding: 2px;
+}
+QCheckBox:disabled {
+	color: #808086;
+	padding: 2px;
+}
+
+QCheckBox:hover {
+	border-radius:4px;
+	border-style:solid;
+	padding-left: 1px;
+	padding-right: 1px;
+	padding-bottom: 1px;
+	padding-top: 1px;
+	border-width:1px;
+	border-color: transparent;
+}
+QCheckBox::indicator:checked {
+
+	height: 10px;
+	width: 10px;
+	border-style:solid;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+	color: #000000;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QCheckBox::indicator:unchecked {
+
+	height: 10px;
+	width: 10px;
+	border-style:solid;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+	color: #000000;
+}
+QRadioButton {
+	color: 000000;
+	padding: 1px;
+}
+QRadioButton::indicator:checked {
+	height: 10px;
+	width: 10px;
+	border-style:solid;
+	border-radius:5px;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+	color: #a9b7c6;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QRadioButton::indicator:!checked {
+	height: 10px;
+	width: 10px;
+	border-style:solid;
+	border-radius:5px;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+	color: #a9b7c6;
+	background-color: transparent;
+}
+QStatusBar {
+	color:#027f7f;
+}
+QSpinBox {
+	border-style: solid;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QDoubleSpinBox {
+	border-style: solid;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QTimeEdit {
+	border-style: solid;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QDateTimeEdit {
+	border-style: solid;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QDateEdit {
+	border-style: solid;
+	border-width: 1px;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+
+QToolBox {
+	color: #a9b7c6;
+	background-color:#000000;
+}
+QToolBox::tab {
+	color: #a9b7c6;
+	background-color:#000000;
+}
+QToolBox::tab:selected {
+	color: #FFFFFF;
+	background-color:#000000;
+}
+QScrollArea {
+	color: #FFFFFF;
+	background-color:#000000;
+}
+QSlider::groove:horizontal {
+	height: 5px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));
+}
+QSlider::groove:vertical {
+	width: 5px;
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));
+}
+QSlider::handle:horizontal {
+	background: rgb(253,253,253);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(207,207,207);
+	width: 12px;
+	margin: -5px 0;
+	border-radius: 7px;
+}
+QSlider::handle:vertical {
+	background: rgb(253,253,253);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(207,207,207);
+	height: 12px;
+	margin: 0 -5px;
+	border-radius: 7px;
+}
+QSlider::add-page:horizontal {
+    background: rgb(181,181,181);
+}
+QSlider::add-page:vertical {
+    background: rgb(181,181,181);
+}
+QSlider::sub-page:horizontal {
+    background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));
+}
+QSlider::sub-page:vertical {
+    background-color: qlineargradient(spread:pad, y1:0.5, x1:1, y2:0.5, x2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));
+}
+QScrollBar:horizontal {
+	max-height: 20px;
+	border: 1px transparent grey;
+	margin: 0px 20px 0px 20px;
+}
+QScrollBar:vertical {
+	max-width: 20px;
+	border: 1px transparent grey;
+	margin: 20px 0px 20px 0px;
+}
+QScrollBar::handle:horizontal {
+	background: rgb(253,253,253);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(207,207,207);
+	border-radius: 7px;
+	min-width: 25px;
+}
+QScrollBar::handle:horizontal:hover {
+	background: rgb(253,253,253);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(147, 200, 200);
+	border-radius: 7px;
+	min-width: 25px;
+}
+QScrollBar::handle:vertical {
+	background: rgb(253,253,253);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(207,207,207);
+	border-radius: 7px;
+	min-height: 25px;
+}
+QScrollBar::handle:vertical:hover {
+	background: rgb(253,253,253);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(147, 200, 200);
+	border-radius: 7px;
+	min-height: 25px;
+}
+QScrollBar::add-line:horizontal {
+   border: 2px transparent grey;
+   border-top-right-radius: 7px;
+   border-bottom-right-radius: 7px;
+   background: rgba(34, 142, 255, 255);
+   width: 20px;
+   subcontrol-position: right;
+   subcontrol-origin: margin;
+}
+QScrollBar::add-line:horizontal:pressed {
+   border: 2px transparent grey;
+   border-top-right-radius: 7px;
+   border-bottom-right-radius: 7px;
+   background: rgb(181,181,181);
+   width: 20px;
+   subcontrol-position: right;
+   subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical {
+   border: 2px transparent grey;
+   border-bottom-left-radius: 7px;
+   border-bottom-right-radius: 7px;
+   background: rgba(34, 142, 255, 255);
+   height: 20px;
+   subcontrol-position: bottom;
+   subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical:pressed {
+   border: 2px transparent grey;
+   border-bottom-left-radius: 7px;
+   border-bottom-right-radius: 7px;
+   background: rgb(181,181,181);
+   height: 20px;
+   subcontrol-position: bottom;
+   subcontrol-origin: margin;
+}
+QScrollBar::sub-line:horizontal {
+   border: 2px transparent grey;
+   border-top-left-radius: 7px;
+   border-bottom-left-radius: 7px;
+   background: rgba(34, 142, 255, 255);
+   width: 20px;
+   subcontrol-position: left;
+   subcontrol-origin: margin;
+}
+QScrollBar::sub-line:horizontal:pressed {
+   border: 2px transparent grey;
+   border-top-left-radius: 7px;
+   border-bottom-left-radius: 7px;
+   background: rgb(181,181,181);
+   width: 20px;
+   subcontrol-position: left;
+   subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical {
+   border: 2px transparent grey;
+   border-top-left-radius: 7px;
+   border-top-right-radius: 7px;
+   background: rgba(34, 142, 255, 255);
+   height: 20px;
+   subcontrol-position: top;
+   subcontrol-origin: margin;
+}
+QScrollBar::sub-line:vertical:pressed {
+   border: 2px transparent grey;
+   border-top-left-radius: 7px;
+   border-top-right-radius: 7px;
+   background: rgb(181,181,181);
+   height: 20px;
+   subcontrol-position: top;
+   subcontrol-origin: margin;
+}
+QScrollBar::left-arrow:horizontal {
+   border: 1px transparent grey;
+   border-top-left-radius: 3px;
+   border-bottom-left-radius: 3px;
+   width: 6px;
+   height: 6px;
+   background: white;
+}
+QScrollBar::right-arrow:horizontal {
+   border: 1px transparent grey;
+   border-top-right-radius: 3px;
+   border-bottom-right-radius: 3px;
+   width: 6px;
+   height: 6px;
+   background: white;
+}
+QScrollBar::up-arrow:vertical {
+   border: 1px transparent grey;
+   border-top-left-radius: 3px;
+   border-top-right-radius: 3px;
+   width: 6px;
+   height: 6px;
+   background: white;
+}
+QScrollBar::down-arrow:vertical {
+   border: 1px transparent grey;
+   border-bottom-left-radius: 3px;
+   border-bottom-right-radius: 3px;
+   width: 6px;
+   height: 6px;
+   background: white;
+}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+   background: none;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+   background: none;
+}</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>768</width>
+    <height>768</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="1" colspan="2">
+     <widget class="QLabel" name="static_text_1">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>欢迎来到Lhat！请连接聊天服务器以开始你的聊天之旅！
+如果想注册账户，可以先输入昵称和密码并注册！</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QPushButton" name="button_register">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>2</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>80</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>18</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 248, 248, 255), stop:1 rgba(237, 255, 255, 255));
+}
+QPushButton:pressed {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 205, 205, 255), stop:1 rgba(198, 255, 254, 255));
+}</string>
+      </property>
+      <property name="text">
+       <string>注册账户</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QPushButton" name="button_login">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>2</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>80</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>20</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 248, 248, 255), stop:1 rgba(237, 255, 255, 255));
+}
+QPushButton:pressed {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 205, 205, 255), stop:1 rgba(198, 255, 254, 255));
+}</string>
+      </property>
+      <property name="text">
+       <string>登录服务器</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <spacer name="hSpacer2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="3">
+     <spacer name="hSpacer1">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="static_text_3">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>14</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>显示昵称</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPlainTextEdit" name="input_box_server_ip_port">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>90</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="plainText">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="static_text_2">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI</family>
+        <pointsize>14</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::DefaultContextMenu</enum>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>服务器IP及端口</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <spacer name="vSpacer1">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="1">
+     <spacer name="vSpacer2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLabel" name="static_text_4">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>密码</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QLineEdit" name="input_box_password">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="statusTip">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+      <property name="readOnly">
+       <bool>false</bool>
+      </property>
+      <property name="placeholderText">
+       <string>留空以作为访客登录</string>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QLineEdit" name="input_box_nickname">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Normal</enum>
+      </property>
+      <property name="placeholderText">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>input_box_server_ip_port</tabstop>
+  <tabstop>button_login</tabstop>
+  <tabstop>button_register</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../dev_src/Client/Lhat/src/builtin_modules/resources/images.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>button_login</sender>
+   <signal>clicked()</signal>
+   <receiver>LoginWindow</receiver>
+   <slot>onCheckLogin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>382</x>
+     <y>315</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>377</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_register</sender>
+   <signal>clicked()</signal>
+   <receiver>LoginWindow</receiver>
+   <slot>onRegister()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>143</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onCheckLogin()</slot>
+  <slot>onRegister()</slot>
+ </slots>
+</ui>

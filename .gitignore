@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+/signal.h
+/LhatCPlan.vcxproj.user
+/LhatCPlan.vcxproj.filters
+/LhatCPlan.vcxproj
+/LhatCPlan.sln
+/LhatCPlan.aps
+/x64
+/AllInBuild/res
+/.vs/LhatCPlan
+/logs
+/records
+/Lhat.ico
