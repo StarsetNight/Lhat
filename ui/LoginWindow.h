@@ -1,34 +1,56 @@
-# -*- coding: utf-8 -*-
+/********************************************************************************
+** Form generated from reading UI file 'LoginWindow.ui'
+**
+** Created by: Qt User Interface Compiler version 6.4.0
+**
+** WARNING! All changes made in this file will be lost when recompiling UI file!
+********************************************************************************/
 
-################################################################################
-## Form generated from reading UI file 'LoginWindow.ui'
-##
-## Created by: Qt User Interface Compiler version 6.2.4
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
+#ifndef LOGINWINDOW_H
+#define LOGINWINDOW_H
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
-    QMainWindow, QPlainTextEdit, QPushButton, QSizePolicy,
-    QSpacerItem, QWidget)
-from ..resources import images_rc
+#include <QtCore/QVariant>
+#include <QtGui/QIcon>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QWidget>
 
-class Ui_LoginWindow(object):
-    def setupUi(self, LoginWindow):
-        if not LoginWindow.objectName():
-            LoginWindow.setObjectName(u"LoginWindow")
-        LoginWindow.resize(500, 400)
-        icon = QIcon()
-        icon.addFile(u":/ico/Lhat.ico", QSize(), QIcon.Normal, QIcon.On)
-        LoginWindow.setWindowIcon(icon)
-        LoginWindow.setStyleSheet(u"/*\n"
+QT_BEGIN_NAMESPACE
+
+class Ui_LoginWindow
+{
+public:
+    QWidget *centralwidget;
+    QGridLayout *gridLayout;
+    QLabel *static_text_1;
+    QPushButton *button_register;
+    QPushButton *button_login;
+    QSpacerItem *hSpacer2;
+    QSpacerItem *hSpacer1;
+    QLabel *static_text_3;
+    QPlainTextEdit *input_box_server_ip_port;
+    QLabel *static_text_2;
+    QSpacerItem *vSpacer1;
+    QSpacerItem *vSpacer2;
+    QLabel *static_text_4;
+    QLineEdit *input_box_password;
+    QLineEdit *input_box_nickname;
+
+    void setupUi(QMainWindow *LoginWindow)
+    {
+        if (LoginWindow->objectName().isEmpty())
+            LoginWindow->setObjectName("LoginWindow");
+        LoginWindow->resize(500, 400);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/ico/Lhat.ico"), QSize(), QIcon::Normal, QIcon::On);
+        LoginWindow->setWindowIcon(icon);
+        LoginWindow->setStyleSheet(QString::fromUtf8("/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
 "Company: GTRONICK\n"
@@ -607,171 +629,181 @@ class Ui_LoginWindow(object):
 "}\n"
 "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
 "   background: none;\n"
-"}")
-        LoginWindow.setIconSize(QSize(768, 768))
-        self.centralwidget = QWidget(LoginWindow)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout = QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.static_text_1 = QLabel(self.centralwidget)
-        self.static_text_1.setObjectName(u"static_text_1")
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(1)
-        sizePolicy.setHeightForWidth(self.static_text_1.sizePolicy().hasHeightForWidth())
-        self.static_text_1.setSizePolicy(sizePolicy)
-        font = QFont()
-        font.setFamilies([u"Microsoft YaHei UI"])
-        font.setPointSize(12)
-        font.setBold(False)
-        self.static_text_1.setFont(font)
+"}"));
+        LoginWindow->setIconSize(QSize(768, 768));
+        centralwidget = new QWidget(LoginWindow);
+        centralwidget->setObjectName("centralwidget");
+        gridLayout = new QGridLayout(centralwidget);
+        gridLayout->setObjectName("gridLayout");
+        static_text_1 = new QLabel(centralwidget);
+        static_text_1->setObjectName("static_text_1");
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(1);
+        sizePolicy.setHeightForWidth(static_text_1->sizePolicy().hasHeightForWidth());
+        static_text_1->setSizePolicy(sizePolicy);
+        QFont font;
+        font.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+        font.setPointSize(12);
+        font.setBold(false);
+        static_text_1->setFont(font);
 
-        self.gridLayout.addWidget(self.static_text_1, 1, 1, 1, 2)
+        gridLayout->addWidget(static_text_1, 1, 1, 1, 2);
 
-        self.button_register = QPushButton(self.centralwidget)
-        self.button_register.setObjectName(u"button_register")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(2)
-        sizePolicy1.setHeightForWidth(self.button_register.sizePolicy().hasHeightForWidth())
-        self.button_register.setSizePolicy(sizePolicy1)
-        self.button_register.setMaximumSize(QSize(16777215, 80))
-        font1 = QFont()
-        font1.setFamilies([u"Microsoft YaHei UI"])
-        font1.setPointSize(18)
-        font1.setBold(False)
-        self.button_register.setFont(font1)
-        self.button_register.setStyleSheet(u"QPushButton {\n"
+        button_register = new QPushButton(centralwidget);
+        button_register->setObjectName("button_register");
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(2);
+        sizePolicy1.setHeightForWidth(button_register->sizePolicy().hasHeightForWidth());
+        button_register->setSizePolicy(sizePolicy1);
+        button_register->setMaximumSize(QSize(16777215, 80));
+        QFont font1;
+        font1.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+        font1.setPointSize(18);
+        font1.setBold(false);
+        button_register->setFont(font1);
+        button_register->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 248, 248, 255), stop:1 rgba(237, 255, 255, 255));\n"
 "}\n"
 "QPushButton:pressed {\n"
 "	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 205, 205, 255), stop:1 rgba(198, 255, 254, 255));\n"
-"}")
+"}"));
 
-        self.gridLayout.addWidget(self.button_register, 6, 1, 1, 1)
+        gridLayout->addWidget(button_register, 6, 1, 1, 1);
 
-        self.button_login = QPushButton(self.centralwidget)
-        self.button_login.setObjectName(u"button_login")
-        sizePolicy1.setHeightForWidth(self.button_login.sizePolicy().hasHeightForWidth())
-        self.button_login.setSizePolicy(sizePolicy1)
-        self.button_login.setMaximumSize(QSize(16777215, 80))
-        font2 = QFont()
-        font2.setFamilies([u"Microsoft YaHei UI"])
-        font2.setPointSize(20)
-        font2.setBold(False)
-        self.button_login.setFont(font2)
-        self.button_login.setStyleSheet(u"QPushButton {\n"
+        button_login = new QPushButton(centralwidget);
+        button_login->setObjectName("button_login");
+        sizePolicy1.setHeightForWidth(button_login->sizePolicy().hasHeightForWidth());
+        button_login->setSizePolicy(sizePolicy1);
+        button_login->setMaximumSize(QSize(16777215, 80));
+        QFont font2;
+        font2.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+        font2.setPointSize(20);
+        font2.setBold(false);
+        button_login->setFont(font2);
+        button_login->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 248, 248, 255), stop:1 rgba(237, 255, 255, 255));\n"
 "}\n"
 "QPushButton:pressed {\n"
 "	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 205, 205, 255), stop:1 rgba(198, 255, 254, 255));\n"
-"}")
+"}"));
 
-        self.gridLayout.addWidget(self.button_login, 6, 2, 1, 1)
+        gridLayout->addWidget(button_login, 6, 2, 1, 1);
 
-        self.hSpacer2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        hSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        self.gridLayout.addItem(self.hSpacer2, 2, 0, 1, 1)
+        gridLayout->addItem(hSpacer2, 2, 0, 1, 1);
 
-        self.hSpacer1 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        hSpacer1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        self.gridLayout.addItem(self.hSpacer1, 2, 3, 1, 1)
+        gridLayout->addItem(hSpacer1, 2, 3, 1, 1);
 
-        self.static_text_3 = QLabel(self.centralwidget)
-        self.static_text_3.setObjectName(u"static_text_3")
-        font3 = QFont()
-        font3.setFamilies([u"Microsoft YaHei UI"])
-        font3.setPointSize(14)
-        font3.setBold(False)
-        self.static_text_3.setFont(font3)
-        self.static_text_3.setAlignment(Qt.AlignCenter)
+        static_text_3 = new QLabel(centralwidget);
+        static_text_3->setObjectName("static_text_3");
+        QFont font3;
+        font3.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+        font3.setPointSize(14);
+        font3.setBold(false);
+        static_text_3->setFont(font3);
+        static_text_3->setAlignment(Qt::AlignCenter);
 
-        self.gridLayout.addWidget(self.static_text_3, 4, 1, 1, 1)
+        gridLayout->addWidget(static_text_3, 4, 1, 1, 1);
 
-        self.input_box_server_ip_port = QPlainTextEdit(self.centralwidget)
-        self.input_box_server_ip_port.setObjectName(u"input_box_server_ip_port")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(1)
-        sizePolicy2.setHeightForWidth(self.input_box_server_ip_port.sizePolicy().hasHeightForWidth())
-        self.input_box_server_ip_port.setSizePolicy(sizePolicy2)
-        self.input_box_server_ip_port.setMaximumSize(QSize(16777215, 90))
-        font4 = QFont()
-        font4.setPointSize(14)
-        self.input_box_server_ip_port.setFont(font4)
+        input_box_server_ip_port = new QPlainTextEdit(centralwidget);
+        input_box_server_ip_port->setObjectName("input_box_server_ip_port");
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(1);
+        sizePolicy2.setHeightForWidth(input_box_server_ip_port->sizePolicy().hasHeightForWidth());
+        input_box_server_ip_port->setSizePolicy(sizePolicy2);
+        input_box_server_ip_port->setMaximumSize(QSize(16777215, 90));
+        QFont font4;
+        font4.setPointSize(14);
+        input_box_server_ip_port->setFont(font4);
 
-        self.gridLayout.addWidget(self.input_box_server_ip_port, 2, 2, 1, 1)
+        gridLayout->addWidget(input_box_server_ip_port, 2, 2, 1, 1);
 
-        self.static_text_2 = QLabel(self.centralwidget)
-        self.static_text_2.setObjectName(u"static_text_2")
-        self.static_text_2.setFont(font3)
-        self.static_text_2.setContextMenuPolicy(Qt.DefaultContextMenu)
-        self.static_text_2.setLayoutDirection(Qt.LeftToRight)
-        self.static_text_2.setAlignment(Qt.AlignCenter)
+        static_text_2 = new QLabel(centralwidget);
+        static_text_2->setObjectName("static_text_2");
+        static_text_2->setFont(font3);
+        static_text_2->setContextMenuPolicy(Qt::DefaultContextMenu);
+        static_text_2->setLayoutDirection(Qt::LeftToRight);
+        static_text_2->setAlignment(Qt::AlignCenter);
 
-        self.gridLayout.addWidget(self.static_text_2, 2, 1, 1, 1)
+        gridLayout->addWidget(static_text_2, 2, 1, 1, 1);
 
-        self.vSpacer1 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        vSpacer1 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        self.gridLayout.addItem(self.vSpacer1, 7, 2, 1, 1)
+        gridLayout->addItem(vSpacer1, 7, 2, 1, 1);
 
-        self.vSpacer2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        vSpacer2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        self.gridLayout.addItem(self.vSpacer2, 0, 1, 1, 1)
+        gridLayout->addItem(vSpacer2, 0, 1, 1, 1);
 
-        self.static_text_4 = QLabel(self.centralwidget)
-        self.static_text_4.setObjectName(u"static_text_4")
-        self.static_text_4.setFont(font4)
-        self.static_text_4.setAlignment(Qt.AlignCenter)
+        static_text_4 = new QLabel(centralwidget);
+        static_text_4->setObjectName("static_text_4");
+        static_text_4->setFont(font4);
+        static_text_4->setAlignment(Qt::AlignCenter);
 
-        self.gridLayout.addWidget(self.static_text_4, 5, 1, 1, 1)
+        gridLayout->addWidget(static_text_4, 5, 1, 1, 1);
 
-        self.input_box_password = QLineEdit(self.centralwidget)
-        self.input_box_password.setObjectName(u"input_box_password")
-        self.input_box_password.setFont(font4)
-        self.input_box_password.setEchoMode(QLineEdit.Password)
-        self.input_box_password.setReadOnly(False)
-        self.input_box_password.setClearButtonEnabled(False)
+        input_box_password = new QLineEdit(centralwidget);
+        input_box_password->setObjectName("input_box_password");
+        input_box_password->setFont(font4);
+        input_box_password->setEchoMode(QLineEdit::Password);
+        input_box_password->setReadOnly(false);
+        input_box_password->setClearButtonEnabled(false);
 
-        self.gridLayout.addWidget(self.input_box_password, 5, 2, 1, 1)
+        gridLayout->addWidget(input_box_password, 5, 2, 1, 1);
 
-        self.input_box_nickname = QLineEdit(self.centralwidget)
-        self.input_box_nickname.setObjectName(u"input_box_nickname")
-        self.input_box_nickname.setFont(font4)
-        self.input_box_nickname.setEchoMode(QLineEdit.Normal)
+        input_box_nickname = new QLineEdit(centralwidget);
+        input_box_nickname->setObjectName("input_box_nickname");
+        input_box_nickname->setFont(font4);
+        input_box_nickname->setEchoMode(QLineEdit::Normal);
 
-        self.gridLayout.addWidget(self.input_box_nickname, 4, 2, 1, 1)
+        gridLayout->addWidget(input_box_nickname, 4, 2, 1, 1);
 
-        LoginWindow.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.input_box_server_ip_port, self.button_login)
-        QWidget.setTabOrder(self.button_login, self.button_register)
+        LoginWindow->setCentralWidget(centralwidget);
+        QWidget::setTabOrder(input_box_server_ip_port, button_login);
+        QWidget::setTabOrder(button_login, button_register);
 
-        self.retranslateUi(LoginWindow)
-        self.button_login.clicked.connect(LoginWindow.onCheckLogin)
-        self.button_register.clicked.connect(LoginWindow.onRegister)
+        retranslateUi(LoginWindow);
+        QObject::connect(button_login, SIGNAL(clicked()), LoginWindow, SLOT(onCheckLogin()));
+        QObject::connect(button_register, SIGNAL(clicked()), LoginWindow, SLOT(onRegister()));
 
-        QMetaObject.connectSlotsByName(LoginWindow)
-    # setupUi
+        QMetaObject::connectSlotsByName(LoginWindow);
+    } // setupUi
 
-    def retranslateUi(self, LoginWindow):
-        LoginWindow.setWindowTitle(QCoreApplication.translate("LoginWindow", u"MainWindow", None))
-        self.static_text_1.setText(QCoreApplication.translate("LoginWindow", u"\u6b22\u8fce\u6765\u5230Lhat\uff01\u8bf7\u8fde\u63a5\u804a\u5929\u670d\u52a1\u5668\u4ee5\u5f00\u59cb\u4f60\u7684\u804a\u5929\u4e4b\u65c5\uff01\n"
-"\u5982\u679c\u60f3\u6ce8\u518c\u8d26\u6237\uff0c\u53ef\u4ee5\u5148\u8f93\u5165\u6635\u79f0\u548c\u5bc6\u7801\u5e76\u6ce8\u518c\uff01", None))
-        self.button_register.setText(QCoreApplication.translate("LoginWindow", u"\u6ce8\u518c\u8d26\u6237", None))
-        self.button_login.setText(QCoreApplication.translate("LoginWindow", u"\u767b\u5f55\u670d\u52a1\u5668", None))
-        self.static_text_3.setText(QCoreApplication.translate("LoginWindow", u"\u663e\u793a\u6635\u79f0", None))
-        self.input_box_server_ip_port.setPlainText("")
-        self.input_box_server_ip_port.setPlaceholderText("")
-        self.static_text_2.setText(QCoreApplication.translate("LoginWindow", u"\u670d\u52a1\u5668IP\u53ca\u7aef\u53e3", None))
-        self.static_text_4.setText(QCoreApplication.translate("LoginWindow", u"\u5bc6\u7801", None))
+    void retranslateUi(QMainWindow *LoginWindow)
+    {
+        LoginWindow->setWindowTitle(QCoreApplication::translate("LoginWindow", "MainWindow", nullptr));
+        static_text_1->setText(QCoreApplication::translate("LoginWindow", "\346\254\242\350\277\216\346\235\245\345\210\260Lhat\357\274\201\350\257\267\350\277\236\346\216\245\350\201\212\345\244\251\346\234\215\345\212\241\345\231\250\344\273\245\345\274\200\345\247\213\344\275\240\347\232\204\350\201\212\345\244\251\344\271\213\346\227\205\357\274\201\n"
+"\345\246\202\346\236\234\346\203\263\346\263\250\345\206\214\350\264\246\346\210\267\357\274\214\345\217\257\344\273\245\345\205\210\350\276\223\345\205\245\346\230\265\347\247\260\345\222\214\345\257\206\347\240\201\345\271\266\346\263\250\345\206\214\357\274\201", nullptr));
+        button_register->setText(QCoreApplication::translate("LoginWindow", "\346\263\250\345\206\214\350\264\246\346\210\267", nullptr));
+        button_login->setText(QCoreApplication::translate("LoginWindow", "\347\231\273\345\275\225\346\234\215\345\212\241\345\231\250", nullptr));
+        static_text_3->setText(QCoreApplication::translate("LoginWindow", "\346\230\276\347\244\272\346\230\265\347\247\260", nullptr));
+        input_box_server_ip_port->setPlainText(QString());
+        input_box_server_ip_port->setPlaceholderText(QString());
+        static_text_2->setText(QCoreApplication::translate("LoginWindow", "\346\234\215\345\212\241\345\231\250IP\345\217\212\347\253\257\345\217\243", nullptr));
+        static_text_4->setText(QCoreApplication::translate("LoginWindow", "\345\257\206\347\240\201", nullptr));
 #if QT_CONFIG(tooltip)
-        self.input_box_password.setToolTip("")
+        input_box_password->setToolTip(QString());
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(statustip)
-        self.input_box_password.setStatusTip("")
+        input_box_password->setStatusTip(QString());
 #endif // QT_CONFIG(statustip)
-        self.input_box_password.setText("")
-        self.input_box_password.setPlaceholderText(QCoreApplication.translate("LoginWindow", u"\u7559\u7a7a\u4ee5\u4f5c\u4e3a\u8bbf\u5ba2\u767b\u5f55", None))
-        self.input_box_nickname.setPlaceholderText("")
-    # retranslateUi
+        input_box_password->setText(QString());
+        input_box_password->setPlaceholderText(QCoreApplication::translate("LoginWindow", "\347\225\231\347\251\272\344\273\245\344\275\234\344\270\272\350\256\277\345\256\242\347\231\273\345\275\225", nullptr));
+        input_box_nickname->setPlaceholderText(QString());
+    } // retranslateUi
 
+};
+
+namespace Ui {
+    class LoginWindow: public Ui_LoginWindow {};
+} // namespace Ui
+
+QT_END_NAMESPACE
+
+#endif // LOGINWINDOW_H

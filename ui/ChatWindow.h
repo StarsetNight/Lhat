@@ -1,35 +1,58 @@
-# -*- coding: utf-8 -*-
+/********************************************************************************
+** Form generated from reading UI file 'ChatWindow.ui'
+**
+** Created by: Qt User Interface Compiler version 6.4.0
+**
+** WARNING! All changes made in this file will be lost when recompiling UI file!
+********************************************************************************/
 
-################################################################################
-## Form generated from reading UI file 'ChatWindow.ui'
-##
-## Created by: Qt User Interface Compiler version 6.3.0
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
+#ifndef CHATWINDOW_H
+#define CHATWINDOW_H
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QMainWindow,
-    QMenu, QMenuBar, QPushButton, QSizePolicy,
-    QStatusBar, QTextBrowser, QTextEdit, QWidget)
-from ..resources import images_rc
+#include <QtCore/QVariant>
+#include <QtGui/QAction>
+#include <QtGui/QIcon>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QWidget>
 
-class Ui_ChatWindow(object):
-    def setupUi(self, ChatWindow):
-        if not ChatWindow.objectName():
-            ChatWindow.setObjectName(u"ChatWindow")
-        ChatWindow.resize(800, 600)
-        icon = QIcon()
-        icon.addFile(u":/ico/Lhat.ico", QSize(), QIcon.Normal, QIcon.Off)
-        ChatWindow.setWindowIcon(icon)
-        ChatWindow.setStyleSheet(u"/*\n"
+QT_BEGIN_NAMESPACE
+
+class Ui_ChatWindow
+{
+public:
+    QAction *menubar_send;
+    QAction *menubar_logoff;
+    QAction *menubar_exit;
+    QWidget *centralwidget;
+    QGridLayout *gridLayout;
+    QHBoxLayout *hbox2;
+    QTextBrowser *output_box_message;
+    QTextBrowser *output_box_online_user;
+    QHBoxLayout *hbox1;
+    QTextEdit *input_box_message;
+    QPushButton *button_send_message;
+    QMenuBar *menubar;
+    QMenu *menu;
+    QStatusBar *statusbar;
+
+    void setupUi(QMainWindow *ChatWindow)
+    {
+        if (ChatWindow->objectName().isEmpty())
+            ChatWindow->setObjectName("ChatWindow");
+        ChatWindow->resize(800, 600);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/ico/Lhat.ico"), QSize(), QIcon::Normal, QIcon::On);
+        ChatWindow->setWindowIcon(icon);
+        ChatWindow->setStyleSheet(QString::fromUtf8("/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
 "Company: GTRONICK\n"
@@ -608,120 +631,130 @@ class Ui_ChatWindow(object):
 "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical "
                         "{\n"
 "   background: none;\n"
-"}")
-        self.menubar_send = QAction(ChatWindow)
-        self.menubar_send.setObjectName(u"menubar_send")
-        font = QFont()
-        font.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font.setPointSize(12)
-        self.menubar_send.setFont(font)
-        self.menubar_logoff = QAction(ChatWindow)
-        self.menubar_logoff.setObjectName(u"menubar_logoff")
-        self.menubar_logoff.setFont(font)
-        self.menubar_exit = QAction(ChatWindow)
-        self.menubar_exit.setObjectName(u"menubar_exit")
-        self.menubar_exit.setFont(font)
-        self.centralwidget = QWidget(ChatWindow)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout = QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.hbox2 = QHBoxLayout()
-        self.hbox2.setObjectName(u"hbox2")
-        self.output_box_message = QTextBrowser(self.centralwidget)
-        self.output_box_message.setObjectName(u"output_box_message")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(5)
-        sizePolicy.setVerticalStretch(5)
-        sizePolicy.setHeightForWidth(self.output_box_message.sizePolicy().hasHeightForWidth())
-        self.output_box_message.setSizePolicy(sizePolicy)
-        font1 = QFont()
-        font1.setPointSize(12)
-        self.output_box_message.setFont(font1)
+"}"));
+        menubar_send = new QAction(ChatWindow);
+        menubar_send->setObjectName("menubar_send");
+        QFont font;
+        font.setFamilies({QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221")});
+        font.setPointSize(12);
+        menubar_send->setFont(font);
+        menubar_logoff = new QAction(ChatWindow);
+        menubar_logoff->setObjectName("menubar_logoff");
+        menubar_logoff->setFont(font);
+        menubar_exit = new QAction(ChatWindow);
+        menubar_exit->setObjectName("menubar_exit");
+        menubar_exit->setFont(font);
+        centralwidget = new QWidget(ChatWindow);
+        centralwidget->setObjectName("centralwidget");
+        gridLayout = new QGridLayout(centralwidget);
+        gridLayout->setObjectName("gridLayout");
+        hbox2 = new QHBoxLayout();
+        hbox2->setObjectName("hbox2");
+        output_box_message = new QTextBrowser(centralwidget);
+        output_box_message->setObjectName("output_box_message");
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(5);
+        sizePolicy.setVerticalStretch(5);
+        sizePolicy.setHeightForWidth(output_box_message->sizePolicy().hasHeightForWidth());
+        output_box_message->setSizePolicy(sizePolicy);
+        QFont font1;
+        font1.setPointSize(12);
+        output_box_message->setFont(font1);
 
-        self.hbox2.addWidget(self.output_box_message)
+        hbox2->addWidget(output_box_message);
 
-        self.output_box_online_user = QTextBrowser(self.centralwidget)
-        self.output_box_online_user.setObjectName(u"output_box_online_user")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy1.setHorizontalStretch(2)
-        sizePolicy1.setVerticalStretch(5)
-        sizePolicy1.setHeightForWidth(self.output_box_online_user.sizePolicy().hasHeightForWidth())
-        self.output_box_online_user.setSizePolicy(sizePolicy1)
-        font2 = QFont()
-        font2.setFamilies([u"\u5e7c\u5706"])
-        font2.setPointSize(12)
-        self.output_box_online_user.setFont(font2)
+        output_box_online_user = new QTextBrowser(centralwidget);
+        output_box_online_user->setObjectName("output_box_online_user");
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(2);
+        sizePolicy1.setVerticalStretch(5);
+        sizePolicy1.setHeightForWidth(output_box_online_user->sizePolicy().hasHeightForWidth());
+        output_box_online_user->setSizePolicy(sizePolicy1);
+        QFont font2;
+        font2.setFamilies({QString::fromUtf8("\345\271\274\345\234\206")});
+        font2.setPointSize(12);
+        output_box_online_user->setFont(font2);
 
-        self.hbox2.addWidget(self.output_box_online_user)
-
-
-        self.gridLayout.addLayout(self.hbox2, 0, 0, 1, 1)
-
-        self.hbox1 = QHBoxLayout()
-        self.hbox1.setObjectName(u"hbox1")
-        self.input_box_message = QTextEdit(self.centralwidget)
-        self.input_box_message.setObjectName(u"input_box_message")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        sizePolicy2.setHorizontalStretch(4)
-        sizePolicy2.setVerticalStretch(1)
-        sizePolicy2.setHeightForWidth(self.input_box_message.sizePolicy().hasHeightForWidth())
-        self.input_box_message.setSizePolicy(sizePolicy2)
-        self.input_box_message.setFont(font1)
-
-        self.hbox1.addWidget(self.input_box_message)
-
-        self.button_send_message = QPushButton(self.centralwidget)
-        self.button_send_message.setObjectName(u"button_send_message")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        sizePolicy3.setHorizontalStretch(1)
-        sizePolicy3.setVerticalStretch(1)
-        sizePolicy3.setHeightForWidth(self.button_send_message.sizePolicy().hasHeightForWidth())
-        self.button_send_message.setSizePolicy(sizePolicy3)
-        font3 = QFont()
-        font3.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
-        font3.setPointSize(24)
-        font3.setBold(False)
-        font3.setStyleStrategy(QFont.PreferAntialias)
-        self.button_send_message.setFont(font3)
-
-        self.hbox1.addWidget(self.button_send_message)
+        hbox2->addWidget(output_box_online_user);
 
 
-        self.gridLayout.addLayout(self.hbox1, 1, 0, 1, 1)
+        gridLayout->addLayout(hbox2, 0, 0, 1, 1);
 
-        ChatWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(ChatWindow)
-        self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 800, 19))
-        self.menu = QMenu(self.menubar)
-        self.menu.setObjectName(u"menu")
-        self.menu.setFont(font)
-        ChatWindow.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(ChatWindow)
-        self.statusbar.setObjectName(u"statusbar")
-        ChatWindow.setStatusBar(self.statusbar)
+        hbox1 = new QHBoxLayout();
+        hbox1->setObjectName("hbox1");
+        input_box_message = new QTextEdit(centralwidget);
+        input_box_message->setObjectName("input_box_message");
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(4);
+        sizePolicy2.setVerticalStretch(1);
+        sizePolicy2.setHeightForWidth(input_box_message->sizePolicy().hasHeightForWidth());
+        input_box_message->setSizePolicy(sizePolicy2);
+        input_box_message->setFont(font1);
 
-        self.menubar.addAction(self.menu.menuAction())
-        self.menu.addAction(self.menubar_send)
-        self.menu.addAction(self.menubar_logoff)
-        self.menu.addAction(self.menubar_exit)
+        hbox1->addWidget(input_box_message);
 
-        self.retranslateUi(ChatWindow)
-        self.button_send_message.clicked.connect(ChatWindow.sendMessage)
-        self.menubar.triggered.connect(ChatWindow.triggeredMenubar)
+        button_send_message = new QPushButton(centralwidget);
+        button_send_message->setObjectName("button_send_message");
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy3.setHorizontalStretch(1);
+        sizePolicy3.setVerticalStretch(1);
+        sizePolicy3.setHeightForWidth(button_send_message->sizePolicy().hasHeightForWidth());
+        button_send_message->setSizePolicy(sizePolicy3);
+        QFont font3;
+        font3.setFamilies({QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221")});
+        font3.setPointSize(24);
+        font3.setBold(false);
+        font3.setStyleStrategy(QFont::PreferAntialias);
+        button_send_message->setFont(font3);
 
-        QMetaObject.connectSlotsByName(ChatWindow)
-    # setupUi
+        hbox1->addWidget(button_send_message);
 
-    def retranslateUi(self, ChatWindow):
-        ChatWindow.setWindowTitle(QCoreApplication.translate("ChatWindow", u"MainWindow", None))
-        self.menubar_send.setText(QCoreApplication.translate("ChatWindow", u"\u53d1\u9001", None))
-        self.menubar_logoff.setText(QCoreApplication.translate("ChatWindow", u"\u65ad\u5f00\u8fde\u63a5", None))
-        self.menubar_exit.setText(QCoreApplication.translate("ChatWindow", u"\u9000\u51fa", None))
-        self.button_send_message.setText(QCoreApplication.translate("ChatWindow", u"\u53d1\u9001", None))
+
+        gridLayout->addLayout(hbox1, 1, 0, 1, 1);
+
+        ChatWindow->setCentralWidget(centralwidget);
+        menubar = new QMenuBar(ChatWindow);
+        menubar->setObjectName("menubar");
+        menubar->setGeometry(QRect(0, 0, 800, 19));
+        menu = new QMenu(menubar);
+        menu->setObjectName("menu");
+        menu->setFont(font);
+        ChatWindow->setMenuBar(menubar);
+        statusbar = new QStatusBar(ChatWindow);
+        statusbar->setObjectName("statusbar");
+        ChatWindow->setStatusBar(statusbar);
+
+        menubar->addAction(menu->menuAction());
+        menu->addAction(menubar_send);
+        menu->addAction(menubar_logoff);
+        menu->addAction(menubar_exit);
+
+        retranslateUi(ChatWindow);
+        QObject::connect(button_send_message, SIGNAL(clicked()), ChatWindow, SLOT(sendMessage()));
+        QObject::connect(menubar, SIGNAL(triggered(QAction*)), ChatWindow, SLOT(triggeredMenubar(QAction*)));
+
+        QMetaObject::connectSlotsByName(ChatWindow);
+    } // setupUi
+
+    void retranslateUi(QMainWindow *ChatWindow)
+    {
+        ChatWindow->setWindowTitle(QCoreApplication::translate("ChatWindow", "MainWindow", nullptr));
+        menubar_send->setText(QCoreApplication::translate("ChatWindow", "\345\217\221\351\200\201", nullptr));
+        menubar_logoff->setText(QCoreApplication::translate("ChatWindow", "\346\226\255\345\274\200\350\277\236\346\216\245", nullptr));
+        menubar_exit->setText(QCoreApplication::translate("ChatWindow", "\351\200\200\345\207\272", nullptr));
+        button_send_message->setText(QCoreApplication::translate("ChatWindow", "\345\217\221\351\200\201", nullptr));
 #if QT_CONFIG(shortcut)
-        self.button_send_message.setShortcut(QCoreApplication.translate("ChatWindow", u"Ctrl+Return", None))
+        button_send_message->setShortcut(QCoreApplication::translate("ChatWindow", "Ctrl+Return", nullptr));
 #endif // QT_CONFIG(shortcut)
-        self.menu.setTitle(QCoreApplication.translate("ChatWindow", u"\u64cd\u4f5c", None))
-    # retranslateUi
+        menu->setTitle(QCoreApplication::translate("ChatWindow", "\346\223\215\344\275\234", nullptr));
+    } // retranslateUi
 
+};
+
+namespace Ui {
+    class ChatWindow: public Ui_ChatWindow {};
+} // namespace Ui
+
+QT_END_NAMESPACE
+
+#endif // CHATWINDOW_H
