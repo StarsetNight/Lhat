@@ -1,4 +1,5 @@
 ﻿#include "InitWindow.h"
+
 const bool logable = true;
 string server_exit_messages[] = {
     "你已被管理员踢出服务器。",
@@ -8,7 +9,7 @@ string server_exit_messages[] = {
     "该用户名已存在。",
     "你已被管理员封禁。",
 };
-const string VERSION = "v1.5.0";
+const string VERSION = lhatVersion;
 string server_ip;
 int server_port;
 string username, password;
@@ -116,7 +117,7 @@ bool isNum(string str)
         此部分用于检测错误输入中，数字加字符串的输入形式（例如：34.f），在上面的的部分（sin>>t）
         已经接收并转换了输入的数字部分，在stringstream中相应也会把那一部分给清除，
         此时接收的是.f这部分，所以条件成立，返回false
-          */
+        */
         return false;
     }
     return true;
@@ -134,10 +135,10 @@ LoginApplication::LoginApplication() : QMainWindow()
 }
 void LoginApplication::bind() {}
 tuple<string, int> LoginApplication::procAddress(string addrData)
-//处理地址
+//处理地址，返回值为元组，类型为std::string和int
 {
-    string ip;
-    int port;
+    string ip; //临时用
+    int port; //临时用
     //意思是，如果在addrData里找到.字符，或找到localhost，则以域名形式或ipv4地址形式处理
     if (addrData.find(".") != addrData.npos || !addrData.rfind("localhost", 0))
     {
@@ -152,7 +153,7 @@ tuple<string, int> LoginApplication::procAddress(string addrData)
 
             if (!isIP(ip)) ip = getIP(ip.c_str());
         }
-        catch (out_of_range)
+        catch (out_of_range) //如果下标越界，问题大了！
         {
             return make_tuple("", 0);
         }
@@ -168,7 +169,7 @@ tuple<string, int> LoginApplication::procAddress(string addrData)
             ip = inetData.at(0).substr(1); //去掉[
             port = stoi(inetData.at(1).substr(1)); //去掉:
         }
-        catch (out_of_range)
+        catch (out_of_range) //下标越界
         {
             return make_tuple("", 0);
         }
@@ -206,9 +207,12 @@ void LoginApplication::onCheckLogin()
 
     close();
     QEventLoop eventLoop; //Qt循环
+
+    //清空输入内容
     ui.input_box_nickname->setText("");
     ui.input_box_server_ip_port->setPlainText("");
     ui.input_box_password->setText("");
+
     ChatApplication chatwindow;
     chatwindow.show(); //启动聊天窗口
     eventLoop.exec();
@@ -228,7 +232,7 @@ void LoginApplication::onRegister()
     string rawAddrData = ui.input_box_server_ip_port->toPlainText().toStdString();
     auto [server_ip, server_port] = procAddress(rawAddrData);
 
-    if (server_ip == "")
+    if (server_ip == "") //解析错误
     {
         QMessageBox::warning(this, "警告 - 服务器地址格式错误", "请输入正确的服务器地址格式：\n[<IPV6地址>]:<外部端口>\n或\n<IPV4地址>:<外部端口>\n或\n<域名>:<外部端口>");
         ui.input_box_server_ip_port->setFocus();
@@ -242,28 +246,28 @@ void LoginApplication::onRegister()
         ui.input_box_nickname->setFocus();
         return;
     }
-    else if (username.length() > 32 || username.length() < 2)
+    else if (username.length() > 32 || username.length() < 2) //用户名长度错误
     {
         QMessageBox::warning(this, "警告 - 用户名长度不规范", "用户名长度应大于2字节且小于32字节。");
         ui.input_box_nickname->setFocus();
         return;
     }
-    if (username.find(" ") != username.npos)
+    if (username.find(" ") != username.npos) //用户名包含空格
     {
         QMessageBox::warning(this, "警告 - 用户名设置不规范", "用户名不应含有空格，\n同时，我们建议你将用户名严格按照以下格式设置：\n只应出现数字、英文字母、下划线，不应包含其他特殊字符。");
         ui.input_box_nickname->setFocus();
         return;
     }
-    if (password.empty())
+    if (password.empty()) //密码为空
     {
         QMessageBox::warning(this, "警告 - 密码设置不规范", "注册时，不应选用空密码。");
         ui.input_box_password->setFocus();
         return;
     }
-    password = MD5(password).toStr();
+    password = MD5(password).toStr(); //密码转MD5
 
     cAddress.sin_family = AF_INET;
-    cAddress.sin_addr.S_un.S_addr = inet_addr(server_ip.c_str());
+    cAddress.sin_addr.S_un.S_addr = inet_addr(server_ip.c_str()); //ip地址转32位整数
     cAddress.sin_port = htons(server_port);
     regSocket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -280,7 +284,7 @@ void LoginApplication::onRegister()
     status = net::recv(regSocket, recvMsg, 64, 0);
     if (status < 0)
     {
-        strcpy(recvMsg, "failed");
+        strcpy(recvMsg, "failed"); //失败，则赋值failed
     }
     if (!strcmp(recvMsg, "successful"))
     {
@@ -309,7 +313,7 @@ ChatApplication::ChatApplication() : QMainWindow()
     cAddress.sin_addr.S_un.S_addr = inet_addr(server_ip.c_str());
     cAddress.sin_port = htons(server_port);
 
-    int status = net::connect(cSocket, (sockaddr*)&cAddress, sizeof(cAddress));
+    int status = net::connect(cSocket, (sockaddr*)&cAddress, sizeof(cAddress)); //连接
     setsockopt(cSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&disableNagle, sizeof(int)); //禁掉他妈的Nagle
     log(username + "登录了服务器" + server_ip + ":" + std::to_string(server_port));
     if (status > 0)
@@ -346,8 +350,9 @@ void ChatApplication::sendMessage()
 void ChatApplication::startReceive()
 {
     log("已启动消息接收线程。");
+    //是，线程启动成员函数必须得这么写：std::thread <线程名>(&<类名>::<成员函数，不带括号>, <对象指针，通常为this>);
     std::thread recvThread(&ChatApplication::onReceive, this);
-    recvThread.detach();
+    recvThread.detach(); //允许后台运行线程
 }
 void ChatApplication::triggeredMenubar(QAction* triggers)
 {
@@ -455,7 +460,7 @@ void ChatApplication::onSend(string rawMessage)
     {
         vector<string> commandMessage = split(rawMessage, " ");
         chatWith = commandMessage.at(1);
-        rawMessage = rawMessage.replace(rawMessage.find("//tell"), 1, "[私聊消息] 到");
+        rawMessage = rawMessage.replace(rawMessage.find("//tell"), 6, "[私聊消息] 到");
     }
     else if (!rawMessage.rfind("//help", 0))
     {
@@ -464,7 +469,7 @@ void ChatApplication::onSend(string rawMessage)
     }
     else if (!rawMessage.rfind("//", 0))
     {
-        rawMessage = rawMessage.replace(rawMessage.find("//"), 1, "");
+        rawMessage = rawMessage.replace(rawMessage.find("//"), 2, "");
         message = pack(rawMessage, username, chatWith, "COMMAND");
         send(cSocket, message.c_str(), message.length(), 0);
         Sleep(50);
@@ -548,7 +553,7 @@ void ChatApplication::onReceive()
             emit appendOutPutBox(QString::fromStdString(finalMessage));
             if (msgBy != "Server")
             {
-                std::ofstream recordFile(recordPath);
+                std::ofstream recordFile(recordPath, std::ios::app);
                 recordFile.write(strcat(recvData, "\n"), strlen(recvData));
                 recordFile.close();
             }
