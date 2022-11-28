@@ -1,6 +1,6 @@
 # Lhat C Plan
 ## 开发说明 DEVELOPING INSTRUCTIONS 
-> 不！要！往！main分支里塞东西啊！ 
+> 不！要！往！main分支里塞东西啊！  
 项目基于C++和Qt6开发。  
 本项目只含有源代码，所以构建后并不能马上运行，另请参阅[构建说明](## 如何构建 HOW TO BUILD)。  
 ## 介绍 INTRODUCE  
