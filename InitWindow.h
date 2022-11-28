@@ -13,7 +13,7 @@
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
 
-#define lhatVersion "v1.5.0"
+#define lhatVersion "v1.5.1"
 
 namespace net {
 #include <WinSock2.h> //socket功能

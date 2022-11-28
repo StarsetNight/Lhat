@@ -206,16 +206,15 @@ void LoginApplication::onCheckLogin()
     password = MD5(password).toStr();
 
     close();
-    QEventLoop eventLoop; //Qt循环
 
     //清空输入内容
     ui.input_box_nickname->setText("");
     ui.input_box_server_ip_port->setPlainText("");
     ui.input_box_password->setText("");
 
-    ChatApplication chatwindow;
-    chatwindow.show(); //启动聊天窗口
-    eventLoop.exec();
+    ChatApplication *chatwindow = new ChatApplication;
+    chatwindow->show(); //启动聊天窗口
+    delete this;
 }
 void LoginApplication::onRegister()
 //用于注册
@@ -365,15 +364,13 @@ void ChatApplication::triggeredMenubar(QAction* triggers)
         onExit();
 }
 void ChatApplication::backLoginWindow()
-//TODO 暂未开发
 {
-    /*
     close();
     closesocket(cSocket);
     WSACleanup();
-    LoginApplication loginwindow;
-    loginwindow.show();
-    */
+    LoginApplication* loginwindow = new LoginApplication;
+    loginwindow->show();
+    delete this;
 }
 bool ChatApplication::reConnect()
 {
@@ -418,12 +415,11 @@ bool ChatApplication::reLogin()
 }
 void ChatApplication::onLogoff()
 {
-    QMessageBox::information(this, "提示 - 功能不可用", "我们诚挚地抱歉，由于Lhat的C++重构工作很快，“断开连接”功能并不可用，你只能退出Lhat，再重新启动它以达到相同效果。");
-    return;
+    //QMessageBox::information(this, "提示 - 功能不可用", "我们诚挚地抱歉，由于Lhat的C++重构工作很快，“断开连接”功能并不可用，你只能退出Lhat，再重新启动它以达到相同效果。");
+    //return;
     QMessageBox::StandardButton choice = QMessageBox::question(this, "询问 - 断开连接", "你真的要从服务器注销并断开连接吗？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
     if (choice == QMessageBox::Yes)
     {
-        closesocket(cSocket);
         backLoginWindow();
     }
     else
@@ -503,17 +499,29 @@ void ChatApplication::onReceive()
 
     while (1)
     {
+        memset(recvData, 0, sizeof(recvData)); //字符数组容易被不完全清理，所以需要手动清理
         status = recv(cSocket, recvData, 1024, 0);
 
-        if (status < 0)
+        /*recv函数返回值有三种
+        * 1.大于0，代表接收到了消息，接收成功。
+        * 2.等于0，代表远程主机未响应。
+        * 3.小于0，代表系统级别的错误（比如socket被关闭）。
+        */
+
+        if (status == 0)
         {
-            log("与服务器断开了连接，代码：" + WSAGetLastError());
+            log("由于服务器未响应，故断开了连接，代码：" + WSAGetLastError());
             if (reLogin())
                 continue;
             else
                 return;
         }
-        if (strlen(recvData) == 0)
+        else if (status < 0)
+        {
+            log("因为用户主动断开连接或系统错误，接收线程被停止，代码：" + WSAGetLastError());
+            return;
+        }
+        else if (strlen(recvData) == 0)
         {
             log("因为接收空消息，与服务器断开连接！");
             if (reLogin())
@@ -554,7 +562,8 @@ void ChatApplication::onReceive()
             if (msgBy != "Server")
             {
                 std::ofstream recordFile(recordPath, std::ios::app);
-                recordFile.write(strcat(recvData, "\n"), strlen(recvData));
+                strcat(recvData, "\n");
+                recordFile.write(recvData, strlen(recvData));
                 recordFile.close();
             }
             if (std::find(begin(server_exit_messages), end(server_exit_messages), msgBody) != end(server_exit_messages))
@@ -600,6 +609,7 @@ void ChatApplication::onReceive()
             emit appendOutPutBox(QString::fromStdString("[提示] 锵锵！已分配至默认聊天室：<font color=\"blue\">" + default_chat + "</font><br/>"));
             log("已分配至默认聊天室。");
         }
+        strcpy(recvData, "\0"); //清空接收的字符
     }
 }
 void ChatApplication::readRecord()
@@ -612,16 +622,13 @@ void ChatApplication::readRecord()
     while (!recordFile.eof())
     {
         recordFile.getline(msg, 1024);
+        if (!strcmp(msg, "")) break;
         recvJson = unpack(msg);
+        msgType = recvJson["type"].asString();
+        msgBy = recvJson["by"].asString();
+        msgTo = recvJson["to"].asString();
         msgTime = lToStringTime(recvJson["time"].asDouble(), "%Y-%m-%d %H:%M:%S");
-        msgBody = subReplace(msgBody, "&", "&amp;");
-        msgBody = subReplace(msgBody, "\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
-        if (msgType == "TEXT_MESSAGE")
-        {
-            msgBody = subReplace(msgBody, "<", "&lt;");
-            msgBody = subReplace(msgBody, ">", "&gt;");
-            msgBody = subReplace(msgBody, " ", "&nbsp;");
-        }
+        msgBody = recvJson["message"].asString();
         msgBody = subReplace(msgBody, "\n", "<br/>");
         finalMessage = "<font color='blue'>" + msgBy + "</font> <font color='grey'>[" + msgTime + "]\
                 </font> : <br/>&nbsp;&nbsp;" + msgBody + "<br/>";
