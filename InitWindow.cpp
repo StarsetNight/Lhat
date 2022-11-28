@@ -273,7 +273,7 @@ void LoginApplication::onRegister()
     status = net::connect(regSocket, (sockaddr*)&cAddress, sizeof(cAddress)); //建立连接
     if (status > 0)
     {
-        QString errorMessage = "请检查服务器是否在线，或检查网络连接。错误代码：" + WSAGetLastError();
+        QString errorMessage = "请检查服务器是否在线，或检查网络连接。错误代码：" + QString::number(WSAGetLastError());
         QMessageBox::critical(this, "错误 - 无法连接服务器", errorMessage);
         return;
     }
