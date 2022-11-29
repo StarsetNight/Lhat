@@ -32,7 +32,7 @@ net::send, net::recv, net::hostent, net::in_addr;
 #pragma comment(lib, "ws2_32.lib") //socket的库
 #pragma comment(lib, "jsoncpp.lib") //json库
 #pragma comment(lib, "LhatCore64.lib") //Lhat核心库
-#pragma warning (disable:4996)
+#pragma warning(disable:4996)
 
 //pack和unpack函数都来自LhatCore64.lib，引用LhatCore64.dll的符号
 
