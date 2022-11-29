@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LoginWindow</class>
- <widget class="QMainWindow" name="LoginWindow">
+ <class>ChatWindow</class>
+ <widget class="QMainWindow" name="ChatWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>400</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -579,313 +579,187 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    background: none;
 }</string>
   </property>
-  <property name="iconSize">
-   <size>
-    <width>768</width>
-    <height>768</height>
-   </size>
-  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="1" colspan="2">
-     <widget class="QLabel" name="static_text_1">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>12</pointsize>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>欢迎来到Lhat！请连接聊天服务器以开始你的聊天之旅！
-小提示：如果无法连接，请尝试安全认证！</string>
-      </property>
-     </widget>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="hbox2">
+      <item>
+       <widget class="QTextBrowser" name="output_box_message">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>5</horstretch>
+          <verstretch>5</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextBrowser" name="output_box_online_user">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>2</horstretch>
+          <verstretch>5</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>幼圆</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="6" column="1">
-     <widget class="QPushButton" name="button_register">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>2</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>80</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>18</pointsize>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>安全认证</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="2">
-     <widget class="QPushButton" name="button_login">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>2</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>80</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>20</pointsize>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>登录服务器</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <spacer name="hSpacer2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="3">
-     <spacer name="hSpacer1">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLabel" name="static_text_3">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>14</pointsize>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>显示昵称</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPlainTextEdit" name="input_box_server_ip_port">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>90</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="plainText">
-       <string/>
-      </property>
-      <property name="placeholderText">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="static_text_2">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>14</pointsize>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::DefaultContextMenu</enum>
-      </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="text">
-       <string>服务器IP及端口</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="2">
-     <spacer name="vSpacer1">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="1">
-     <spacer name="vSpacer2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLabel" name="static_text_4">
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>密码</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="2">
-     <widget class="QLineEdit" name="input_box_password">
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="statusTip">
-       <string/>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="echoMode">
-       <enum>QLineEdit::Password</enum>
-      </property>
-      <property name="readOnly">
-       <bool>false</bool>
-      </property>
-      <property name="placeholderText">
-       <string>留空以作为访客登录</string>
-      </property>
-      <property name="clearButtonEnabled">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <widget class="QLineEdit" name="input_box_nickname">
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="echoMode">
-       <enum>QLineEdit::Normal</enum>
-      </property>
-      <property name="placeholderText">
-       <string/>
-      </property>
-     </widget>
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="hbox1">
+      <item>
+       <widget class="QTextEdit" name="input_box_message">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>4</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_send_message">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>微软雅黑</family>
+          <pointsize>24</pointsize>
+          <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
+        <property name="text">
+         <string>发送</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+Return</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>操作</string>
+    </property>
+    <addaction name="menubar_send"/>
+    <addaction name="menubar_logoff"/>
+    <addaction name="menubar_exit"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="menubar_send">
+   <property name="text">
+    <string>发送</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="menubar_logoff">
+   <property name="text">
+    <string>断开连接</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="menubar_exit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+  </action>
  </widget>
- <tabstops>
-  <tabstop>input_box_server_ip_port</tabstop>
-  <tabstop>button_login</tabstop>
-  <tabstop>button_register</tabstop>
- </tabstops>
  <resources>
-  <include location="../resources/images.qrc"/>
+  <include location="../../dev_src/Client/Lhat/src/builtin_modules/resources/images.qrc"/>
  </resources>
  <connections>
   <connection>
-   <sender>button_login</sender>
+   <sender>button_send_message</sender>
    <signal>clicked()</signal>
-   <receiver>LoginWindow</receiver>
-   <slot>onCheckLogin()</slot>
+   <receiver>ChatWindow</receiver>
+   <slot>sendMessage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>382</x>
-     <y>315</y>
+     <x>667</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
-     <x>335</x>
-     <y>377</y>
+     <x>619</x>
+     <y>633</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>button_register</sender>
-   <signal>clicked()</signal>
-   <receiver>LoginWindow</receiver>
-   <slot>onRegister()</slot>
+   <sender>menubar</sender>
+   <signal>triggered(QAction*)</signal>
+   <receiver>ChatWindow</receiver>
+   <slot>triggeredMenubar()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>330</y>
+     <x>102</x>
+     <y>13</y>
     </hint>
     <hint type="destinationlabel">
-     <x>143</x>
-     <y>380</y>
+     <x>81</x>
+     <y>26</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>onCheckLogin()</slot>
-  <slot>onRegister()</slot>
+  <slot>sendMessage()</slot>
+  <slot>triggeredMenubar()</slot>
  </slots>
 </ui>
