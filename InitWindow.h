@@ -52,7 +52,6 @@ extern string default_chat; //默认聊天室名称
 extern bool guest; // 访客
 extern const bool logable; // 是否记录日志
 extern string chatting_rooms[32];
-extern string server_exit_messages[];
 extern const string VERSION;
 
 class LoginApplication : public QMainWindow

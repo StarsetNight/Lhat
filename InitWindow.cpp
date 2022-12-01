@@ -1,14 +1,6 @@
 ﻿#include "InitWindow.h"
 
 const bool logable = true;
-string server_exit_messages[] = {
-    "你已被管理员踢出服务器。",
-    "用户名或密码错误。",
-    "请不要重复登录。",
-    "该服务器启用了强制用户系统，请使用帐号登录。",
-    "该用户名已存在。",
-    "你已被管理员封禁。",
-};
 const string VERSION = lhatVersion;
 string server_ip;
 int server_port;
@@ -563,12 +555,6 @@ void ChatApplication::onReceive()
                 recordFile.write(recvData, strlen(recvData));
                 recordFile.close();
             }
-            if (std::find(begin(server_exit_messages), end(server_exit_messages), msgBody) != end(server_exit_messages))
-            {
-                emit appendOutPutBox("与服务器断开了连接。<br/>");
-                closesocket(cSocket);
-                return;
-            }
         }
         else if (msgType == "USER_MANIFEST")
         {
@@ -605,6 +591,12 @@ void ChatApplication::onReceive()
             default_chat = msgBody;
             emit appendOutPutBox(QString::fromStdString("[提示] 锵锵！已分配至默认聊天室：<font color=\"blue\">" + default_chat + "</font><br/>"));
             log("已分配至默认聊天室。");
+        }
+        else if (msgType == "KICK_NOTICE" && msgBy == "Server")
+        {
+            emit appendOutPutBox("服务器主动断开了与客户端的连接。原因为：" + QString::fromStdString(msgBody));
+            closesocket(cSocket);
+            return;
         }
         strcpy(recvData, "\0"); //清空接收的字符
     }
