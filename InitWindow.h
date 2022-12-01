@@ -13,7 +13,7 @@
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
 
-#define lhatVersion "v1.5.1"
+#define lhatVersion "v1.5.2"
 
 namespace net {
 #include <WinSock2.h> //socket功能
@@ -51,7 +51,7 @@ extern string onlinebox;  //在线用户列表框的内容
 extern string default_chat; //默认聊天室名称
 extern bool guest; // 访客
 extern const bool logable; // 是否记录日志
-extern string chatting_rooms[32];
+extern string chatting_rooms[32];1
 extern const string VERSION;
 
 class LoginApplication : public QMainWindow
