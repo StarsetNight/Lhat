@@ -1,14 +1,6 @@
 ﻿#include "InitWindow.h"
 
 const bool logable = true;
-string server_exit_messages[] = {
-    "你已被管理员踢出服务器。",
-    "用户名或密码错误。",
-    "请不要重复登录。",
-    "该服务器启用了强制用户系统，请使用帐号登录。",
-    "该用户名已存在。",
-    "你已被管理员封禁。",
-};
 const string VERSION = lhatVersion;
 string server_ip;
 int server_port;
@@ -17,6 +9,8 @@ string onlinebox;
 string default_chat;
 bool guest;
 string chatting_rooms[32];
+
+
 
 string subReplace(string resource_str, string sub_str, string new_str)
 //替换一个字符串所有的子字符串，直到替换完毕，返回替换后的字符串，原字符串不变
@@ -204,7 +198,7 @@ void LoginApplication::onCheckLogin()
         return;
     }
     password = MD5(password).toStr();
-
+    
     close();
 
     //清空输入内容
@@ -510,24 +504,20 @@ void ChatApplication::onReceive()
 
         if (status == 0)
         {
-            log("由于服务器未响应，故断开了连接，代码：" + WSAGetLastError());
-            if (reLogin())
-                continue;
-            else
-                return;
+            log("由于服务器未响应，故断开了连接，代码：" + std::to_string(WSAGetLastError()));
+            if (reLogin()) continue;
+            else return;
         }
         else if (status < 0)
         {
-            log("因为用户主动断开连接或系统错误，接收线程被停止，代码：" + WSAGetLastError());
+            log("因为用户主动断开连接或系统错误，接收线程被停止，代码：" + std::to_string(WSAGetLastError()));
             return;
         }
         else if (strlen(recvData) == 0)
         {
             log("因为接收空消息，与服务器断开连接！");
-            if (reLogin())
-                continue;
-            else
-                return;
+            if (reLogin()) continue;
+            else return;
         }
 
         byColor = "blue";
@@ -562,15 +552,8 @@ void ChatApplication::onReceive()
             if (msgBy != "Server")
             {
                 std::ofstream recordFile(recordPath, std::ios::app);
-                strcat(recvData, "\n");
                 recordFile.write(recvData, strlen(recvData));
                 recordFile.close();
-            }
-            if (std::find(begin(server_exit_messages), end(server_exit_messages), msgBody) != end(server_exit_messages))
-            {
-                emit appendOutPutBox("与服务器断开了连接。<br/>");
-                closesocket(cSocket);
-                return;
             }
         }
         else if (msgType == "USER_MANIFEST")
@@ -609,6 +592,12 @@ void ChatApplication::onReceive()
             emit appendOutPutBox(QString::fromStdString("[提示] 锵锵！已分配至默认聊天室：<font color=\"blue\">" + default_chat + "</font><br/>"));
             log("已分配至默认聊天室。");
         }
+        else if (msgType == "KICK_NOTICE" && msgBy == "Server")
+        {
+            emit appendOutPutBox("服务器主动断开了与客户端的连接。原因为：" + QString::fromStdString(msgBody));
+            closesocket(cSocket);
+            return;
+        }
         strcpy(recvData, "\0"); //清空接收的字符
     }
 }
@@ -622,7 +611,7 @@ void ChatApplication::readRecord()
     while (!recordFile.eof())
     {
         recordFile.getline(msg, 1024);
-        if (!strcmp(msg, "")) break;
+        if (!strcmp(msg, "")) continue;
         recvJson = unpack(msg);
         msgType = recvJson["type"].asString();
         msgBy = recvJson["by"].asString();

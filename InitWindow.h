@@ -13,7 +13,7 @@
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
 
-#define lhatVersion "v1.5.1"
+#define lhatVersion "v1.5.2"
 
 namespace net {
 #include <WinSock2.h> //socket功能
@@ -32,7 +32,7 @@ net::send, net::recv, net::hostent, net::in_addr;
 #pragma comment(lib, "ws2_32.lib") //socket的库
 #pragma comment(lib, "jsoncpp.lib") //json库
 #pragma comment(lib, "LhatCore64.lib") //Lhat核心库
-#pragma warning (disable:4996)
+#pragma warning(disable:4996)
 
 //pack和unpack函数都来自LhatCore64.lib，引用LhatCore64.dll的符号
 
@@ -51,8 +51,7 @@ extern string onlinebox;  //在线用户列表框的内容
 extern string default_chat; //默认聊天室名称
 extern bool guest; // 访客
 extern const bool logable; // 是否记录日志
-extern string chatting_rooms[32];
-extern string server_exit_messages[];
+extern string chatting_rooms[32];1
 extern const string VERSION;
 
 class LoginApplication : public QMainWindow
