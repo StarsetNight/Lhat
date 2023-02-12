@@ -42,8 +42,6 @@ extern Json::Value unpack(string jsonString);
 #include "ui/LoginWindow.h"
 #include "ui/ChatWindow.h"
 
-//TODO 妹看见CPP文件里还只有一堆include吗？
-
 extern string server_ip; //服务器地址
 extern int server_port; //服务器端口
 extern string username, password;
@@ -51,7 +49,7 @@ extern string onlinebox;  //在线用户列表框的内容
 extern string default_chat; //默认聊天室名称
 extern bool guest; // 访客
 extern const bool logable; // 是否记录日志
-extern string chatting_rooms[32];1
+extern string chatting_rooms[32];
 extern const string VERSION;
 
 class LoginApplication : public QMainWindow
