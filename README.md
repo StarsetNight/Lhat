@@ -1,9 +1,10 @@
-# Lhat C Plan
+# Lhat Client
 ## 开发说明 DEVELOPING INSTRUCTIONS 
-> 不！要！往！main分支里塞东西啊！  
+> 不！要！往！main分支里塞东西啊！
 
+首先我得说一件该死的事情，我的Visual Studio和Qt6全崩了，所以这就是为什么我一年没维护这个项目，我现在得等JetBrains的开源许可证下来才能在CLion上开工，否则没戏，DAMN。  
 项目基于C++和Qt6开发。  
-本项目只含有源代码，所以构建后并不能马上运行，另请参阅[构建说明](#如何构建-how-to-build)。  
+本项目既可以手动构建，也可以直接下载Release界面的成品软件。  
 ## 介绍 INTRODUCE  
 欢迎使用Lhat，这是一个基于Qt6的简易聊天程序。  
 安全、简约、实用，这是我们的开发理念。
