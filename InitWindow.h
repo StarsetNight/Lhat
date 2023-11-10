@@ -13,6 +13,7 @@
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
 
+#define lhatVersion "v1.5.2"
 
 namespace net {
 #include <WinSock2.h> //socket功能
@@ -31,15 +32,15 @@ net::send, net::recv, net::hostent, net::in_addr;
 #pragma comment(lib, "ws2_32.lib") //socket的库
 #pragma comment(lib, "jsoncpp.lib") //json库
 #pragma comment(lib, "LhatCore64.lib") //Lhat核心库
-#pragma warning (disable:4996)
+#pragma warning(disable:4996)
+
+//pack和unpack函数都来自LhatCore64.lib，引用LhatCore64.dll的符号
 
 extern string pack(string rawMessage, string chatFrom, string chatWith, string messageType);
 extern Json::Value unpack(string jsonString);
 
 #include "ui/LoginWindow.h"
 #include "ui/ChatWindow.h"
-
-//TODO 妹看见CPP文件里还只有一堆include吗？
 
 extern string server_ip; //服务器地址
 extern int server_port; //服务器端口
@@ -49,7 +50,6 @@ extern string default_chat; //默认聊天室名称
 extern bool guest; // 访客
 extern const bool logable; // 是否记录日志
 extern string chatting_rooms[32];
-extern string server_exit_messages[];
 extern const string VERSION;
 
 class LoginApplication : public QMainWindow
@@ -95,7 +95,7 @@ signals:
 	void appendOnlineUserList(QString);
 	void setOnlineUserList(QString);
 	void clearOnlineUserList();
-private slots:
+private slots: //由于槽函数必须得在slots声明中，所以不得不添加了这些繁琐的函数
 	void appendOBoxSlot(QString content) { ui.output_box_message->append(content); }
 	void setOBoxSlot(QString content) { ui.output_box_message->setText(content); }
 	void clearOBoxSlot() { ui.output_box_message->clear(); }
@@ -115,7 +115,7 @@ private:
 	SOCKET cSocket;  //聊天用的套接字
 	sockaddr_in cAddress;  //地址信息对象
 	string recordPath; //聊天记录文件存储位置
-	std::thread recvThread;
+	std::thread recvThread; //接收线程
 };
 
 #endif //INIT_WINDOW_H
