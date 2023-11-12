@@ -13,7 +13,7 @@
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
 
-#define lhatVersion "v1.6.0"
+#define lhatVersion "v2-alpha-ui-update"
 
 namespace net {
 #include <WinSock2.h> //socket功能
@@ -35,12 +35,13 @@ net::send, net::recv, net::hostent, net::in_addr;
 #pragma warning(disable:4996)
 
 //pack和unpack函数都来自LhatCore64.lib，引用LhatCore64.dll的符号
+//JsonCPP相关函数则引用了jsoncpp.dll的符号
 
 extern string pack(string rawMessage, string chatFrom, string chatWith, string messageType);
 extern Json::Value unpack(string jsonString);
 
-#include "ui/LoginWindow.h"
-#include "ui/ChatWindow.h"
+#include "ui/LhatWindow.h"
+#include "ui/LoginDialog.h"
 
 extern string server_ip; //服务器地址
 extern int server_port; //服务器端口
@@ -62,7 +63,7 @@ public:
 	void bind();
 	tuple<string, int> procAddress(string addrData);
 private slots:
-	void onCheckLogin();
+	void onLogin();
 	void onRegister();
 };
 
@@ -70,13 +71,16 @@ class ChatApplication : public QMainWindow
 {
 	Q_OBJECT
 public:
-	Ui::ChatWindow ui;
+	Ui::LhatWindow ui;
 	ChatApplication();
 	void bind();
 	void startReceive();
 	void backLoginWindow();
 	bool reConnect();
 	bool reLogin();
+	void onConnect();
+	void onSessionMgr();
+	void onAbout();
 	void onLogoff();
 	void onExit();
 	void onSend(string rawMessage);
@@ -96,17 +100,17 @@ signals:
 	void setOnlineUserList(QString);
 	void clearOnlineUserList();
 private slots: //由于槽函数必须得在slots声明中，所以不得不添加了这些繁琐的函数
-	void appendOBoxSlot(QString content) { ui.output_box_message->append(content); }
-	void setOBoxSlot(QString content) { ui.output_box_message->setText(content); }
-	void clearOBoxSlot() { ui.output_box_message->clear(); }
+	void appendOBoxSlot(QString content) { ui.output_message->append(content); }
+	void setOBoxSlot(QString content) { ui.output_message->setText(content); }
+	void clearOBoxSlot() { ui.output_message->clear(); }
 
-	void appendIBoxSlot(QString content) { ui.input_box_message->append(content); }
-	void setIBoxSlot(QString content) { ui.input_box_message->setText(content); }
-	void clearIBoxSlot() { ui.input_box_message->clear(); }
-
-	void appendUBoxSlot(QString content) { ui.output_box_online_user->append(content); }
-	void setUBoxSlot(QString content) { ui.output_box_online_user->setText(content); }
-	void clearUBoxSlot() { ui.output_box_online_user->clear(); }
+	void appendIBoxSlot(QString content) { ui.input_message->appendPlainText(content); }
+	void setIBoxSlot(QString content) { ui.input_message->setPlainText(content); }
+	void clearIBoxSlot() { ui.input_message->clear(); }
+	// TODO 用户列表及服务器状态
+	void appendUBoxSlot(QString content) {} //ui.output_status->append(content); }
+	void setUBoxSlot(QString content) {} //ui.output_status->setText(content); }
+	void clearUBoxSlot() {} //ui.output_status->clear(); }
 
 	void sendMessage();
 	void triggeredMenubar(QAction* triggers);

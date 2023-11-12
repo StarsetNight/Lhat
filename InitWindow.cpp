@@ -122,8 +122,6 @@ LoginApplication::LoginApplication() : QMainWindow()
     ui.setupUi(this); //初始化窗口UI
     bind(); //绑定信号槽（其实并没有定义）
     
-    setWindowTitle(QString::fromStdString("Lhat！" + VERSION + " - 登录到一个 Lhat！服务器"));
-    
     if (_access("logs/", 0) == -1) _mkdir("logs/");
     if (_access("records/", 0) == -1) _mkdir("records/");
 }
@@ -170,31 +168,31 @@ tuple<string, int> LoginApplication::procAddress(string addrData)
     }
     return make_tuple(ip, port);
 }
-void LoginApplication::onCheckLogin()
-//记住，不是onLogin，是onCheckLogin！！！
+void LoginApplication::onLogin()
+//即使函数名更改，它仍然肩负的是检查登录信息是否符合格式，而不是负责登录。
 {
-    string rawAddrData = ui.input_box_server_ip_port->toPlainText().toStdString();
+    string rawAddrData = ui.input_server->text().toStdString();
     tuple<string, int> tmpAddr = procAddress(rawAddrData); //处理地址
     server_ip = std::get<0>(tmpAddr);
     server_port = std::get<1>(tmpAddr);
     if (server_ip == "") //如果处理不成功
     {
-        QMessageBox::warning(this, "警告 - 服务器地址格式错误", "请输入正确的服务器地址格式：\n[<IPV6地址>]:<外部端口>\n或\n<IPV4地址>:<外部端口>\n或\n<域名>:<外部端口>");
-        ui.input_box_server_ip_port->setFocus();
+        QMessageBox::warning(this, "警告 - 服务器地址格式错误", "请输入正确的服务器地址格式，下述为三种标准格式：\n[<IPV6地址>]:<外部端口>\n<IPV4地址>:<外部端口>\n<域名>:<外部端口>");
+        ui.input_server->setFocus();
         return;
     }
-    username = ui.input_box_nickname->text().toStdString(); //获取用户名
-    password = ui.input_box_password->text().toStdString(); //获取密码
+    username = ui.input_username->text().toStdString(); //获取用户名
+    password = ui.input_password->text().toStdString(); //获取密码
     if (username == "") //如果用户名为空
     {
-        QMessageBox::warning(this, "警告 - 用户名为空", "用户名不能为空，请设置一个用户名。");
-        ui.input_box_nickname->setFocus();
+        QMessageBox::warning(this, "警告 - 用户名为空", "用户名不能为空，请给定一个用户名。");
+        ui.input_username->setFocus();
         return;
     }
     else if (username.length() > 32 || username.length() < 2)
     {
         QMessageBox::warning(this, "警告 - 用户名长度不规范", "用户名长度应大于2字节且小于32字节。");
-        ui.input_box_nickname->setFocus();
+        ui.input_username->setFocus();
         return;
     }
     password = MD5(password).toStr();
@@ -202,9 +200,9 @@ void LoginApplication::onCheckLogin()
     close();
 
     //清空输入内容
-    ui.input_box_nickname->setText("");
-    ui.input_box_server_ip_port->setPlainText("");
-    ui.input_box_password->setText("");
+    ui.input_username->setText("");
+    ui.input_server->setText("");
+    ui.input_password->setText("");
 
     ChatApplication *chatwindow = new ChatApplication;
     chatwindow->show(); //启动聊天窗口
@@ -220,41 +218,41 @@ void LoginApplication::onRegister()
     int status;
     char recvMsg[64];
 
-    setWindowTitle(QString::fromStdString("Lhat！" + VERSION + " - 正在提交注册信息……"));
+    setWindowTitle(QString::fromStdString("Lhat - 正在提交注册信息……"));
 
-    string rawAddrData = ui.input_box_server_ip_port->toPlainText().toStdString();
+    string rawAddrData = ui.input_server->text().toStdString();
     auto [server_ip, server_port] = procAddress(rawAddrData);
 
     if (server_ip == "") //解析错误
     {
-        QMessageBox::warning(this, "警告 - 服务器地址格式错误", "请输入正确的服务器地址格式：\n[<IPV6地址>]:<外部端口>\n或\n<IPV4地址>:<外部端口>\n或\n<域名>:<外部端口>");
-        ui.input_box_server_ip_port->setFocus();
+        QMessageBox::warning(this, "警告 - 服务器地址格式错误", "请输入正确的服务器地址格式，下述为三种标准格式：\n[<IPV6地址>]:<外部端口>\n<IPV4地址>:<外部端口>\n<域名>:<外部端口>");
+        ui.input_server->setFocus();
         return;
     }
-    username = ui.input_box_nickname->text().toStdString(); //获取用户名
-    password = ui.input_box_password->text().toStdString(); //获取密码
+    username = ui.input_username->text().toStdString(); //获取用户名
+    password = ui.input_password->text().toStdString(); //获取密码
     if (username == "") //如果用户名为空
     {
-        QMessageBox::warning(this, "警告 - 用户名为空", "用户名不能为空，请设置一个用户名。");
-        ui.input_box_nickname->setFocus();
+        QMessageBox::warning(this, "警告 - 用户名为空", "用户名不能为空，请给定一个用户名。");
+        ui.input_username->setFocus();
         return;
     }
     else if (username.length() > 32 || username.length() < 2) //用户名长度错误
     {
         QMessageBox::warning(this, "警告 - 用户名长度不规范", "用户名长度应大于2字节且小于32字节。");
-        ui.input_box_nickname->setFocus();
+        ui.input_username->setFocus();
         return;
     }
     if (username.find(" ") != username.npos) //用户名包含空格
     {
         QMessageBox::warning(this, "警告 - 用户名设置不规范", "用户名不应含有空格，\n同时，我们建议你将用户名严格按照以下格式设置：\n只应出现数字、英文字母、下划线，不应包含其他特殊字符。");
-        ui.input_box_nickname->setFocus();
+        ui.input_username->setFocus();
         return;
     }
     if (password.empty()) //密码为空
     {
         QMessageBox::warning(this, "警告 - 密码设置不规范", "注册时，不应选用空密码。");
-        ui.input_box_password->setFocus();
+        ui.input_password->setFocus();
         return;
     }
     password = MD5(password).toStr(); //密码转MD5
@@ -287,7 +285,7 @@ void LoginApplication::onRegister()
     {
         QMessageBox::warning(this, "警告 - 注册并不成功", "服务器拒绝了注册信息，请检查输入格式。");
     }
-    setWindowTitle(QString::fromStdString("Lhat！" + VERSION + " - 登录到一个 Lhat！服务器"));
+    setWindowTitle(QString::fromStdString("Lhat - 新会话"));
     closesocket(regSocket);
     WSACleanup(); //清理socket库
 }
@@ -298,7 +296,7 @@ ChatApplication::ChatApplication() : QMainWindow()
     string loginInformation;
     ui.setupUi(this); //初始化UI
     bind();
-    setWindowTitle(QString::fromStdString("欢迎来到Lhat！" + VERSION + " - 登录为：" + username));
+    setWindowTitle(QString::fromStdString("Lhat " + VERSION + " - 登录为：" + username));
 
     WSAStartup(MAKEWORD(2, 2), &wsd);
     cSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -337,7 +335,7 @@ void ChatApplication::bind()
 }
 void ChatApplication::sendMessage()
 {
-    onSend(ui.input_box_message->toPlainText().toStdString()); //发送消息
+    onSend(ui.input_message->toPlainText().toStdString()); //发送消息
     emit clearInPutBox();
 }
 void ChatApplication::startReceive()
@@ -349,13 +347,18 @@ void ChatApplication::startReceive()
 }
 void ChatApplication::triggeredMenubar(QAction* triggers)
 {
-    string buttonSignal = triggers->text().toStdString();
-    if (buttonSignal == "发送")
-        sendMessage();
-    else if (buttonSignal == "断开连接")
+    QString buttonSignal = triggers->text();
+    if (buttonSignal == "连接会话")
+        onConnect();
+    else if (buttonSignal == "会话管理器")
+        // TODO onSessionMgr();
+        QMessageBox::information(this, "Lhat - 功能未完成", "Lhat会话管理器正在积极开发中！");
+    else if (buttonSignal == "断开会话")
         onLogoff();
-    else if (buttonSignal == "退出")
+    else if (buttonSignal == "退出Lhat")
         onExit();
+    else if (buttonSignal == "关于Lhat")
+        onAbout();
 }
 void ChatApplication::backLoginWindow()
 {
@@ -407,6 +410,8 @@ bool ChatApplication::reLogin()
     emit appendOutPutBox("[提示] 尝试重连失败，请重新启动程序！<br/>");
     return false;
 }
+void ChatApplication::onConnect(){}
+void ChatApplication::onAbout(){}
 void ChatApplication::onLogoff()
 {
     //QMessageBox::information(this, "提示 - 功能不可用", "我们诚挚地抱歉，由于Lhat的C++重构工作很快，“断开连接”功能并不可用，你只能退出Lhat，再重新启动它以达到相同效果。");
@@ -418,7 +423,7 @@ void ChatApplication::onLogoff()
     }
     else
     {
-        ui.input_box_message->setFocus();
+        ui.input_message->setFocus();
     }
 }
 void ChatApplication::onExit()
@@ -433,7 +438,7 @@ void ChatApplication::onExit()
     }
     else
     {
-        ui.input_box_message->setFocus();
+        ui.input_message->setFocus();
     }
 }
 void ChatApplication::onSend(string rawMessage)
