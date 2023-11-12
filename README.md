@@ -19,14 +19,15 @@
 
 ### 环境要求：
 - MSVC 2022编译器
-- Qt6（版本：6.4.0）
+- Qt6（版本：6.4.0以上）
 
 1. 安装所需的MSVC 2022编译器。
-2. 安装Qt6，版本为6.4.0。
+2. 安装Qt6，版本为6.4.0以上。
 3. 按照Qt的配置指南进行配置。
 4. 从 [Lhat-Core](https://github.com/3rdBit/Lhat-Core) 下载对应版本的LIB和DLL文件。
 5. 下载JSONcpp库文件（LIB文件），项目已包含所需的JSON头文件。
-6. 生成项目，然后使用命令 `windeployqt Lhat.exe --no-opengl-sw --no-system-d3d-compiler --no-plugins --release` 完成Qt库文件的补全。
+6. 配置Qt与Visual Studio，搭建项目环境。
+7. 生成项目，然后使用命令 `windeployqt Lhat.exe --no-opengl-sw --no-system-d3d-compiler --no-plugins --release` 完成Qt库文件的补全。
 
 ## 下载
 
