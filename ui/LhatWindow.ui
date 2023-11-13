@@ -36,6 +36,11 @@ QTextEdit {
 	border-style: solid;
 	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
 }
+QTreeWidget {
+	border-width: 1px;
+	border-style: solid;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
 QPlainTextEdit {
 	border-width: 1px;
 	border-style: solid;
@@ -686,7 +691,45 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="button_send_message">
+             <widget class="QPushButton" name="button_tool">
+              <property name="minimumSize">
+               <size>
+                <width>60</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>工具</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_manage">
+              <property name="minimumSize">
+               <size>
+                <width>60</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>管理</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_send">
               <property name="minimumSize">
                <size>
                 <width>60</width>
@@ -798,7 +841,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    </hints>
   </connection>
   <connection>
-   <sender>button_send_message</sender>
+   <sender>button_send</sender>
    <signal>clicked()</signal>
    <receiver>LhatWindow</receiver>
    <slot>sendMessage()</slot>
@@ -813,9 +856,43 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>button_manage</sender>
+   <signal>clicked()</signal>
+   <receiver>LhatWindow</receiver>
+   <slot>onManage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>683</x>
+     <y>473</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>682</x>
+     <y>461</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_tool</sender>
+   <signal>clicked()</signal>
+   <receiver>LhatWindow</receiver>
+   <slot>onTool()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>616</x>
+     <y>472</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>600</x>
+     <y>457</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>triggeredMenubar(QAction*)</slot>
   <slot>sendMessage()</slot>
+  <slot>onManage()</slot>
+  <slot>onTool()</slot>
  </slots>
 </ui>

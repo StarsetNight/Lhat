@@ -47,7 +47,9 @@ public:
     QPlainTextEdit *input_message;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
-    QPushButton *button_send_message;
+    QPushButton *button_tool;
+    QPushButton *button_manage;
+    QPushButton *button_send;
     QVBoxLayout *verticalLayout;
     QMenuBar *menubar;
     QMenu *menu;
@@ -74,16 +76,21 @@ public:
 "	border-style: solid;\n"
 "	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "}\n"
+"QTreeWidget {\n"
+"	border-width: 1px;\n"
+"	border-style: solid;\n"
+"	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
+"}\n"
 "QPlainTextEdit {\n"
 "	border-width: 1px;\n"
 "	border-style: solid;\n"
 "	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "}\n"
-"QToolButton {\n"
+"QT"
+                        "oolButton {\n"
 "	border-style: solid;\n"
 "	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
-"	border-right-color: qlineargradient("
-                        "spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));\n"
+"	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));\n"
 "	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
 "	border-width: 1px;\n"
@@ -95,10 +102,10 @@ public:
 "QToolButton:hover{\n"
 "	border-style: solid;\n"
 "	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));\n"
-"	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(197, 197, 197), stop:1 rgb(227, 227, 227));\n"
+"	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(197, 197, 197), stop:1 rgb(227,"
+                        " 227, 227));\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(197, 197, 197));\n"
-"	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:"
-                        "1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));\n"
+"	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));\n"
 "	border-width: 1px;\n"
 "	border-radius: 5px;\n"
 "	color: rgb(0,0,0);\n"
@@ -111,7 +118,8 @@ public:
 "	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));\n"
 "	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
-"	border-width: 1px;\n"
+"	bor"
+                        "der-width: 1px;\n"
 "	border-radius: 5px;\n"
 "	color: rgb(0,0,0);\n"
 "	padding: 2px;\n"
@@ -119,8 +127,7 @@ public:
 "}\n"
 "QPushButton{\n"
 "	border-style: solid;\n"
-"	border-top-color: qlineargradient("
-                        "spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
+"	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
 "	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));\n"
 "	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
@@ -132,10 +139,10 @@ public:
 "}\n"
 "QPushButton::default{\n"
 "	border-style: solid;\n"
-"	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
+"	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(2"
+                        "22, 222, 222));\n"
 "	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));\n"
-"	border-left-color: qlineargradient(spread:pad, x1:0, y1:"
-                        "0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));\n"
+"	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));\n"
 "	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
 "	border-width: 1px;\n"
 "	border-radius: 5px;\n"
@@ -148,12 +155,12 @@ public:
 "	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));\n"
 "	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(197, 197, 197), stop:1 rgb(227, 227, 227));\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(197, 197, 197));\n"
-"	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));\n"
+"	bor"
+                        "der-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));\n"
 "	border-width: 1px;\n"
 "	border-radius: 5px;\n"
 "	color: rgb(0,0,0);\n"
-"	paddin"
-                        "g: 2px;\n"
+"	padding: 2px;\n"
 "	background-color: rgb(255,255,255);\n"
 "}\n"
 "QPushButton:pressed{\n"
@@ -168,11 +175,11 @@ public:
 "	padding: 2px;\n"
 "	background-color: rgb(142,142,142);\n"
 "}\n"
-"QPushButton:disabled{\n"
+"QPushButton:disabled{"
+                        "\n"
 "	border-style: solid;\n"
 "	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
-"	border-right-color: qlineargradient(spread:pad,"
-                        " x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));\n"
+"	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));\n"
 "	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));\n"
 "	border-width: 1px;\n"
@@ -190,7 +197,8 @@ public:
 "	color: #000000;\n"
 "}\n"
 "QLCDNumber {\n"
-"	color: rgb(0, 113, 255, 255);\n"
+"	color: rgb(0, 113, 255, 255"
+                        ");\n"
 "}\n"
 "QProgressBar {\n"
 "	text-align: center;\n"
@@ -199,8 +207,7 @@ public:
 "	border-radius: 10px;\n"
 "	border-color: rgb(230, 230, 230);\n"
 "	border-style: solid;\n"
-"	backgro"
-                        "und-color:rgb(207,207,207);\n"
+"	background-color:rgb(207,207,207);\n"
 "}\n"
 "QProgressBar::chunk {\n"
 "	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));\n"
@@ -217,15 +224,15 @@ public:
 "}\n"
 "\n"
 "QMenuBar::item:selected {\n"
-"  	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
+"  	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 2"
+                        "52, 255));\n"
 "	color: #FFFFFF;\n"
 "}\n"
 "QMenu::item:selected {\n"
 "	border-style: solid;\n"
 "	border-top-color: transparent;\n"
 "	border-right-color: transparent;\n"
-"	border-left-color: qlineargradient(spread:p"
-                        "ad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
+"	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "	border-bottom-color: transparent;\n"
 "	border-left-width: 2px;\n"
 "	color: #000000;\n"
@@ -254,7 +261,8 @@ public:
 "QTabWidget::pane {\n"
 "		border-color: rgb(223,223,223);\n"
 "		background-color:rgb(226,226,226);\n"
-"		border-style: solid;\n"
+""
+                        "		border-style: solid;\n"
 "		border-width: 2px;\n"
 "    	border-radius: 6px;\n"
 "}\n"
@@ -262,8 +270,7 @@ public:
 "	border-style: solid;\n"
 "	border-left-width:1px;\n"
 "	border-right-width:0px;\n"
-"	border-top-wi"
-                        "dth:1px;\n"
+"	border-top-width:1px;\n"
 "	border-bottom-width:1px;\n"
 "	border-top-color: rgb(209,209,209);\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));\n"
@@ -279,11 +286,11 @@ public:
 "	border-style: solid;\n"
 "	border-width:1px;\n"
 "	border-top-color: rgb(209,209,209);\n"
-"	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));\n"
+"	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));"
+                        "\n"
 "	border-right-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));\n"
 "	border-bottom-color: rgb(229,229,229);\n"
-"	border-top-"
-                        "right-radius: 4px;\n"
+"	border-top-right-radius: 4px;\n"
 "	border-bottom-right-radius: 4px;\n"
 "	color: #000000;\n"
 "	padding: 3px;\n"
@@ -301,14 +308,14 @@ public:
 "	color: #000000;\n"
 "	padding: 3px;\n"
 "	margin-left:0px;\n"
-"	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(247, 247, 247, 255), stop:1 rgba(255, 255, 255, 255));\n"
+"	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(247, 247, 247, 255), stop:1 rg"
+                        "ba(255, 255, 255, 255));\n"
 "}\n"
 "QTabBar::tab:selected, QTabBar::tab:last:selected, QTabBar::tab:hover {\n"
 "  	border-style: solid;\n"
 "  	border-left-width:1px;\n"
 "	border-right-color: transparent;\n"
-"	b"
-                        "order-top-color: rgb(209,209,209);\n"
+"	border-top-color: rgb(209,209,209);\n"
 "	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));\n"
 "	border-bottom-color: rgb(229,229,229);\n"
 "	color: #FFFFFF;\n"
@@ -324,13 +331,13 @@ public:
 "  	border-top-width:1px;\n"
 "	border-right-color: transparent;\n"
 "	border-top-color: rgb(209,209,209);\n"
-"	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 209, 209, 209), stop:1 rgba(229, 229, 229, 229));\n"
+"	border-left-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(209, 20"
+                        "9, 209, 209), stop:1 rgba(229, 229, 229, 229));\n"
 "	border-bottom-color: rgb(229,229,229);\n"
 "	color: #FFFFFF;\n"
 "	padding: 3px;\n"
 "	margin-left:0px;\n"
-"	background-color: qlineargradient(spread:pad, x1:0"
-                        ".5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
+"	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "}\n"
 "\n"
 "QCheckBox {\n"
@@ -360,15 +367,15 @@ public:
 "	border-width: 1px;\n"
 "	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "	color: #000000;\n"
-"	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
+"	background-color: qlineargradient(spread:pad, x1:0.5, y1:1"
+                        ", x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "}\n"
 "QCheckBox::indicator:unchecked {\n"
 "\n"
 "	height: 10px;\n"
 "	width: 10px;\n"
 "	border-style:solid;\n"
-"	border-width: "
-                        "1px;\n"
+"	border-width: 1px;\n"
 "	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "	color: #000000;\n"
 "}\n"
@@ -390,12 +397,12 @@ public:
 "	height: 10px;\n"
 "	width: 10px;\n"
 "	border-style:solid;\n"
-"	border-radius:5px;\n"
+"	border-radius:5px;"
+                        "\n"
 "	border-width: 1px;\n"
 "	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "	color: #a9b7c6;\n"
-"	background-color: t"
-                        "ransparent;\n"
+"	background-color: transparent;\n"
 "}\n"
 "QStatusBar {\n"
 "	color:#027f7f;\n"
@@ -418,13 +425,13 @@ public:
 "QDateTimeEdit {\n"
 "	border-style: solid;\n"
 "	border-width: 1px;\n"
-"	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
+"	border-color: qlineargradient(spread:pad, x"
+                        "1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "}\n"
 "QDateEdit {\n"
 "	border-style: solid;\n"
 "	border-width: 1px;\n"
-"	border-color: qlineargradient(spread:pad,"
-                        " x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
+"	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));\n"
 "}\n"
 "\n"
 "QToolBox {\n"
@@ -450,7 +457,8 @@ public:
 "QSlider::groove:vertical {\n"
 "	width: 5px;\n"
 "	background-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));\n"
-"}\n"
+"}"
+                        "\n"
 "QSlider::handle:horizontal {\n"
 "	background: rgb(253,253,253);\n"
 "	border-style: solid;\n"
@@ -458,8 +466,7 @@ public:
 "	border-color: rgb(207,207,207);\n"
 "	width: 12px;\n"
 "	margin: -5px 0;\n"
-"	border-ra"
-                        "dius: 7px;\n"
+"	border-radius: 7px;\n"
 "}\n"
 "QSlider::handle:vertical {\n"
 "	background: rgb(253,253,253);\n"
@@ -483,7 +490,8 @@ public:
 "    background-color: qlineargradient(spread:pad, y1:0.5, x1:1, y2:0.5, x2:0, stop:0 rgba(49, 147, 250, 255), stop:1 rgba(34, 142, 255, 255));\n"
 "}\n"
 "QScrollBar:horizontal {\n"
-"	max-height: 20px;\n"
+"	max-height: "
+                        "20px;\n"
 "	border: 1px transparent grey;\n"
 "	margin: 0px 20px 0px 20px;\n"
 "}\n"
@@ -492,8 +500,7 @@ public:
 "	border: 1px transparent grey;\n"
 "	margin: 20px 0px 20px 0px;\n"
 "}\n"
-"QScro"
-                        "llBar::handle:horizontal {\n"
+"QScrollBar::handle:horizontal {\n"
 "	background: rgb(253,253,253);\n"
 "	border-style: solid;\n"
 "	border-width: 1px;\n"
@@ -522,15 +529,15 @@ public:
 "	border-style: solid;\n"
 "	border-width: 1px;\n"
 "	border-color: rgb(147, 200, 200);\n"
-"	border-radius: 7px;\n"
+"	border-radius: 7"
+                        "px;\n"
 "	min-height: 25px;\n"
 "}\n"
 "QScrollBar::add-line:horizontal {\n"
 "   border: 2px transparent grey;\n"
 "   border-top-right-radius: 7px;\n"
 "   border-bottom-right-radius: 7px;\n"
-"   background: rgba("
-                        "34, 142, 255, 255);\n"
+"   background: rgba(34, 142, 255, 255);\n"
 "   width: 20px;\n"
 "   subcontrol-position: right;\n"
 "   subcontrol-origin: margin;\n"
@@ -555,15 +562,15 @@ public:
 "}\n"
 "QScrollBar::add-line:vertical:pressed {\n"
 "   border: 2px transparent grey;\n"
-"   border-bottom-left-radius: 7px;\n"
+"   border-bottom-left-radius: 7"
+                        "px;\n"
 "   border-bottom-right-radius: 7px;\n"
 "   background: rgb(181,181,181);\n"
 "   height: 20px;\n"
 "   subcontrol-position: bottom;\n"
 "   subcontrol-origin: margin;\n"
 "}\n"
-"QScrollBar::sub-line:horizo"
-                        "ntal {\n"
+"QScrollBar::sub-line:horizontal {\n"
 "   border: 2px transparent grey;\n"
 "   border-top-left-radius: 7px;\n"
 "   border-bottom-left-radius: 7px;\n"
@@ -588,15 +595,15 @@ public:
 "   background: rgba(34, 142, 255, 255);\n"
 "   height: 20px;\n"
 "   subcontrol-position: top;\n"
-"   subcontrol-origin: margin;\n"
+"   subcontrol-origin: "
+                        "margin;\n"
 "}\n"
 "QScrollBar::sub-line:vertical:pressed {\n"
 "   border: 2px transparent grey;\n"
 "   border-top-left-radius: 7px;\n"
 "   border-top-right-radius: 7px;\n"
 "   background: rgb(181,181,181);\n"
-""
-                        "   height: 20px;\n"
+"   height: 20px;\n"
 "   subcontrol-position: top;\n"
 "   subcontrol-origin: margin;\n"
 "}\n"
@@ -625,15 +632,15 @@ public:
 "   background: white;\n"
 "}\n"
 "QScrollBar::down-arrow:vertical {\n"
-"   border: 1px transparent grey;\n"
+"   border: 1px tra"
+                        "nsparent grey;\n"
 "   border-bottom-left-radius: 3px;\n"
 "   border-bottom-right-radius: 3px;\n"
 "   width: 6px;\n"
 "   height: 6px;\n"
 "   background: white;\n"
 "}\n"
-"QScrollBar::add-page:horizontal, QScroll"
-                        "Bar::sub-page:horizontal {\n"
+"QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {\n"
 "   background: none;\n"
 "}\n"
 "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {\n"
@@ -710,12 +717,26 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        button_send_message = new QPushButton(centralwidget);
-        button_send_message->setObjectName("button_send_message");
-        button_send_message->setMinimumSize(QSize(60, 25));
-        button_send_message->setMaximumSize(QSize(60, 25));
+        button_tool = new QPushButton(centralwidget);
+        button_tool->setObjectName("button_tool");
+        button_tool->setMinimumSize(QSize(60, 25));
+        button_tool->setMaximumSize(QSize(60, 25));
 
-        horizontalLayout->addWidget(button_send_message);
+        horizontalLayout->addWidget(button_tool);
+
+        button_manage = new QPushButton(centralwidget);
+        button_manage->setObjectName("button_manage");
+        button_manage->setMinimumSize(QSize(60, 25));
+        button_manage->setMaximumSize(QSize(60, 25));
+
+        horizontalLayout->addWidget(button_manage);
+
+        button_send = new QPushButton(centralwidget);
+        button_send->setObjectName("button_send");
+        button_send->setMinimumSize(QSize(60, 25));
+        button_send->setMaximumSize(QSize(60, 25));
+
+        horizontalLayout->addWidget(button_send);
 
 
         verticalLayout_2->addLayout(horizontalLayout);
@@ -757,7 +778,9 @@ public:
 
         retranslateUi(LhatWindow);
         QObject::connect(menubar, SIGNAL(triggered(QAction*)), LhatWindow, SLOT(triggeredMenubar(QAction*)));
-        QObject::connect(button_send_message, SIGNAL(clicked()), LhatWindow, SLOT(sendMessage()));
+        QObject::connect(button_send, SIGNAL(clicked()), LhatWindow, SLOT(sendMessage()));
+        QObject::connect(button_manage, SIGNAL(clicked()), LhatWindow, SLOT(onManage()));
+        QObject::connect(button_tool, SIGNAL(clicked()), LhatWindow, SLOT(onTool()));
 
         QMetaObject::connectSlotsByName(LhatWindow);
     } // setupUi
@@ -781,9 +804,11 @@ public:
         ___qtreewidgetitem2->setText(0, QCoreApplication::translate("LhatWindow", "\346\210\220\345\221\230\345\210\227\350\241\250", nullptr));
         output_status->setSortingEnabled(__sortingEnabled);
 
-        button_send_message->setText(QCoreApplication::translate("LhatWindow", "\345\217\221\351\200\201", nullptr));
+        button_tool->setText(QCoreApplication::translate("LhatWindow", "\345\267\245\345\205\267", nullptr));
+        button_manage->setText(QCoreApplication::translate("LhatWindow", "\347\256\241\347\220\206", nullptr));
+        button_send->setText(QCoreApplication::translate("LhatWindow", "\345\217\221\351\200\201", nullptr));
 #if QT_CONFIG(shortcut)
-        button_send_message->setShortcut(QCoreApplication::translate("LhatWindow", "Ctrl+Return", nullptr));
+        button_send->setShortcut(QCoreApplication::translate("LhatWindow", "Ctrl+Return", nullptr));
 #endif // QT_CONFIG(shortcut)
         menu->setTitle(QCoreApplication::translate("LhatWindow", "\344\274\232\350\257\235", nullptr));
         menu_2->setTitle(QCoreApplication::translate("LhatWindow", "\345\205\263\344\272\216", nullptr));

@@ -48,24 +48,11 @@ extern int server_port; //服务器端口
 extern string username, password;
 extern string onlinebox;  //在线用户列表框的内容
 extern string default_chat; //默认聊天室名称
-extern bool guest; // 访客
-extern const bool logable; // 是否记录日志
+extern bool guest; //是否为访客
+extern const bool logable; //是否记录日志
 extern string chatting_rooms[32];
 extern const string VERSION;
-
-class LoginApplication : public QMainWindow
-{
-	Q_OBJECT
-public:
-	Ui::LoginWindow ui;
-	LoginApplication();
-//private:
-	void bind();
-	tuple<string, int> procAddress(string addrData);
-private slots:
-	void onLogin();
-	void onRegister();
-};
+extern bool session; //会话是否在线
 
 class ChatApplication : public QMainWindow
 {
@@ -75,13 +62,13 @@ public:
 	ChatApplication();
 	void bind();
 	void startReceive();
-	void backLoginWindow();
 	bool reConnect();
 	bool reLogin();
+	void onLogin();
 	void onConnect();
 	void onSessionMgr();
 	void onAbout();
-	void onLogoff();
+	void onLogoff(bool silentMode);
 	void onExit();
 	void onSend(string rawMessage);
 	void onReceive();
@@ -114,12 +101,29 @@ private slots: //由于槽函数必须得在slots声明中，所以不得不添�
 
 	void sendMessage();
 	void triggeredMenubar(QAction* triggers);
+	void onManage();
+	void onTool();
 private:
 	WSADATA wsd;
 	SOCKET cSocket;  //聊天用的套接字
 	sockaddr_in cAddress;  //地址信息对象
 	string recordPath; //聊天记录文件存储位置
 	std::thread recvThread; //接收线程
+};
+
+class LoginApplication : public QMainWindow
+{
+	Q_OBJECT
+public:
+	Ui::LoginWindow ui;
+	ChatApplication* parentWindow;
+	LoginApplication(ChatApplication& parent);
+	//private:
+	void bind();
+	tuple<string, int> procAddress(string addrData);
+private slots:
+	void onLogin();
+	void onRegister();
 };
 
 #endif //INIT_WINDOW_H

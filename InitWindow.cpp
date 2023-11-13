@@ -1,7 +1,6 @@
 ﻿#include "InitWindow.h"
 
 const bool logable = true;
-const string VERSION = lhatVersion;
 string server_ip;
 int server_port;
 string username, password;
@@ -9,6 +8,7 @@ string onlinebox;
 string default_chat;
 bool guest;
 string chatting_rooms[32];
+bool session = false;
 
 
 
@@ -117,13 +117,11 @@ bool isNum(string str)
     return true;
 }
 
-LoginApplication::LoginApplication() : QMainWindow()
+LoginApplication::LoginApplication(ChatApplication& parent) : QMainWindow()
 {
     ui.setupUi(this); //初始化窗口UI
     bind(); //绑定信号槽（其实并没有定义）
-    
-    if (_access("logs/", 0) == -1) _mkdir("logs/");
-    if (_access("records/", 0) == -1) _mkdir("records/");
+    parentWindow = &parent; //把父窗口对象指针赋给登录窗口
 }
 void LoginApplication::bind() {}
 tuple<string, int> LoginApplication::procAddress(string addrData)
@@ -171,6 +169,11 @@ tuple<string, int> LoginApplication::procAddress(string addrData)
 void LoginApplication::onLogin()
 //即使函数名更改，它仍然肩负的是检查登录信息是否符合格式，而不是负责登录。
 {
+    if (session)
+    {
+        QMessageBox::StandardButton choice = QMessageBox::question(this, "询问 - 覆盖会话", "当前Lhat已有在线会话，要连接到新的会话，必须断开当前会话，你确定要这么做吗？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        if (choice == QMessageBox::Yes) parentWindow->onLogoff(true);
+    }
     string rawAddrData = ui.input_server->text().toStdString();
     tuple<string, int> tmpAddr = procAddress(rawAddrData); //处理地址
     server_ip = std::get<0>(tmpAddr);
@@ -204,8 +207,7 @@ void LoginApplication::onLogin()
     ui.input_server->setText("");
     ui.input_password->setText("");
 
-    ChatApplication *chatwindow = new ChatApplication;
-    chatwindow->show(); //启动聊天窗口
+    parentWindow->onLogin();
     delete this;
 }
 void LoginApplication::onRegister()
@@ -292,31 +294,15 @@ void LoginApplication::onRegister()
 
 ChatApplication::ChatApplication() : QMainWindow()
 {
-    int disableNagle = 0;
-    string loginInformation;
     ui.setupUi(this); //初始化UI
     bind();
-    setWindowTitle(QString::fromStdString("Lhat " + VERSION + " - 登录为：" + username));
 
-    WSAStartup(MAKEWORD(2, 2), &wsd);
-    cSocket = socket(AF_INET, SOCK_STREAM, 0);
-    cAddress.sin_family = AF_INET;
-    cAddress.sin_addr.S_un.S_addr = inet_addr(server_ip.c_str());
-    cAddress.sin_port = htons(server_port);
+    //初始化文件系统
+    if (_access("logs/", 0) == -1) _mkdir("logs/");
+    if (_access("records/", 0) == -1) _mkdir("records/");
+    setWindowTitle(QString::fromStdString("Lhat " lhatVersion));
 
-    int status = net::connect(cSocket, (sockaddr*)&cAddress, sizeof(cAddress)); //连接
-    setsockopt(cSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&disableNagle, sizeof(int)); //禁掉他妈的Nagle
-    log(username + "登录了服务器" + server_ip + ":" + std::to_string(server_port));
-    if (status > 0)
-    {
-        QString errorMessage = "请检查服务器是否在线，或检查网络连接。错误代码：" + WSAGetLastError();
-        QMessageBox::critical(this, "错误 - 无法连接服务器", errorMessage);
-        return;
-    }
-    loginInformation = pack(username + "\r\n" + password, "", "", "USER_NAME");
-    send(cSocket, loginInformation.c_str(), loginInformation.length(), 0);
-    recordPath = "records/chat" + server_ip + "," + std::to_string(server_port) + ".txt";
-    startReceive();
+    emit appendOutPutBox("欢迎使用Lhat " lhatVersion "，本软件使用AGPL 3.0许可证。");
 }
 void ChatApplication::bind()
 //自定义信号槽的绑定
@@ -354,20 +340,11 @@ void ChatApplication::triggeredMenubar(QAction* triggers)
         // TODO onSessionMgr();
         QMessageBox::information(this, "Lhat - 功能未完成", "Lhat会话管理器正在积极开发中！");
     else if (buttonSignal == "断开会话")
-        onLogoff();
+        onLogoff(false);
     else if (buttonSignal == "退出Lhat")
         onExit();
     else if (buttonSignal == "关于Lhat")
         onAbout();
-}
-void ChatApplication::backLoginWindow()
-{
-    close();
-    closesocket(cSocket);
-    WSACleanup();
-    LoginApplication* loginwindow = new LoginApplication;
-    loginwindow->show();
-    delete this;
 }
 bool ChatApplication::reConnect()
 {
@@ -390,10 +367,10 @@ bool ChatApplication::reConnect()
 bool ChatApplication::reLogin()
 {
     string loginInformation;
-    for (int tryTime = 0; tryTime < 3; tryTime++)
+    for (int chanceCount = 0; chanceCount < 3; chanceCount++)
     {
         emit appendOutPutBox("<font color=\"red\">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>\
-            正在尝试在5秒后重新连接（还剩" + QString::fromStdString(std::to_string(3 - tryTime)) + "次重连机会）……<br/>");
+            正在尝试在5秒后重新连接（还剩" + QString::fromStdString(std::to_string(3 - chanceCount)) + "次重连机会）……<br/>");
         log("与服务器断开了连接，也许服务端宕机了。");
         Sleep(5000); //延迟5秒
         if (reConnect())
@@ -410,16 +387,49 @@ bool ChatApplication::reLogin()
     emit appendOutPutBox("[提示] 尝试重连失败，请重新启动程序！<br/>");
     return false;
 }
-void ChatApplication::onConnect(){}
-void ChatApplication::onAbout(){}
-void ChatApplication::onLogoff()
+void ChatApplication::onLogin()
 {
-    //QMessageBox::information(this, "提示 - 功能不可用", "我们诚挚地抱歉，由于Lhat的C++重构工作很快，“断开连接”功能并不可用，你只能退出Lhat，再重新启动它以达到相同效果。");
-    //return;
-    QMessageBox::StandardButton choice = QMessageBox::question(this, "询问 - 断开连接", "你真的要从服务器注销并断开连接吗？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-    if (choice == QMessageBox::Yes)
+    int disableNagle = 0;
+    string loginInformation;
+
+    WSAStartup(MAKEWORD(2, 2), &wsd);
+    cSocket = socket(AF_INET, SOCK_STREAM, 0);
+    cAddress.sin_family = AF_INET;
+    cAddress.sin_addr.S_un.S_addr = inet_addr(server_ip.c_str());
+    cAddress.sin_port = htons(server_port);
+
+    int status = net::connect(cSocket, (sockaddr*)&cAddress, sizeof(cAddress)); //连接
+    setsockopt(cSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&disableNagle, sizeof(int)); //禁掉他妈的Nagle
+    log(username + "登录了服务器" + server_ip + ":" + std::to_string(server_port));
+    if (status > 0)
     {
-        backLoginWindow();
+        QString errorMessage = "请检查服务器是否在线，或检查网络连接。错误代码：" + WSAGetLastError();
+        QMessageBox::critical(this, "错误 - 无法连接服务器", errorMessage);
+        return;
+    }
+    loginInformation = pack(username + "\r\n" + password, "", "", "USER_NAME");
+    send(cSocket, loginInformation.c_str(), loginInformation.length(), 0);
+    recordPath = "records/chat" + server_ip + "," + std::to_string(server_port) + ".txt";
+    startReceive();
+    session = true;
+}
+void ChatApplication::onConnect()
+{
+    LoginApplication* loginwindow = new LoginApplication(*this);
+    loginwindow->show();
+}
+void ChatApplication::onAbout(){}
+void ChatApplication::onManage() {}
+void ChatApplication::onTool() {}
+void ChatApplication::onLogoff(bool silentMode = true)
+{
+    QMessageBox::StandardButton choice = QMessageBox::No;
+    if (!silentMode) QMessageBox::StandardButton choice = QMessageBox::question(this, "询问 - 断开连接", "你真的要从服务器注销并断开连接吗？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if (choice == QMessageBox::Yes || silentMode)
+    {
+        closesocket(cSocket);
+        session = false;
+        emit appendOutPutBox("会话已断开连接。<br/>");
     }
     else
     {
@@ -492,8 +502,7 @@ void ChatApplication::onReceive()
     }
     else
     {
-        emit appendOutPutBox("Lhat! 版本 " + QString::fromStdString(VERSION) + " 许可证 AGPL v3.0");
-        emit appendOutPutBox("哒哒！欢迎来到Lhat聊天室！大家开始聊天吧！<br/>" "更多操作提示请输入 //help 并发送！<br/>");
+        emit appendOutPutBox("欢迎来到Lhat聊天室！<br/>更多操作提示请键入//help！<br/>");
     }
 
     while (1)
@@ -628,8 +637,7 @@ void ChatApplication::readRecord()
                 </font> : <br/>&nbsp;&nbsp;" + msgBody + "<br/>";
         emit appendOutPutBox(QString::fromStdString(finalMessage));
     }
-    emit appendOutPutBox("Lhat! 版本 " + QString::fromStdString(VERSION) + " 许可证 AGPL v3.0");
-    emit appendOutPutBox("哒哒！欢迎来到Lhat聊天室！大家开始聊天吧！<br/>" "更多操作提示请输入 //help 并发送！<br/>");
+    emit appendOutPutBox("欢迎来到Lhat聊天室！<br/>" "更多操作提示请键入//help！<br/>");
 }
 void ChatApplication::log(string content)
 {
