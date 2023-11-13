@@ -1,0 +1,7 @@
+Label：label_xxx
+LineEdit、TextEdit和PlainTextEdit：input_xxx
+textBrowser：content_xxx
+ListWidget：list_xxx
+TreeWidget：tree_xxx
+PushButton：key_xxx
+MenuAction：action_xxx

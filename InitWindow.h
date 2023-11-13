@@ -13,7 +13,7 @@
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
 
-#define lhatVersion "v1.5.2"
+#define lhatVersion "v2-alpha-ui-update"
 
 namespace net {
 #include <WinSock2.h> //socket功能
@@ -35,51 +35,40 @@ net::send, net::recv, net::hostent, net::in_addr;
 #pragma warning(disable:4996)
 
 //pack和unpack函数都来自LhatCore64.lib，引用LhatCore64.dll的符号
+//JsonCPP相关函数则引用了jsoncpp.dll的符号
 
 extern string pack(string rawMessage, string chatFrom, string chatWith, string messageType);
 extern Json::Value unpack(string jsonString);
 
-#include "ui/LoginWindow.h"
-#include "ui/ChatWindow.h"
-
-//TODO 妹看见CPP文件里还只有一堆include吗？
+#include "ui/LhatWindow.h"
+#include "ui/LoginDialog.h"
 
 extern string server_ip; //服务器地址
 extern int server_port; //服务器端口
 extern string username, password;
 extern string onlinebox;  //在线用户列表框的内容
 extern string default_chat; //默认聊天室名称
-extern bool guest; // 访客
-extern const bool logable; // 是否记录日志
-extern string chatting_rooms[32];1
+extern bool guest; //是否为访客
+extern const bool logable; //是否记录日志
+extern string chatting_rooms[32];
 extern const string VERSION;
-
-class LoginApplication : public QMainWindow
-{
-	Q_OBJECT
-public:
-	Ui::LoginWindow ui;
-	LoginApplication();
-//private:
-	void bind();
-	tuple<string, int> procAddress(string addrData);
-private slots:
-	void onCheckLogin();
-	void onRegister();
-};
+extern bool session; //会话是否在线
 
 class ChatApplication : public QMainWindow
 {
 	Q_OBJECT
 public:
-	Ui::ChatWindow ui;
+	Ui::LhatWindow ui;
 	ChatApplication();
 	void bind();
 	void startReceive();
-	void backLoginWindow();
 	bool reConnect();
 	bool reLogin();
-	void onLogoff();
+	void onLogin();
+	void onConnect();
+	void onSessionMgr();
+	void onAbout();
+	void onLogoff(bool silentMode);
 	void onExit();
 	void onSend(string rawMessage);
 	void onReceive();
@@ -98,26 +87,43 @@ signals:
 	void setOnlineUserList(QString);
 	void clearOnlineUserList();
 private slots: //由于槽函数必须得在slots声明中，所以不得不添加了这些繁琐的函数
-	void appendOBoxSlot(QString content) { ui.output_box_message->append(content); }
-	void setOBoxSlot(QString content) { ui.output_box_message->setText(content); }
-	void clearOBoxSlot() { ui.output_box_message->clear(); }
+	void appendOBoxSlot(QString content) { ui.output_message->append(content); }
+	void setOBoxSlot(QString content) { ui.output_message->setText(content); }
+	void clearOBoxSlot() { ui.output_message->clear(); }
 
-	void appendIBoxSlot(QString content) { ui.input_box_message->append(content); }
-	void setIBoxSlot(QString content) { ui.input_box_message->setText(content); }
-	void clearIBoxSlot() { ui.input_box_message->clear(); }
-
-	void appendUBoxSlot(QString content) { ui.output_box_online_user->append(content); }
-	void setUBoxSlot(QString content) { ui.output_box_online_user->setText(content); }
-	void clearUBoxSlot() { ui.output_box_online_user->clear(); }
+	void appendIBoxSlot(QString content) { ui.input_message->appendPlainText(content); }
+	void setIBoxSlot(QString content) { ui.input_message->setPlainText(content); }
+	void clearIBoxSlot() { ui.input_message->clear(); }
+	// TODO 用户列表及服务器状态
+	void appendUBoxSlot(QString content) {} //ui.output_status->append(content); }
+	void setUBoxSlot(QString content) {} //ui.output_status->setText(content); }
+	void clearUBoxSlot() {} //ui.output_status->clear(); }
 
 	void sendMessage();
 	void triggeredMenubar(QAction* triggers);
+	void onManage();
+	void onTool();
 private:
 	WSADATA wsd;
 	SOCKET cSocket;  //聊天用的套接字
 	sockaddr_in cAddress;  //地址信息对象
 	string recordPath; //聊天记录文件存储位置
 	std::thread recvThread; //接收线程
+};
+
+class LoginApplication : public QMainWindow
+{
+	Q_OBJECT
+public:
+	Ui::LoginWindow ui;
+	ChatApplication* parentWindow;
+	LoginApplication(ChatApplication& parent);
+	//private:
+	void bind();
+	tuple<string, int> procAddress(string addrData);
+private slots:
+	void onLogin();
+	void onRegister();
 };
 
 #endif //INIT_WINDOW_H
