@@ -297,6 +297,8 @@ ChatApplication::ChatApplication() : QMainWindow()
     ui.setupUi(this); //初始化UI
     bind();
 
+    ui.output_status->expandAll();
+
     //初始化文件系统
     if (_access("logs/", 0) == -1) _mkdir("logs/");
     if (_access("records/", 0) == -1) _mkdir("records/");
@@ -369,9 +371,9 @@ bool ChatApplication::reLogin()
     string loginInformation;
     for (int chanceCount = 0; chanceCount < 3; chanceCount++)
     {
-        emit appendOutPutBox("<font color=\"red\">[严重错误] 呜……看起来与服务器断开了连接，服务姬正在努力修复呢……</font><br/>\
+        emit appendOutPutBox("<font color=\"red\">[错误] 与服务器的连接已断开！</font><br/>\
             正在尝试在5秒后重新连接（还剩" + QString::fromStdString(std::to_string(3 - chanceCount)) + "次重连机会）……<br/>");
-        log("与服务器断开了连接，也许服务端宕机了。");
+        log("与服务器意外断开了连接。");
         Sleep(5000); //延迟5秒
         if (reConnect())
         {
@@ -384,7 +386,7 @@ bool ChatApplication::reLogin()
         else
             log("重新连接失败，重新尝试中。");
     }
-    emit appendOutPutBox("[提示] 尝试重连失败，请重新启动程序！<br/>");
+    emit appendOutPutBox("[提示] 尝试重连失败，请重新连接会话！<br/>");
     return false;
 }
 void ChatApplication::onLogin()
@@ -421,10 +423,10 @@ void ChatApplication::onConnect()
 void ChatApplication::onAbout(){}
 void ChatApplication::onManage() {}
 void ChatApplication::onTool() {}
-void ChatApplication::onLogoff(bool silentMode = true)
+void ChatApplication::onLogoff(bool silentMode)
 {
     QMessageBox::StandardButton choice = QMessageBox::No;
-    if (!silentMode) QMessageBox::StandardButton choice = QMessageBox::question(this, "询问 - 断开连接", "你真的要从服务器注销并断开连接吗？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if (!silentMode) choice = QMessageBox::question(this, "询问 - 断开连接", "你真的要从服务器注销并断开连接吗？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
     if (choice == QMessageBox::Yes || silentMode)
     {
         closesocket(cSocket);
@@ -574,8 +576,6 @@ void ChatApplication::onReceive()
         {
             userManifest = unpack(msgBody);
             emit clearOnlineUserList();
-            emit appendOnlineUserList(QString::fromStdString(default_chat));
-            emit appendOnlineUserList("<font color=\"#3333FF\">====在线用户====</font>");
             // 遍历JSON数组，添加用户列表（指针遍历）
             for (Json::Value::iterator it = userManifest.begin(); it != userManifest.end(); it++)
                 emit appendOnlineUserList(QString::fromStdString(it->asString()));
@@ -650,4 +650,23 @@ void ChatApplication::log(string content)
         logFile.write(logContent.c_str(), logContent.length());
         logFile.close();
     }
+}
+void ChatApplication::appendUBoxSlot(QString content)
+{
+    QTreeWidgetItem *newUser = new QTreeWidgetItem;
+    newUser->setText(0, content);
+    ui.output_status->topLevelItem(2)->addChild(newUser);
+    ui.output_status->repaint();
+}
+void ChatApplication::setUBoxSlot(QString content)
+{
+
+}
+void ChatApplication::clearUBoxSlot()
+{
+    for (int i = 0; i < ui.output_status->topLevelItem(2)->childCount(); i++)
+    {
+        ui.output_status->topLevelItem(2)->takeChild(0);
+    }
+    ui.output_status->repaint();
 }

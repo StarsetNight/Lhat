@@ -745,6 +745,9 @@ public:
         QObject::connect(key_register, SIGNAL(clicked()), LoginWindow, SLOT(onRegister()));
         QObject::connect(key_login, SIGNAL(clicked()), LoginWindow, SLOT(onLogin()));
         QObject::connect(key_cancel, &QPushButton::clicked, LoginWindow, qOverload<>(&QMainWindow::close));
+        QObject::connect(input_server, &QLineEdit::returnPressed, input_username, qOverload<>(&QLineEdit::setFocus));
+        QObject::connect(input_username, &QLineEdit::returnPressed, input_password, qOverload<>(&QLineEdit::setFocus));
+        QObject::connect(input_password, &QLineEdit::returnPressed, key_login, qOverload<>(&QPushButton::click));
 
         QMetaObject::connectSlotsByName(LoginWindow);
     } // setupUi

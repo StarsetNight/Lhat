@@ -12,8 +12,9 @@
 #include <direct.h> //不清楚为什么include这个头文件……
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
+#include <QtWidgets/qtreewidget.h>
 
-#define lhatVersion "v2-alpha-ui-update"
+#define lhatVersion "v2-alpha2-status-update"
 
 namespace net {
 #include <WinSock2.h> //socket功能
@@ -95,9 +96,9 @@ private slots: //由于槽函数必须得在slots声明中，所以不得不添�
 	void setIBoxSlot(QString content) { ui.input_message->setPlainText(content); }
 	void clearIBoxSlot() { ui.input_message->clear(); }
 	// TODO 用户列表及服务器状态
-	void appendUBoxSlot(QString content) {} //ui.output_status->append(content); }
-	void setUBoxSlot(QString content) {} //ui.output_status->setText(content); }
-	void clearUBoxSlot() {} //ui.output_status->clear(); }
+	void appendUBoxSlot(QString content);
+	void setUBoxSlot(QString content);
+	void clearUBoxSlot();
 
 	void sendMessage();
 	void triggeredMenubar(QAction* triggers);
