@@ -767,8 +767,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    <slot>onRegister()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>165</y>
+     <x>166</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>100</x>
@@ -783,8 +783,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    <slot>onLogin()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>163</y>
+     <x>232</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>179</x>
@@ -805,6 +805,54 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     <hint type="destinationlabel">
      <x>263</x>
      <y>153</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>input_server</sender>
+   <signal>returnPressed()</signal>
+   <receiver>input_username</receiver>
+   <slot>setFocus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>48</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>input_username</sender>
+   <signal>returnPressed()</signal>
+   <receiver>input_password</receiver>
+   <slot>setFocus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>input_password</sender>
+   <signal>returnPressed()</signal>
+   <receiver>key_login</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>208</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>208</x>
+     <y>174</y>
     </hint>
    </hints>
   </connection>
