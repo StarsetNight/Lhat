@@ -317,9 +317,9 @@ void ChatApplication::bind()
     connect(this, SIGNAL(setOutPutBox(QString)), this, SLOT(setOBoxSlot(QString)));
     connect(this, SIGNAL(clearOutPutBox()), this, SLOT(clearOBoxSlot()));
 
-    connect(this, SIGNAL(appendOnlineUserList(QString)), this, SLOT(appendUBoxSlot(QString)));
-    connect(this, SIGNAL(setOnlineUserList(QString)), this, SLOT(setUBoxSlot(QString)));
-    connect(this, SIGNAL(clearOnlineUserList()), this, SLOT(clearUBoxSlot()));
+    connect(this, SIGNAL(appendOnlineUserList(int, QString)), this, SLOT(appendUBoxSlot(int, QString)));
+    connect(this, SIGNAL(setOnlineUserList(int, QString)), this, SLOT(setUBoxSlot(int, QString)));
+    connect(this, SIGNAL(clearOnlineUserList(int)), this, SLOT(clearUBoxSlot(int)));
 }
 void ChatApplication::sendMessage()
 {
@@ -414,15 +414,20 @@ void ChatApplication::onLogin()
     recordPath = "records/chat" + server_ip + "," + std::to_string(server_port) + ".txt";
     startReceive();
     session = true;
+    emit appendOnlineUserList(status::SESSION, "Lhat版本：" lhatVersion);
+    emit appendOnlineUserList(status::SESSION, QString::fromStdString("服务器地址：" + server_ip));
+    emit appendOnlineUserList(status::SESSION, 
+        QString::fromStdString("服务器端口：" + std::to_string(server_port)));
+    emit appendOnlineUserList(status::SESSION, QString::fromStdString("登录为：" + username));
 }
 void ChatApplication::onConnect()
 {
     LoginApplication* loginwindow = new LoginApplication(*this);
     loginwindow->show();
 }
-void ChatApplication::onAbout(){}
-void ChatApplication::onManage() {}
-void ChatApplication::onTool() {}
+void ChatApplication::onAbout(){} //TODO 关于Lhat窗口及相关函数
+void ChatApplication::onManage() {} //TODO 管理员面板（管理账户系统等）
+void ChatApplication::onTool() {} //TODO 更多聊天工具窗口（如加入退出聊天室，重置密码，以及设置也可以放进去）
 void ChatApplication::onLogoff(bool silentMode)
 {
     QMessageBox::StandardButton choice = QMessageBox::No;
@@ -431,6 +436,9 @@ void ChatApplication::onLogoff(bool silentMode)
     {
         closesocket(cSocket);
         session = false;
+        emit clearOnlineUserList(status::SESSION);
+        emit clearOnlineUserList(status::USERS);
+        emit clearOnlineUserList(status::ROOMS);
         emit appendOutPutBox("会话已断开连接。<br/>");
     }
     else
@@ -474,6 +482,11 @@ void ChatApplication::onSend(string rawMessage)
         system("start notepad help.txt");
         return;
     }
+    else if (!rawMessage.rfind("//readrecord", 0))
+    {
+        readRecord();
+        return;
+    }
     else if (!rawMessage.rfind("//", 0))
     {
         rawMessage = rawMessage.replace(rawMessage.find("//"), 2, "");
@@ -496,16 +509,7 @@ void ChatApplication::onReceive()
     string finalMessage; //最终显示到输出框的是以这个字符串为介质
     int status; //接受状态码
     log("消息接收线程启动完毕。");
-    if (_access(recordPath.c_str(), 0) == 0)
-    {
-        log("找到旧聊天记录，正在读取……");
-        std::thread readThread(&ChatApplication::readRecord, this);
-        readThread.detach();
-    }
-    else
-    {
-        emit appendOutPutBox("欢迎来到Lhat聊天室！<br/>更多操作提示请键入//help！<br/>");
-    }
+    emit appendOutPutBox("欢迎来到Lhat聊天室！<br/>更多操作提示请键入//help！<br/>");
 
     while (1)
     {
@@ -575,10 +579,10 @@ void ChatApplication::onReceive()
         else if (msgType == "USER_MANIFEST")
         {
             userManifest = unpack(msgBody);
-            emit clearOnlineUserList();
+            emit clearOnlineUserList(status::USERS);
             // 遍历JSON数组，添加用户列表（指针遍历）
             for (Json::Value::iterator it = userManifest.begin(); it != userManifest.end(); it++)
-                emit appendOnlineUserList(QString::fromStdString(it->asString()));
+                emit appendOnlineUserList(status::USERS, QString::fromStdString(it->asString()));
         }
         else if (msgType == "MANAGER_LIST")
         {
@@ -595,15 +599,20 @@ void ChatApplication::onReceive()
         else if (msgType == "ROOM_MANIFEST")
         {
             chatting_rooms->clear();
+            emit clearOnlineUserList(status::ROOMS);
             userManifest = unpack(msgBody);
             for (Json::Value::iterator it = userManifest.begin(); it != userManifest.end(); it++)
+            {
                 chatting_rooms[it.index()] = it->asString();
+                emit appendOnlineUserList(status::ROOMS, QString::fromStdString(it->asString()));
+            }
             log("聊天室列表已更新。");
         }
         else if (msgType == "DEFAULT_ROOM")
         {
             default_chat = msgBody;
             emit appendOutPutBox(QString::fromStdString("[提示] 锵锵！已分配至默认聊天室：<font color=\"blue\">" + default_chat + "</font><br/>"));
+            emit appendOnlineUserList(status::ROOMS, QString::fromStdString(msgBody));
             log("已分配至默认聊天室。");
         }
         else if (msgType == "KICK_NOTICE" && msgBy == "Server")
@@ -616,6 +625,7 @@ void ChatApplication::onReceive()
     }
 }
 void ChatApplication::readRecord()
+// HACK 此函数可能会在不久的版本中移除
 {
     string msgType, msgBy, msgTo, msgTime, msgBody;
     string finalMessage;
@@ -637,7 +647,6 @@ void ChatApplication::readRecord()
                 </font> : <br/>&nbsp;&nbsp;" + msgBody + "<br/>";
         emit appendOutPutBox(QString::fromStdString(finalMessage));
     }
-    emit appendOutPutBox("欢迎来到Lhat聊天室！<br/>" "更多操作提示请键入//help！<br/>");
 }
 void ChatApplication::log(string content)
 {
@@ -651,22 +660,24 @@ void ChatApplication::log(string content)
         logFile.close();
     }
 }
-void ChatApplication::appendUBoxSlot(QString content)
+void ChatApplication::appendUBoxSlot(int index, QString content)
 {
     QTreeWidgetItem *newUser = new QTreeWidgetItem;
     newUser->setText(0, content);
-    ui.output_status->topLevelItem(2)->addChild(newUser);
+    ui.output_status->topLevelItem(index)->addChild(newUser);
     ui.output_status->repaint();
 }
-void ChatApplication::setUBoxSlot(QString content)
+void ChatApplication::setUBoxSlot(int index, QString content)
 {
 
 }
-void ChatApplication::clearUBoxSlot()
+void ChatApplication::clearUBoxSlot(int index)
 {
-    for (int i = 0; i < ui.output_status->topLevelItem(2)->childCount(); i++)
+    QTreeWidgetItem* item = ui.output_status->topLevelItem(index);
+    while (item->childCount() > 0)
     {
-        ui.output_status->topLevelItem(2)->takeChild(0);
+        QTreeWidgetItem* child = item->takeChild(0);
+        delete child;
     }
     ui.output_status->repaint();
 }

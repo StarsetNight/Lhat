@@ -55,6 +55,13 @@ extern string chatting_rooms[32];
 extern const string VERSION;
 extern bool session; //会话是否在线
 
+namespace status
+{
+constexpr int SESSION = 0;
+constexpr int ROOMS = 1;
+constexpr int USERS = 2;
+}
+
 class ChatApplication : public QMainWindow
 {
 	Q_OBJECT
@@ -84,9 +91,9 @@ signals:
 	void setInPutBox(QString);
 	void clearInPutBox();
 
-	void appendOnlineUserList(QString);
-	void setOnlineUserList(QString);
-	void clearOnlineUserList();
+	void appendOnlineUserList(int, QString);
+	void setOnlineUserList(int, QString);
+	void clearOnlineUserList(int);
 private slots: //由于槽函数必须得在slots声明中，所以不得不添加了这些繁琐的函数
 	void appendOBoxSlot(QString content) { ui.output_message->append(content); }
 	void setOBoxSlot(QString content) { ui.output_message->setText(content); }
@@ -95,10 +102,10 @@ private slots: //由于槽函数必须得在slots声明中，所以不得不添�
 	void appendIBoxSlot(QString content) { ui.input_message->appendPlainText(content); }
 	void setIBoxSlot(QString content) { ui.input_message->setPlainText(content); }
 	void clearIBoxSlot() { ui.input_message->clear(); }
-	// TODO 用户列表及服务器状态
-	void appendUBoxSlot(QString content);
-	void setUBoxSlot(QString content);
-	void clearUBoxSlot();
+	
+	void appendUBoxSlot(int index, QString content);
+	void setUBoxSlot(int index, QString content);
+	void clearUBoxSlot(int index);
 
 	void sendMessage();
 	void triggeredMenubar(QAction* triggers);
