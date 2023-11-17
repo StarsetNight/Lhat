@@ -20,6 +20,11 @@
   <property name="windowTitle">
    <string>Lhat</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normalon>:/Icon/resources/Lhat.png</normalon>
+   </iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">/*
 Aqua Style Sheet for QT Applications
@@ -787,6 +792,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
      <string>关于</string>
     </property>
     <addaction name="action_about"/>
+    <addaction name="action"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -816,13 +822,20 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     <string>关于Lhat</string>
    </property>
   </action>
+  <action name="action">
+   <property name="text">
+    <string>帮助</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>input_message</tabstop>
   <tabstop>output_message</tabstop>
   <tabstop>output_status</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../Lhat.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>menubar</sender>

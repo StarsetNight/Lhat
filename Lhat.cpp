@@ -3,6 +3,7 @@
 int main(int argc, char* argv[])
 {
 	QApplication app(argc, argv); //Qt应用程序对象
+	app.setStyle(QStyleFactory::create("windowsvista"));
 	ChatApplication *lhatwindow = new ChatApplication; //创建登录窗口
 	lhatwindow->show();
 	lhatwindow->onConnect(); //软件启动后打开登录窗口

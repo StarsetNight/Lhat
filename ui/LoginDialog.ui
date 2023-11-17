@@ -19,6 +19,11 @@
   <property name="windowTitle">
    <string>Lhat - 新会话</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normalon>:/Icon/resources/Lhat.png</normalon>
+   </iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">/*
 Aqua Style Sheet for QT Applications
@@ -758,7 +763,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
   <tabstop>key_cancel</tabstop>
   <tabstop>key_register</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../Lhat.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>key_register</sender>
@@ -853,6 +860,22 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     <hint type="destinationlabel">
      <x>208</x>
      <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>key_cancel</sender>
+   <signal>clicked()</signal>
+   <receiver>LoginWindow</receiver>
+   <slot>deleteLater()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>252</x>
+     <y>160</y>
     </hint>
    </hints>
   </connection>
