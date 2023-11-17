@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
+#include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
@@ -36,6 +37,7 @@ public:
     QAction *action_disconnect;
     QAction *action_exit;
     QAction *action_about;
+    QAction *action;
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout_3;
     QHBoxLayout *horizontalLayout_2;
@@ -61,6 +63,9 @@ public:
             LhatWindow->setObjectName("LhatWindow");
         LhatWindow->resize(800, 500);
         LhatWindow->setMinimumSize(QSize(800, 500));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/Icon/resources/Lhat.png"), QSize(), QIcon::Normal, QIcon::On);
+        LhatWindow->setWindowIcon(icon);
         LhatWindow->setStyleSheet(QString::fromUtf8("/*\n"
 "Aqua Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
@@ -656,6 +661,8 @@ public:
         action_exit->setObjectName("action_exit");
         action_about = new QAction(LhatWindow);
         action_about->setObjectName("action_about");
+        action = new QAction(LhatWindow);
+        action->setObjectName("action");
         centralwidget = new QWidget(LhatWindow);
         centralwidget->setObjectName("centralwidget");
         horizontalLayout_3 = new QHBoxLayout(centralwidget);
@@ -775,6 +782,7 @@ public:
         menu->addSeparator();
         menu->addAction(action_exit);
         menu_2->addAction(action_about);
+        menu_2->addAction(action);
 
         retranslateUi(LhatWindow);
         QObject::connect(menubar, SIGNAL(triggered(QAction*)), LhatWindow, SLOT(triggeredMenubar(QAction*)));
@@ -793,6 +801,7 @@ public:
         action_disconnect->setText(QCoreApplication::translate("LhatWindow", "\346\226\255\345\274\200\344\274\232\350\257\235", nullptr));
         action_exit->setText(QCoreApplication::translate("LhatWindow", "\351\200\200\345\207\272Lhat", nullptr));
         action_about->setText(QCoreApplication::translate("LhatWindow", "\345\205\263\344\272\216Lhat", nullptr));
+        action->setText(QCoreApplication::translate("LhatWindow", "\345\270\256\345\212\251", nullptr));
 
         const bool __sortingEnabled = output_status->isSortingEnabled();
         output_status->setSortingEnabled(false);

@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ChatWindow</class>
- <widget class="QMainWindow" name="ChatWindow">
+ <class>AboutWindow</class>
+ <widget class="QMainWindow" name="AboutWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>480</width>
+    <height>300</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>480</width>
+    <height>300</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>关于 Lhat</string>
   </property>
   <property name="windowIcon">
    <iconset>
-    <normalon>:/ico/Lhat.ico</normalon>
+    <normalon>:/Icon/resources/Lhat.png</normalon>
    </iconset>
   </property>
   <property name="styleSheet">
@@ -27,9 +45,14 @@ Last updated: 22/01/2019, 07:55.
 Available at: https://github.com/GTRONICK/QSS/blob/master/Aqua.qss
 */
 QMainWindow {
-	background-color:#ececec;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 244, 235, 255), stop:1 rgba(233, 255, 255, 255));
 }
 QTextEdit {
+	border-width: 1px;
+	border-style: solid;
+	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
+}
+QTreeWidget {
 	border-width: 1px;
 	border-style: solid;
 	border-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgba(0, 113, 255, 255), stop:1 rgba(91, 171, 252, 255));
@@ -580,186 +603,136 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <layout class="QHBoxLayout" name="hbox2">
-      <item>
-       <widget class="QTextBrowser" name="output_box_message">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>5</horstretch>
-          <verstretch>5</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QTextBrowser" name="output_box_online_user">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>2</horstretch>
-          <verstretch>5</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <family>幼圆</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0">
-     <layout class="QHBoxLayout" name="hbox1">
-      <item>
-       <widget class="QTextEdit" name="input_box_message">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>4</horstretch>
-          <verstretch>1</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_send_message">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>1</horstretch>
-          <verstretch>1</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <family>微软雅黑</family>
-          <pointsize>24</pointsize>
-          <bold>false</bold>
-          <stylestrategy>PreferAntialias</stylestrategy>
-         </font>
-        </property>
-        <property name="text">
-         <string>发送</string>
-        </property>
-        <property name="shortcut">
-         <string>Ctrl+Return</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>19</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QLabel" name="text_logo">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>141</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../Lhat.qrc">:/Icon/resources/Lhat.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_title">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>40</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
     <property name="font">
      <font>
-      <family>微软雅黑</family>
-      <pointsize>12</pointsize>
+      <pointsize>28</pointsize>
+      <bold>false</bold>
      </font>
     </property>
-    <property name="title">
-     <string>操作</string>
+    <property name="text">
+     <string>Lhat</string>
     </property>
-    <addaction name="menubar_send"/>
-    <addaction name="menubar_logoff"/>
-    <addaction name="menubar_exit"/>
    </widget>
-   <addaction name="menu"/>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>90</y>
+      <width>281</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_content">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>110</y>
+      <width>271</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;“条条端口达罗马，择其便者而行之。”&lt;br/&gt;“仰望星空，飞越黑夜，远方是我的视线。”&lt;br/&gt;感谢你使用本软件！&lt;/p&gt;&lt;p&gt;Lhat及其配套软件由 星夕Starset 开发，&lt;br/&gt;本软件遵循AGPL 3.0许可协议。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_version">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>50</y>
+      <width>54</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>版本</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_ok">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>260</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>确定</string>
+    </property>
+   </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <action name="menubar_send">
-   <property name="text">
-    <string>发送</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-  </action>
-  <action name="menubar_logoff">
-   <property name="text">
-    <string>断开连接</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-  </action>
-  <action name="menubar_exit">
-   <property name="text">
-    <string>退出</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>微软雅黑</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-  </action>
  </widget>
  <resources>
-  <include location="../../dev_src/Client/Lhat/src/builtin_modules/resources/images.qrc"/>
+  <include location="../Lhat.qrc"/>
  </resources>
  <connections>
   <connection>
-   <sender>button_send_message</sender>
+   <sender>button_ok</sender>
    <signal>clicked()</signal>
-   <receiver>ChatWindow</receiver>
-   <slot>sendMessage()</slot>
+   <receiver>AboutWindow</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>667</x>
-     <y>568</y>
+     <x>406</x>
+     <y>272</y>
     </hint>
     <hint type="destinationlabel">
-     <x>619</x>
-     <y>633</y>
+     <x>426</x>
+     <y>252</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>menubar</sender>
-   <signal>triggered(QAction*)</signal>
-   <receiver>ChatWindow</receiver>
-   <slot>triggeredMenubar()</slot>
+   <sender>button_ok</sender>
+   <signal>clicked()</signal>
+   <receiver>AboutWindow</receiver>
+   <slot>deleteLater()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>102</x>
-     <y>13</y>
+     <x>447</x>
+     <y>269</y>
     </hint>
     <hint type="destinationlabel">
-     <x>81</x>
-     <y>26</y>
+     <x>450</x>
+     <y>225</y>
     </hint>
    </hints>
   </connection>
  </connections>
- <slots>
-  <slot>sendMessage()</slot>
-  <slot>triggeredMenubar()</slot>
- </slots>
 </ui>

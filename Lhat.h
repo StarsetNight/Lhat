@@ -2,6 +2,7 @@
 #define LHAT_H
 
 #include "InitWindow.h"
+#include <QtWidgets/qstylefactory.h>
 
 #endif //LHAT_H
 

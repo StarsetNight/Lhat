@@ -117,6 +117,12 @@ bool isNum(string str)
     return true;
 }
 
+AboutApplication::AboutApplication() : QMainWindow()
+{
+    ui.setupUi(this);
+    ui.text_version->setText(lhatVersion);
+}
+
 LoginApplication::LoginApplication(ChatApplication& parent) : QMainWindow()
 {
     ui.setupUi(this); //初始化窗口UI
@@ -347,6 +353,8 @@ void ChatApplication::triggeredMenubar(QAction* triggers)
         onExit();
     else if (buttonSignal == "关于Lhat")
         onAbout();
+    else if (buttonSignal == "帮助")
+        onHelp();
 }
 bool ChatApplication::reConnect()
 {
@@ -425,9 +433,14 @@ void ChatApplication::onConnect()
     LoginApplication* loginwindow = new LoginApplication(*this);
     loginwindow->show();
 }
-void ChatApplication::onAbout(){} //TODO 关于Lhat窗口及相关函数
+void ChatApplication::onAbout()
+{
+    AboutApplication* aboutwindow = new AboutApplication();
+    aboutwindow->show();
+}
 void ChatApplication::onManage() {} //TODO 管理员面板（管理账户系统等）
 void ChatApplication::onTool() {} //TODO 更多聊天工具窗口（如加入退出聊天室，重置密码，以及设置也可以放进去）
+void ChatApplication::onHelp() {} //TODO 帮助界面
 void ChatApplication::onLogoff(bool silentMode)
 {
     QMessageBox::StandardButton choice = QMessageBox::No;
