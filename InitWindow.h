@@ -14,7 +14,7 @@
 #include <QtWidgets/qmessagebox.h>
 #include <QtWidgets/qtreewidget.h>
 
-#define lhatVersion "v2-alpha2-status-update"
+#define lhatVersion "v2-alpha3-about-update"
 
 namespace net {
 #include <WinSock2.h> //socket功能
@@ -43,6 +43,7 @@ extern Json::Value unpack(string jsonString);
 
 #include "ui/LhatWindow.h"
 #include "ui/LoginDialog.h"
+#include "ui/AboutWindow.h"
 
 extern string server_ip; //服务器地址
 extern int server_port; //服务器端口
@@ -61,6 +62,14 @@ constexpr int SESSION = 0;
 constexpr int ROOMS = 1;
 constexpr int USERS = 2;
 }
+
+class AboutApplication : public QMainWindow
+{
+	Q_OBJECT
+public:
+	Ui::AboutWindow ui;
+	AboutApplication();
+};
 
 class ChatApplication : public QMainWindow
 {
@@ -111,6 +120,7 @@ private slots: //由于槽函数必须得在slots声明中，所以不得不添�
 	void triggeredMenubar(QAction* triggers);
 	void onManage();
 	void onTool();
+	void onHelp();
 private:
 	WSADATA wsd;
 	SOCKET cSocket;  //聊天用的套接字
