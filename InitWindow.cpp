@@ -440,7 +440,10 @@ void ChatApplication::onAbout()
 }
 void ChatApplication::onManage() {} //TODO 管理员面板（管理账户系统等）
 void ChatApplication::onTool() {} //TODO 更多聊天工具窗口（如加入退出聊天室，重置密码，以及设置也可以放进去）
-void ChatApplication::onHelp() {} //TODO 帮助界面
+void ChatApplication::onHelp()
+{
+    WinExec("hh.exe LhatHelp.chm", SW_SHOWNORMAL);
+}
 void ChatApplication::onLogoff(bool silentMode)
 {
     QMessageBox::StandardButton choice = QMessageBox::No;
