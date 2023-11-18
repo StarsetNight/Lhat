@@ -235,6 +235,7 @@ void LoginApplication::onRegister()
     {
         QMessageBox::warning(this, "警告 - 服务器地址格式错误", "请输入正确的服务器地址格式，下述为三种标准格式：\n[<IPV6地址>]:<外部端口>\n<IPV4地址>:<外部端口>\n<域名>:<外部端口>");
         ui.input_server->setFocus();
+        setWindowTitle(QString::fromStdString("Lhat - 新会话"));
         return;
     }
     username = ui.input_username->text().toStdString(); //获取用户名
@@ -243,24 +244,28 @@ void LoginApplication::onRegister()
     {
         QMessageBox::warning(this, "警告 - 用户名为空", "用户名不能为空，请给定一个用户名。");
         ui.input_username->setFocus();
+        setWindowTitle(QString::fromStdString("Lhat - 新会话"));
         return;
     }
     else if (username.length() > 32 || username.length() < 2) //用户名长度错误
     {
         QMessageBox::warning(this, "警告 - 用户名长度不规范", "用户名长度应大于2字节且小于32字节。");
         ui.input_username->setFocus();
+        setWindowTitle(QString::fromStdString("Lhat - 新会话"));
         return;
     }
     if (username.find(" ") != username.npos) //用户名包含空格
     {
         QMessageBox::warning(this, "警告 - 用户名设置不规范", "用户名不应含有空格，\n同时，我们建议你将用户名严格按照以下格式设置：\n只应出现数字、英文字母、下划线，不应包含其他特殊字符。");
         ui.input_username->setFocus();
+        setWindowTitle(QString::fromStdString("Lhat - 新会话"));
         return;
     }
     if (password.empty()) //密码为空
     {
         QMessageBox::warning(this, "警告 - 密码设置不规范", "注册时，不应选用空密码。");
         ui.input_password->setFocus();
+        setWindowTitle(QString::fromStdString("Lhat - 新会话"));
         return;
     }
     password = MD5(password).toStr(); //密码转MD5
@@ -310,7 +315,7 @@ ChatApplication::ChatApplication() : QMainWindow()
     if (_access("records/", 0) == -1) _mkdir("records/");
     setWindowTitle(QString::fromStdString("Lhat " lhatVersion));
 
-    emit appendOutPutBox("欢迎使用Lhat " lhatVersion "，本软件使用AGPL 3.0许可证。");
+    emit appendOutPutBox("欢迎回来！Lhat当前版本为 " lhatVersion "，本软件使用AGPL 3.0许可证。");
 }
 void ChatApplication::bind()
 //自定义信号槽的绑定
@@ -355,6 +360,99 @@ void ChatApplication::triggeredMenubar(QAction* triggers)
         onAbout();
     else if (buttonSignal == "帮助")
         onHelp();
+}
+void ChatApplication::onStatusClicked(QTreeWidgetItem* item)
+{
+    if (qApp->mouseButtons() == Qt::RightButton)
+    {
+        QTreeWidget* tree = item->treeWidget();
+        if (tree->topLevelItem(status::ROOMS) == item->parent()) //如果是聊天室右键
+        {
+            QMenu* menu = new QMenu(tree);
+            QAction* action_list_rooms = new QAction("列出所有聊天室");
+            QAction* action_join = new QAction("加入聊天室……");
+            QAction* action_leave = new QAction("离开聊天室");
+            QAction* action_switch = new QAction("切换到此聊天室");
+            QList<QAction*> actions;
+            actions << action_list_rooms << action_join << action_leave << action_switch;
+            menu->addActions(actions);
+
+            // 为右键菜单上的QAction创建信号槽，添加对应的功能
+            connect(action_list_rooms, &QAction::triggered, this, [=]
+                {
+                    onSend("//room list");
+                });
+            connect(action_join, &QAction::triggered, this, [=]
+                {
+                    string room = QInputDialog::getText(this, "Lhat - 加入聊天室……",
+                                        "请输入你要加入的聊天室名称：").toStdString();
+                    onSend("//room join " + room);
+                });
+            connect(action_leave, &QAction::triggered, this, [=]
+                {
+                    onSend("//room leave " + item->text(0).toStdString());
+                });
+            connect(action_switch, &QAction::triggered, this, [=]
+                {
+                    emit appendOutPutBox("此功能未完成！<br/>");
+                });
+
+            // 右键菜单在鼠标点击的位置显示
+            menu->exec(QCursor::pos());
+            menu->deleteLater();
+        }
+        else if (tree->topLevelItem(status::USERS) == item->parent()) //用户列表右键
+        {
+            QMenu* menu = new QMenu(tree);
+            QAction* action_refresh = new QAction("刷新");
+            QAction* action_kick = new QAction("踢出用户");
+            QAction* action_ban = new QAction("封禁用户");
+            QAction* action_unban = new QAction("将……解封");
+            QAction* action_admin = new QAction("赋予最高权限");
+            QAction* action_manager = new QAction("赋予维护者权限");
+            QAction* action_deprive = new QAction("剥夺权限");
+            QList<QAction*> actions;
+            actions << action_refresh << action_kick << action_ban << action_unban <<
+                action_admin << action_manager << action_deprive;
+            menu->addActions(actions);
+
+            // 为右键菜单上的QAction创建信号槽，添加对应的功能
+            connect(action_refresh, &QAction::triggered, this, [=]
+                {
+                    onSend("//update");
+                });
+            connect(action_kick, &QAction::triggered, this, [=]
+                {
+                    onSend("//kick " + item->text(0).toStdString());
+                });
+            connect(action_ban, &QAction::triggered, this, [=]
+                {
+                    onSend("//user ban " + item->text(0).toStdString());
+                });
+            connect(action_unban, &QAction::triggered, this, [=]
+                {
+                    string victim = QInputDialog::getText(this, "Lhat - 将……解封",
+                                        "请输入你要解封的用户名：").toStdString();
+                    onSend("//user restore " + victim);
+                });
+            connect(action_admin, &QAction::triggered, this, [=]
+                {
+                    onSend("//user setper " + item->text(0).toStdString() + " Admin");
+                });
+            connect(action_manager, &QAction::triggered, this, [=]
+                {
+                    onSend("//manager add " + item->text(0).toStdString());
+                });
+            connect(action_deprive, &QAction::triggered, this, [=]
+                {
+                    onSend("//user setper " + item->text(0).toStdString() + " User");
+                });
+
+            // 右键菜单在鼠标点击的位置显示
+            menu->exec(QCursor::pos());
+            menu->deleteLater();
+        }
+    }
 }
 bool ChatApplication::reConnect()
 {
@@ -440,7 +538,10 @@ void ChatApplication::onAbout()
 }
 void ChatApplication::onManage() {} //TODO 管理员面板（管理账户系统等）
 void ChatApplication::onTool() {} //TODO 更多聊天工具窗口（如加入退出聊天室，重置密码，以及设置也可以放进去）
-void ChatApplication::onHelp() {} //TODO 帮助界面
+void ChatApplication::onHelp()
+{
+    WinExec("hh.exe LhatHelp.chm", SW_SHOWNORMAL);
+}
 void ChatApplication::onLogoff(bool silentMode)
 {
     QMessageBox::StandardButton choice = QMessageBox::No;
@@ -481,7 +582,7 @@ void ChatApplication::onSend(string rawMessage)
     
     if (trim(rawMessage).empty())
     {
-        emit appendOutPutBox("[提示] 发送的消息不能为空！<br/>");
+        emit appendOutPutBox("发送的消息不能为空！<br/>");
         return;
     }
     else if (!rawMessage.rfind("//tell ", 0))
@@ -493,11 +594,6 @@ void ChatApplication::onSend(string rawMessage)
     else if (!rawMessage.rfind("//help", 0))
     {
         system("start notepad help.txt");
-        return;
-    }
-    else if (!rawMessage.rfind("//readrecord", 0))
-    {
-        readRecord();
         return;
     }
     else if (!rawMessage.rfind("//", 0))
@@ -522,7 +618,7 @@ void ChatApplication::onReceive()
     string finalMessage; //最终显示到输出框的是以这个字符串为介质
     int status; //接受状态码
     log("消息接收线程启动完毕。");
-    emit appendOutPutBox("欢迎来到Lhat聊天室！<br/>更多操作提示请键入//help！<br/>");
+    emit appendOutPutBox("会话连接成功，欢迎来到Lhat聊天室！<br/>");
 
     while (1)
     {
@@ -624,7 +720,7 @@ void ChatApplication::onReceive()
         else if (msgType == "DEFAULT_ROOM")
         {
             default_chat = msgBody;
-            emit appendOutPutBox(QString::fromStdString("[提示] 锵锵！已分配至默认聊天室：<font color=\"blue\">" + default_chat + "</font><br/>"));
+            emit appendOutPutBox(QString::fromStdString("已分配至默认聊天室：<font color=\"blue\">" + default_chat + "</font><br/>"));
             emit appendOnlineUserList(status::ROOMS, QString::fromStdString(msgBody));
             log("已分配至默认聊天室。");
         }
@@ -635,30 +731,6 @@ void ChatApplication::onReceive()
             return;
         }
         strcpy(recvData, "\0"); //清空接收的字符
-    }
-}
-void ChatApplication::readRecord()
-// HACK 此函数可能会在不久的版本中移除
-{
-    string msgType, msgBy, msgTo, msgTime, msgBody;
-    string finalMessage;
-    Json::Value recvJson;
-    char msg[1024];
-    std::ifstream recordFile(recordPath);
-    while (!recordFile.eof())
-    {
-        recordFile.getline(msg, 1024);
-        if (!strcmp(msg, "")) continue;
-        recvJson = unpack(msg);
-        msgType = recvJson["type"].asString();
-        msgBy = recvJson["by"].asString();
-        msgTo = recvJson["to"].asString();
-        msgTime = lToStringTime(recvJson["time"].asDouble(), "%Y-%m-%d %H:%M:%S");
-        msgBody = recvJson["message"].asString();
-        msgBody = subReplace(msgBody, "\n", "<br/>");
-        finalMessage = "<font color='blue'>" + msgBy + "</font> <font color='grey'>[" + msgTime + "]\
-                </font> : <br/>&nbsp;&nbsp;" + msgBody + "<br/>";
-        emit appendOutPutBox(QString::fromStdString(finalMessage));
     }
 }
 void ChatApplication::log(string content)

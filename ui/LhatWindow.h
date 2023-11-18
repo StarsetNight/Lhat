@@ -789,6 +789,7 @@ public:
         QObject::connect(button_send, SIGNAL(clicked()), LhatWindow, SLOT(sendMessage()));
         QObject::connect(button_manage, SIGNAL(clicked()), LhatWindow, SLOT(onManage()));
         QObject::connect(button_tool, SIGNAL(clicked()), LhatWindow, SLOT(onTool()));
+        QObject::connect(output_status, SIGNAL(itemPressed(QTreeWidgetItem*,int)), LhatWindow, SLOT(onStatusClicked(QTreeWidgetItem*)));
 
         QMetaObject::connectSlotsByName(LhatWindow);
     } // setupUi

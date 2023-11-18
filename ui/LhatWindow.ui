@@ -901,11 +901,28 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>output_status</sender>
+   <signal>itemPressed(QTreeWidgetItem*,int)</signal>
+   <receiver>LhatWindow</receiver>
+   <slot>onStatusClicked(QTreeWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>127</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>triggeredMenubar(QAction*)</slot>
   <slot>sendMessage()</slot>
   <slot>onManage()</slot>
   <slot>onTool()</slot>
+  <slot>onStatusClicked(QTreeWidgetItem*)</slot>
  </slots>
 </ui>
