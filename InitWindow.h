@@ -12,6 +12,7 @@
 #include <direct.h> //不清楚为什么include这个头文件……
 #include <thread> //多线程
 #include <QtWidgets/qmessagebox.h>
+#include <QtWidgets/qinputdialog.h>
 #include <QtWidgets/qtreewidget.h>
 
 #define lhatVersion "v2-alpha3-about-update"
@@ -118,6 +119,7 @@ private slots: //由于槽函数必须得在slots声明中，所以不得不添�
 
 	void sendMessage();
 	void triggeredMenubar(QAction* triggers);
+	void onStatusClicked(QTreeWidgetItem* item);
 	void onManage();
 	void onTool();
 	void onHelp();
